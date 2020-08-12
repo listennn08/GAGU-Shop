@@ -2,6 +2,11 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import './plugins/loading';
+import './plugins/confirm';
+import './plugins/fontawesome';
+import './plugins/vee-validate';
+import './filters';
 
 Vue.config.productionTip = false;
 

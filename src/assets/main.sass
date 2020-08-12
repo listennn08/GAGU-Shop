@@ -1,0 +1,154 @@
+@charset "utf-8"
+@import '~bulma/bulma'
+$navyblue: #333D51
+$hnavyblue: #242b39
+$goldyellow: #D3AC2B
+$darkgray: #CBD0D8
+$lightgray: #F4F3EA
+
+$info: $cyan
+$success: $green
+$warning: $goldyellow
+$danger: $red
+$dark: $navyblue
+$text: $lightgray
+
+// Import a Google Font
+// @import url('https://fonts.googleapis.com/css?family=Nunito:400,700')
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&display=swap)
+
+// Set your brand colors
+$purple: #8A4D76
+$pink: #FA7C91
+$brown: #757763
+$beige-light: #D0D1CD
+$beige-lighter: #EFF0EB
+
+// Update Bulma's global variables
+$family-sans-serif: "Nunito", sans-serif
+$grey-dark: $brown
+$grey-light: $beige-light
+$primary: $navyblue
+$link: $navyblue
+$link-hover: $hnavyblue
+$link-hover-border: $hnavyblue
+$link-active: $goldyellow
+$widescreen-enabled: false
+$fullhd-enabled: false
+$scheme-main: $navyblue
+
+
+// Update some of Bulma's component variables
+// $body-background-color: $beige-lighter
+
+// $control-border-width: 2px
+// $input-border-color: transparent
+// $input-shadow: none
+
+// Import only what you need from Bulma
+@import '~bulma/sass/utilities/_all.sass'
+@import '~bulma/sass/base/_all.sass'
+@import '~bulma/sass/elements/button.sass'
+@import '~bulma/sass/elements/container.sass'
+@import '~bulma/sass/elements/title.sass'
+@import '~bulma/sass/form/_all.sass'
+@import '~bulma/sass/components/navbar.sass'
+@import '~bulma/sass/layout/hero.sass'
+@import '~bulma/sass/layout/section.sass'
+// Import Extensions
+@import '~bulma-switch'
+// @import '~bulma-carousel'
+
+
+/* navbar */
+.center, .center-column, .top, .right, .bottom, .left
+	display: flex
+	justify-content: center
+	align-items: center
+
+.center-column
+  flex-direction: column
+
+.top    
+  align-items: flex-start
+.right  
+  justify-content: flex-end
+.bottom 
+  align-items: flex-end
+.left
+  justify-content: flex-start
+.vc-btn.left
+  justify-content: center
+
+.single-spaced, .single-spaced * 
+  line-height: 1
+
+.navbar-dropdown
+  &.hide
+    display: none
+
+@media screen and ( min-width: 767px )
+  .mobile
+    display: none
+@media screen and ( max-width: 767px )
+  .desktop
+    display: none
+
+.is-cus-primary
+  background: $navyblue
+  color: $lightgray
+  transition: .2s
+  &:hover
+    background: $hnavyblue
+    color: #fff
+  &:focus
+    background: $hnavyblue
+    color: #fff
+.input
+  &::-webkit-outer-spin-button, &::-webkit-inner-spin-button
+    -webkit-appearance: none
+.footer
+  padding: 1rem 1.5rem 2rem
+  z-index: 2
+.is-fixed-bottom
+  position: sticky
+  bottom: 0
+.has-cus-background-dark
+  background-color: $navyblue 
+  color: $lightgray
+.has-cus-background-light
+  background-color: $lightgray
+  // color: $lightgray
+
+.pagination-link,
+.pagination-previous,
+.pagination-previous[disabled],
+.pagination-next,
+.pagination-next[disabled]
+  justify-content: center
+
+.image.is-256x256
+  width: 256px
+  height: 256px
+
+.price
+  width: 100%
+  text-align: left
+  font-family: 'Raleway', sans-serif
+  font-weight: 500
+  span.strike
+    margin-left: 1%
+    font-size: 12px
+    text-decoration: line-through
+    color: #888
+  &.in-bottom
+    margin-top: auto
+.h4t
+  border-bottom: 1px solid $navyblue
+  margin-bottom: 1%
+.is-font-raleway
+  font-family: 'Raleway', sans serif
+.mt-auto
+  margin-top: auto
+.mh-70
+  min-height: 70px
