@@ -27,5 +27,6 @@ export const checkCoupon = (code) => Request.post('coupon/search', {
 });
 
 export const createOrder = (data) => Request.post('orders', { ...data });
+export const getAllOrders = () => Request.get('orders');
 export const getOrder = (id) => Request.get(`orders/${id}`);
 export const payOrder = (id) => Request.post(`orders/${id}/paying`);

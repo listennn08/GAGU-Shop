@@ -1,10 +1,9 @@
 <template lang="pug">
-  .container.is-fluid
-    .columns.is-marginless
-      .column.is-one-quarter
-        categoryList.is-left(:class="{sticky}")
-      .column
-        productList.is-right(:class="{sticky}")
+  .tile.is-ancestor
+    .tile.is-parent.is-3
+      categoryList.is-child(:class="{sticky}")
+    .tile.is-parent.is-7
+      productList.is-child(:class="{sticky}")
 </template>
 <script>
 import { mapGetters } from 'vuex';

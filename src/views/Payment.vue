@@ -17,15 +17,17 @@
             .column x{{ prod.quantity }}
             .column
               .is-font-raleway {{ prod.product.price | cash }}
-        .collapse
-          .horizon(v-if="!isCollapse") ⋯
-          button.collapse__btn(
-            :class="collapseIcon"
-            @click="toggleCollapse()"
-          )
-            font-awesome-icon(
-              :icon="['fas', isCollapse?'angle-double-up' : 'angle-double-down']"
+        .columns.is-marginless.collapse.is-centered(
+          v-if="order.products.length > 3"
+        )
+          .column.is-full
+            button.collapse__btn(
+              :class="collapseIcon"
+              @click="toggleCollapse()"
             )
+              font-awesome-icon(
+                :icon="['fas', isCollapse?'angle-double-up' : 'angle-double-down']"
+              )
         h4.h4t.has-text-left
           font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
           | &nbsp; 訂單資訊
@@ -50,9 +52,9 @@
             td(:class="paidStatus.status") {{ paidStatus.msg }}
         button.button.is-cus-primary(
           :class="{'is-loading': loading}"
+          v-if="!order.paid"
           @click="doPay(order.id)"
         ) 確認付款
-
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -126,6 +128,10 @@ export default {
     transform: translateY(10%)
   100%
     transform: translateY(20%)
+.list
+  overflow: hidden
+  &.hide
+    max-height: 450px
 .collapse__btn
   cursor: pointer
   padding: 1% 2%
@@ -139,7 +145,4 @@ export default {
     animation: collapseAnimation 1s infinite linear reverse forwards
   &:hover
     animation-play-state: paused
-.horizon
-  font-weight: 700
-  writing-mode: vertical-rl
 </style>

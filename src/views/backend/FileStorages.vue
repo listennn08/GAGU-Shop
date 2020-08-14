@@ -59,10 +59,17 @@ export default {
       });
   },
   computed: {
-    ...mapGetters(['files', 'page']),
+    ...mapGetters({
+      files: 'file/files',
+      page: 'page',
+    }),
   },
   methods: {
-    ...mapActions(['setFiles', 'togglePage', 'delFile']),
+    ...mapActions({
+      setFiles: 'file/setFiles',
+      delFile: 'file/delFile',
+      togglePage: 'togglePage',
+    }),
     removeFile(index) {
       const { id } = this.files[index];
       this.$confirm({

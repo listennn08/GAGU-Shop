@@ -94,6 +94,10 @@ export default {
       if (id && quantity) {
         addCart(id, quantity)
           .then(() => {
+            this.setMsg({
+              msg: '已加入購物車',
+              type: true,
+            });
             this.isLoading = false;
           })
           .catch((error) => {

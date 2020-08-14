@@ -1,6 +1,6 @@
 <template lang="pug">
   #product-list.product-list
-    .container
+    .container.is-fluid
       .columns.is-multiline.is-marginless.is-variable.is-1-fullhd.is-2-desktop.is-desktop
         .column.is-4-fullhd.is-4-widescreen.is-5-desktop-only.is-6-tablet-only.is-12-mobile(
           v-for="(item, index) in products"
@@ -47,7 +47,6 @@
                   ) 加入購物車
       template(v-if="pagination.current_page")
         pagination(:pagination="pagination")
-      //- product
       router-link(to="/shopcart").shop-cart
         .shop-container
           .cart-count(v-if="shopcart.quantity") {{ shopcart.quantity }}
@@ -57,14 +56,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import {
-  getAllProducts, getDataDetail, addCart, getCart,
+  getAllProducts, addCart, getCart,
 } from '@/apis/frontend';
 import productCategories from '../components/ProductCategories.vue';
 import pagination from '../components/Pagination.vue';
 
 export default {
   components: {
-    // product,
     productCategories,
     pagination,
   },
@@ -130,25 +128,6 @@ export default {
           loader.hide();
         })
         .catch(() => {});
-    },
-    showDetail(e) {
-      const { id } = e.target.parentNode.parentNode.dataset
-        || e.target.parentNode.dataset;
-      if (id) {
-        this.toggleProductPage();
-        const loader = this.$loading.show({
-          container: this.$refs.product,
-          isFullPage: false,
-        });
-        getDataDetail(id)
-          .then((resp) => {
-            this.setTempProduct({
-              ...resp.data.data,
-              quantity: 1,
-            });
-            loader.hide();
-          });
-      }
     },
     getShopcartQuantity() {
       getCart()

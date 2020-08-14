@@ -26,7 +26,6 @@ const store = new Vuex.Store({
   }),
   getters: {
     msg: (state) => state.msg,
-    category: (state) => state.category,
     page: (state) => state.page,
     loading: (state) => state.loading,
     pagination: (state) => state.pagination,

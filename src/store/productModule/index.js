@@ -32,6 +32,7 @@ const productModule = {
           .indexOf(state.category[0]) > -1)
     ),
     tempProduct: (state) => state.tempProduct,
+    category: (state) => state.category,
   },
   actions: {
     setProducts({ commit }, data) {
