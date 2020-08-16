@@ -8,32 +8,8 @@
           router-link.button.is-light.is-small.link(to="products") 商品資訊 &rsaquo;&rsaquo;
     .container.mt-5
       .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 本周主打
-      .columns.is-multiline.is-gapless
-        .column.is-third-four(
-          v-for="data in datas"
-          :key="data.id"
-        )
-          figure.image.1by1
-            img(:src="data.imageUrl[0]")
-            .txt.has-text-left.px-2.py-2
-              .has-text-light.mh-70 {{ data.title }}
-              .has-text-light.mt-auto {{ data.price | cash }}
-              .fullheight.has-centered
-                router-link.button.is-outlined.is-warning(:to="`product/${data.id}`") 查看更多
-      .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 特價商品
-      .columns.is-multiline.is-gapless
-        .column.is-third-four(
-          v-for="data in sales"
-        )
-          figure.image.1by1
-            img(:src="data.imageUrl[0]")
-            .txt.has-text-left.px-2.py-2
-              .has-text-light.mh-70 {{ data.title }}
-              .has-text-light
-                span {{ data.price | cash }}
-                del.ml-1: small.has-text-lightgray {{ data.origin_price | cash}}
-              .fullheight.has-centered
-                router-link.button.is-outlined.is-warning(:to="`product/${data.id}`") 查看更多
+      template(v-if="datas[0]")
+        ProductCarousel(:datas="datas")
       .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 精選推薦
       .columns.is-multiline.is-gapless
         .column.is-third-four(
@@ -45,14 +21,32 @@
               .has-text-light.mh-70 {{ data.title }}
               .has-text-light
                 span {{ data.price | cash }}
-                del.ml-1: small.has-text-lightgray {{ data.origin_price | cash}}
+                del.ml-1: small.has-text-lightgray {{ data.origin_price | cash }}
               .fullheight.has-centered
                 router-link.button.is-outlined.is-warning(:to="`product/${data.id}`") 查看更多
+      .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 特價商品
+      .columns.is-multiline.is-gapless
+        .column.is-third-four(
+          v-for="data in sales"
+        )
+          figure.zoonin.image.1by1
+            img(:src="data.imageUrl[0]")
+            .txt.has-text-left.px-1.py-1
+              .has-text-light {{ data.title }}
+              .has-text-light
+                span {{ data.price | cash }}
+                del.ml-1: small.has-text-lightgray {{ data.origin_price | cash}}
+              .fullheight.has-centered
+                router-link.button.is-outlined.is-warning.is-small(:to="`product/${data.id}`") 查看更多
 </template>
 <script>
+import ProductCarousel from '@/components/ProductCarousel.vue';
 import { getAllProducts } from '../apis/frontend';
 
 export default {
+  components: {
+    ProductCarousel,
+  },
   data() {
     return {
       datas: [],
@@ -65,7 +59,7 @@ export default {
     try {
       const resp = await getAllProducts();
       resp.data.data.forEach((item, index) => {
-        if (index < 5) {
+        if (item.category === 'sofa' || item.category === 'chair') {
           this.datas.push(item);
         } else if (index < 10) {
           this.sales.push(item);
@@ -98,20 +92,27 @@ $lightgray: #F4F3EA
   position: absolute
   font-size: 24px
 .text
-  bottom: 40%
+  bottom: 25%
   left: 2%
 .link
   position: absolute
   font-size: 16px
-  bottom: 25%
+  bottom: 10%
   left: 2%
 .cus-title
   color: $navyblue
+.zoonin
+  transition: transform .5s
+  font-size: 1px
+  &:hover
+    transform: scale(1.8)
+    box-shadow: 5px 5px 10px #888
+    z-index: 999
 .image
-  position: relative
   &:hover .txt
     background: rgba(#000, .8)
     opacity: 1
+    transform: scale(1)
 .txt
   position: absolute
   height: 100%
@@ -120,11 +121,14 @@ $lightgray: #F4F3EA
   right: 0
   opacity: 0
   transition: .5s
+  z-index: 999
+  display: flex
+  flex-direction: column
   .fullheight
     display: flex
     align-items: center
     justify-content: center
-    position: absolute
+    align-self: flex-end
     width: 100%
-    bottom: 10%
+    height: 100%
 </style>

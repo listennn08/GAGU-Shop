@@ -1,7 +1,5 @@
 <template lang="pug">
-  aside.menu.mt-5(
-    :class="sticky"
-  )
+  aside.menu
     ul.menu-list.has-cus-background-light
       li
         a(
@@ -62,13 +60,16 @@ $lightgray: #F4F3EA
 *
   font-family: 'Noto Sans TC', sans serif
 .menu
+  box-sizing: border-box
   top: 0
   width: 80%
+  margin: 5% 10% 0
   transition: top .5s
   &.sticky
-    width: 18%
+    width: 19%
     position: fixed
     top: 10%
+    margin: 2%
 .active
   color: $goldyellow
 </style>
