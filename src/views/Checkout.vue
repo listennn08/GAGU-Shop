@@ -292,9 +292,11 @@ export default {
               no: '繼續購物',
               yes: '去付款',
             },
-            callback: (confirm) => this
-              .$router
-              .push(confirm ? '' : `payment/${resp.data.data.id}`),
+            callback: (confirm) => {
+              if (confirm) {
+                this.$router.push(`payment/${resp.data.data.id}`);
+              }
+            },
           });
         });
     },
