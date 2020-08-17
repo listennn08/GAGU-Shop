@@ -58,7 +58,6 @@ export default {
     position: relative
     border: 1px solid #888
   &.current
-
       &:hover .txt
         background: rgba(#000, .8)
         opacity: 1

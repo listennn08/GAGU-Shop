@@ -279,7 +279,7 @@ $lightgray: #F4F3EA
     width: 20px
     height: 20px
     border-radius: 50%
-    box-shadow: 2px 2px 5px #dd0000
+    box-shadow: 2px 2px 5px rgba(#dd0000, .8)
   .txt
     font-size: 6px
     overflow-wrap: nowrap
