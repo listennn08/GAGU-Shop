@@ -20,7 +20,7 @@ export const updateCart = (product, quantity) => Request.patch('shopping', {
   product,
   quantity,
 });
-export const deleteCart = (product) => (product ? Request.delete('shopping') : Request.delete('/all/product'));
+export const deleteCart = (product) => (product ? Request.delete('shopping') : Request.delete('all/product'));
 
 export const checkCoupon = (code) => Request.post('coupon/search', {
   code,
