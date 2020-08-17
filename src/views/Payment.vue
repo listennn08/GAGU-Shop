@@ -18,7 +18,7 @@
             .column
               .is-font-raleway {{ prod.product.price | cash }}
         .columns.is-marginless.collapse.is-centered(
-          v-if="order.products.length > 3"
+          v-if="showCollapseButton"
         )
           .column.is-full
             button.collapse__btn(
@@ -82,6 +82,11 @@ export default {
     }),
     collapseIcon() {
       return this.isCollapse ? 'up' : 'down';
+    },
+    showCollapseButton() {
+      return this.order.products
+        ? this.order.products.length > 3
+        : false;
     },
     paidStatus() {
       return (this.order.paid
