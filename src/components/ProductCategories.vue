@@ -72,4 +72,13 @@ $lightgray: #F4F3EA
     margin: 2%
 .active
   color: $goldyellow
+
+// .menu
+//   +sm
+//     position: fixed
+//     left: 0
+//     z-index: 999
+//   &.sticky
+//     +sm
+//       z-index: 999
 </style>

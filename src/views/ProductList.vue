@@ -2,7 +2,7 @@
   #product-list.product-list
     .container.is-fluid
       .columns.is-multiline.is-marginless.is-variable.is-1-fullhd.is-2-desktop.is-desktop
-        .column.is-4-fullhd.is-4-widescreen.is-5-desktop-only.is-6-tablet-only.is-12-mobile(
+        .column.is-4-fullhd.is-5-widescreen.is-5-desktop-only.is-6-tablet-only.is-12-mobile(
           v-for="(item, index) in products"
           :data-id="item.id"
           :key="index"
@@ -26,12 +26,12 @@
                       :class="{strike: item.price}"
                     ) {{ item.origin_price | cash }}
               .card-footer
-                .field.has-addons.has-addons-centered.mt-1
+                .field.has-addons.has-addons-centered.mt-1.is-fullwidth
                   .control
                     button.button.is-left(
                       @click="countQuantity(index, 'm')"
                     ) &minus;
-                  .control
+                  .control.is-expanded
                     input.input.has-text-centered(
                       type="number"
                       v-model="item.quantity"
@@ -41,7 +41,7 @@
                     button.button.is-right(
                       @click="countQuantity(index, 'p')"
                     ) &plus;
-                  button.button.is-cus-primary.addCart.ml-1(
+                  button.button.is-cus-primary.addCart.ml-1.is-fullwidth(
                     @click="addToCart(index, item.id, item.quantity)"
                     :class="{'is-loading': item.isLoading}"
                   ) 加入購物車
@@ -275,7 +275,7 @@ $lightgray: #F4F3EA
     right: -10px
     background: #ff0000
     color: #fff
-    font-size: 15px
+    font-size: 12px
     width: 20px
     height: 20px
     border-radius: 50%
