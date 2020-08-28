@@ -5,7 +5,7 @@
     .modal-background(@click="cancel")
     .modal-card
       header.modal-card-head
-        p.is-size-4.is-full {{ !tempProduct.id ? '新增' : '更新'}}商品
+        p.is-size-4.is-full {{ title }}商品
       section.modal-card-body
         .field.has-text-left
             .control
@@ -55,7 +55,7 @@
             .control
               input#uploadImg.input(type="file")
             section.section(v-if="showImagePreview(tempProduct.imageUrl)")
-              carousel(:images="tempProduct.imageUrl")
+              Carousel(:images="tempProduct.imageUrl")
       footer.modal-card-foot
         button.button.is-cus-primary(
           v-if="!tempProduct.id"
@@ -76,15 +76,15 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import carousel from '@/components/Carousel.vue';
+import Carousel from '@/components/Carousel.vue';
 import {
   getBackendDataDetail, createData, updateData, uploadFile,
 } from '@/apis/backend';
 
 export default {
-  name: 'product',
+  name: 'Product',
   components: {
-    carousel,
+    Carousel,
   },
   props: {
     addNewItem: Boolean,
@@ -102,6 +102,9 @@ export default {
     }),
     checkEnabled: () => (enabled) => (enabled ? '啟用' : '未啟用'),
     showImagePreview: () => (item) => (item.length > 0),
+    title() {
+      return !this.tempProduct.id ? '新增' : '更新';
+    },
   },
   watch: {
     'page.open': {
@@ -215,7 +218,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap')
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B
