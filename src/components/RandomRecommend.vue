@@ -1,7 +1,7 @@
 <template lang="pug">
   .box.is-shadowless.mt-1
     .subtitle.is-4.is-clearfix.has-text-weight-bold.has-text-centered {{ title }}
-    .columns.is-multiline.is-gapless
+    .columns.is-multiline
       .column.is-third-four(
         v-for="data in recommend"
         @click="$router.push(`product/${data.id}`)"
@@ -58,6 +58,7 @@ export default {
   justify-content: center
   border: 1px solid transparent
   overflow: hidden
+  border-radius: 6px
   &-image
     transform: perspective(800px)
     transform-style: preserve-3d
@@ -65,7 +66,7 @@ export default {
     border: 1px solid #ddd
     border-radius: 6px
     .card-info
-      top: 10%
+      top: 15%
       z-index: 2
       .des
         opacity: 1
@@ -99,7 +100,7 @@ export default {
   align-self: flex-start
   position: absolute
   padding: 2%
-  top: 70%
+  top: 72%
   bottom: 0
   transition: top .5s
   h4

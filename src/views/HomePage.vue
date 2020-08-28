@@ -5,7 +5,6 @@
         .banner.banner-1
           .image.is-3by1.is-fixed-left.img-1
             .text-in-img.left
-              //- p.has-text-light 進來坐坐吧，看看不用錢
               button.button.is-light.link(@click="goToProduct('bed')") 精選床墊
           .box.is-fixed-right
             .text
@@ -15,7 +14,6 @@
         .banner
           .image.is-3by1.is-fixed-right.img-2
             .text-in-img.right
-              //- p.has-text-light 進來坐坐吧，看看不用錢
               button.button.is-light.link(@click="goToProduct('sofa')") 熱銷沙發
           .box.is-fixed-left
             .text
@@ -39,39 +37,20 @@
                     del.ml-1: small.has-text-lightgray.is-font-raleway
                       | {{ data.origin_price | cash }}
                   .fullheight.has-centered
-                    button.button.is-primary(@click.stop="$router.push(`product/${data.id}`)") 查看更多
-                      //- .txt.has-text-left.px-2.py-2
-        //- .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 本周主打
-        //-   template(v-if="datas[0]")
-        //-     ProductCarousel(:datas="datas")
-    //-   .subtitle.is-4.has-text-primary.has-text-weight-bold.has-text-centered 特價商品
-    //-   .columns.is-multiline.is-gapless
-    //-     .column.is-third-four(
-    //-       v-for="data in sales"
-    //-     )
-    //-       figure.zoonin.image.1by1
-    //-         img(:src="data.imageUrl[0]")
-    //-         .txt.has-text-left.px-1.py-1
-    //-           .has-text-light {{ data.title }}
-    //-           .has-text-light
-    //-             span {{ data.price | cash }}
-    //-             del.ml-1: small.has-text-lightgray {{ data.origin_price | cash }}
-    //-           .fullheight.has-centered
-    //-             router-link.button.is-outlined.is-warning.is-small(:to="`product/${data.id}`")
-    //-               | 查看更多
+                    button.button.is-primary(@click.stop="$router.push(`product/${data.id}`)")
+                      |查看更多
 </template>
 <script>
-import skrollr from 'skrollr';
 import { mapActions } from 'vuex';
 import ProductCarousel from '@/components/ProductCarousel.vue';
+import RandomRecommend from '@/components/RandomRecommend.vue';
 import { getAllProducts } from '@/apis/frontend';
-
-window.skrollr = skrollr.init();
 
 export default {
   name: 'HomePage',
   components: {
     ProductCarousel,
+    RandomRecommend,
   },
   data() {
     return {
