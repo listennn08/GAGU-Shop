@@ -109,8 +109,8 @@ export default {
   methods: {
     ...mapActions({
       setShopcartItems: 'shopcart/setShopcartItems',
-      deletShopcartItem: 'shopcart/setShopcartItem',
-      deletShopcartItems: 'shopcart/setShopcartItems',
+      deleteItem: 'shopcart/deleteItem',
+      deleteAllItem: 'shopcart/deleteAllItem',
     }),
     getShopCartData() {
       const loader = this.$loading.show();
@@ -148,7 +148,7 @@ export default {
         this.shopcartItems[index].removing = true;
         deleteCart(this.shopcartItems[index].product.id)
           .then(() => {
-            this.deleteShopcartItem(index);
+            this.deleteItem(index);
           });
       } else {
         const loader = this.$loading.show({
@@ -157,7 +157,7 @@ export default {
         });
         deleteCart()
           .then(() => {
-            this.deletShopcartItems();
+            this.deleteAllItem();
             loader.hide();
           });
       }

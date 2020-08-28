@@ -29,23 +29,24 @@
                     td.col {{ order.amount | cash }}
                     td.col
                       div {{ order.payment }}
-                      div(:class="paidStatus(order.paid).status") ({{ paidStatus(order.paid).msg }})
-            li.has-text-left
-              button.button.is-text.is-small(
-                @click="toggleCollapse(index)"
-              )
-                span.icon.is-small
-                  font-awesome-icon(:icon="collapseProduct(index)[0]")
-                span 看明細
-              ul(:class="{'is-hidden': !order.collapse}")
-                li(
-                  v-for="(products, pIndex) in order.products"
-                  :key="products.product.id"
+                      div(:class="paidStatus(order.paid).status")
+                        |({{ paidStatus(order.paid).msg }})
+            li.has-text-left.is-marginless
+                button.button.is-text.is-small(
+                  @click="toggleCollapse(index)"
                 )
-                  table.table.is-fullwidth.has-text-centered
-                    td {{ products.product.title }}
-                    td {{ products.quantity + products.product.unit }}
-                    td {{ itemTotal(index, pIndex) | cash }}
+                  span.icon.is-small
+                    font-awesome-icon(:icon="collapseProduct(index)[0]")
+                  span 看明細
+                ul(:class="{'is-hidden': !order.collapse}")
+                  li(
+                    v-for="(products, pIndex) in order.products"
+                    :key="products.product.id"
+                  )
+                    table.table.is-fullwidth.has-text-centered
+                      td {{ products.product.title }}
+                      td {{ products.quantity + products.product.unit }}
+                      td {{ itemTotal(index, pIndex) | cash }}
         .column.is-marginless.is-paddingless
           hr.hr
 </template>
@@ -119,6 +120,8 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $darkgrayn: #46505e
 $lightgray: #F4F3EA
+.container
+  overflow-x: auto
 .is-cus-text
   position: relative
   &::before
