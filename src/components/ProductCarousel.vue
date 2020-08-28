@@ -8,12 +8,11 @@
         :style="{backgroundImage: `url(${data.imageUrl[0]}`}"
       )
         figure.image
-          //- img(:src="data.imageUrl[0]")
           .txt.has-text-left.px-2.py-2
             .has-text-light.mh-70 {{ data.title }}
             .has-text-light
               span {{ data.price | cash }}
-              del.ml-1: small.has-text-lightgray {{ data.origin_price | cash}}
+              del.ml-1: small.has-text-lightgray {{ data.origin_price | cash }}
             .fullheight.has-centered
               router-link.button.is-outlined.is-warning(:to="`product/${data.id}`") 查看更多
 </template>
