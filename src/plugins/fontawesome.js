@@ -6,7 +6,7 @@ import {
   faTimes, faCheck, faEdit, faTrashAlt, faShoppingCart, faAngleLeft,
   faAngleRight, faAngleDoubleDown, faAngleDoubleUp, faInfoCircle,
   faExclamationCircle, faUser, faPhoneAlt, faExclamationTriangle,
-  faTags, faMinus, faFlag, faAngleDoubleLeft, faAngleDoubleRight,
+  faTags, faMinus, faFlag, faAngleDoubleLeft, faAngleDoubleRight, faChair, faCouch,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faClipboard, faAddressCard,
@@ -20,5 +20,6 @@ library.add(
   faAngleRight, faClipboard, faAngleDoubleDown, faAngleDoubleUp, faInfoCircle,
   faInstagram, faFacebook, faExclamationCircle, faUser, faPhoneAlt, faExclamationTriangle,
   faAddressCard, faTags, faMinus, faFlag, faAngleDoubleLeft, faAngleDoubleRight,
+  faChair, faCouch,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
