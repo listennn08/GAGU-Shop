@@ -47,12 +47,6 @@ export default {
         .sort(() => 0.5 - Math.random())
         .filter((el, i) => i < 5);
       randomArray.forEach((el) => { this.recommend.push(data[el]); });
-      // while (this.recommend.length < 5) {
-      //   const random = Math.floor(Math.random() * total);
-      //   if (!this.recommend.find((el) => el.id === data[random].id)) {
-      //     this.recommend.push(data[random]);
-      //   }
-      // }
     },
   },
 };
