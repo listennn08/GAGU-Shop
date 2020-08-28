@@ -8,6 +8,6 @@ Vue.use(Loading, {
   width: 64,
   height: 64,
   backgroundColor: '#fff',
-  opacity: 0.8,
+  opacity: 1,
   zIndex: 9999,
 });
