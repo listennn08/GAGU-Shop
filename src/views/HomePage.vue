@@ -1,44 +1,43 @@
 <template lang="pug">
-  .tile.is-ancestor
-    .container.is-fluid
-      .container
-        .banner.banner-1
-          .image.is-3by1.is-fixed-left.img-1
-            .text-in-img.left
-              button.button.is-light.link(@click="goToProduct('bed')") 精選床墊
-          .box.is-fixed-right
-            .text
-              span.logo GAGU
-              | 照顧你的睡眠
-              p 優質精選高級床墊，讓您睡到連地震都沒感覺
-        .banner
-          .image.is-3by1.is-fixed-right.img-2
-            .text-in-img.right
-              button.button.is-light.link(@click="goToProduct('sofa')") 熱銷沙發
-          .box.is-fixed-left
-            .text
-              span.logo GAGU
-              | 販售的沙發使用高級檜木打造而成
-              p 可承受超過 1000 公斤的重量
-        .container.mt-5
-          .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 精選推薦
-          .columns.is-multiline.is-gapless
-            .column.is-third-four(
-              v-for="data in random"
-              @click="$router.push(`product/${data.id}`)"
-            )
-              .card
-                figure.image.1by1
-                  img(:src="data.imageUrl[0]")
-                .card-info.mx-3
-                  h4.subtitle.is-5.is-marginless.mh-70 {{ data.title }}
-                  .has-text-primary
-                    span.is-font-raleway {{ data.price | cash }}
-                    del.ml-1: small.has-text-lightgray.is-font-raleway
-                      | {{ data.origin_price | cash }}
-                  .fullheight.has-centered
-                    button.button.is-primary(@click.stop="$router.push(`product/${data.id}`)")
-                      |查看更多
+  .container.is-fluid
+    .container
+      .banner.banner-1
+        .image.is-3by1.is-fixed-left.img-1
+          .text-in-img.left
+            button.button.is-light.link(@click="goToProduct('bed')") 精選床墊
+        .box.is-fixed-right
+          .text
+            span.logo GAGU
+            | 照顧你的睡眠
+            p 優質精選高級床墊，讓您睡到連地震都沒感覺
+      .banner
+        .image.is-3by1.is-fixed-right.img-2
+          .text-in-img.right
+            button.button.is-light.link(@click="goToProduct('sofa')") 熱銷沙發
+        .box.is-fixed-left
+          .text
+            span.logo GAGU
+            | 販售的沙發使用高級檜木打造而成
+            p 可承受超過 1000 公斤的重量
+      .container.mt-5
+        .subtitle.is-4.cus-title.has-text-weight-bold.has-text-centered 精選推薦
+        .columns.is-multiline.is-gapless
+          .column.is-third-four(
+            v-for="data in random"
+            @click="$router.push(`product/${data.id}`)"
+          )
+            .card
+              figure.image.1by1
+                img(:src="data.imageUrl[0]")
+              .card-info.mx-3
+                h4.subtitle.is-5.is-marginless.mh-70 {{ data.title }}
+                .has-text-primary
+                  span.is-font-raleway {{ data.price | cash }}
+                  del.ml-1: small.has-text-lightgray.is-font-raleway
+                    | {{ data.origin_price | cash }}
+                .fullheight.has-centered
+                  button.button.is-primary(@click.stop="$router.push(`product/${data.id}`)")
+                    |查看更多
 </template>
 <script>
 import { mapActions } from 'vuex';
@@ -127,9 +126,6 @@ $hnavyblue: #242b39
 .logo
   font-family: 'Lobster', sans serif
   margin-right: 1%
-.container
-  display: flex
-  flex-direction: column
 
 .banner
   width: 100%
