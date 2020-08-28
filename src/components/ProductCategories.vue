@@ -20,11 +20,11 @@
             :class="active('chair')"
             @click.prevent="setCategory('chair')"
           )
-            span
-              font-awesome-icon.mr-1(:icon="['fas', 'chair']")
+            //- span
+            //-   font-awesome-icon.mr-1(:icon="['fas', 'chair']")
             span 椅子／沙發
-            span
-              font-awesome-icon.ml-1(:icon="['fas', 'couch']")
+            //- span
+            //-   font-awesome-icon.ml-1(:icon="['fas', 'couch']")
         li
           a(
             href="#"
