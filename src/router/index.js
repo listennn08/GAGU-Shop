@@ -18,10 +18,6 @@ const routes = [
         component: () => import('@/views/About.vue'),
       },
       {
-        path: 'login',
-        component: () => import('@/views/Login.vue'),
-      },
-      {
         path: 'logout',
         component: () => import('@/views/Logout.vue'),
       },
@@ -49,7 +45,15 @@ const routes = [
         path: 'payment/:id',
         component: () => import('@/views/Payment.vue'),
       },
+      {
+        path: 'payflow/:id',
+        component: () => import('@/views/PayFlow.vue'),
+      },
     ],
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/Login.vue'),
   },
   {
     path: '/admin',
