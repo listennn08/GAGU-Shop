@@ -1,24 +1,16 @@
 @charset "utf-8"
-@import '~bulma/bulma'
+
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $lightgray: #F4F3EA
 
-$info: $cyan
-$success: $green
-$warning: $goldyellow
-$danger: $red
-$dark: $navyblue
-$text: $lightgray
-
 // Import a Google Font
-// @import url('https://fonts.googleapis.com/css?family=Nunito:400,700')
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&family=Lobster&display=swap')
 
 // Set your brand colors
-$purple: #8A4D76
+$purple: #3a3237
 $pink: #FA7C91
 $brown: #757763
 $beige-light: #D0D1CD
@@ -35,29 +27,26 @@ $link-hover-border: $hnavyblue
 $link-active: $goldyellow
 $widescreen-enabled: false
 $fullhd-enabled: false
-$scheme-main: $navyblue
+$scheme-main: #fff
+$text: $navyblue
+$warning: $lightgray
 
 
-// Update some of Bulma's component variables
-// $body-background-color: $beige-lighter
 
-// $control-border-width: 2px
-// $input-border-color: transparent
-// $input-shadow: none
+$gap: 20px
+$tablet: 576px
+$desktop: 768px
+$widescreen: 993px
+$widescreen-enabled: true
+$fullhd: 1200px
+$fullhd-enabled: true
 
-// Import only what you need from Bulma
-@import '~bulma/sass/utilities/_all.sass'
-@import '~bulma/sass/base/_all.sass'
-@import '~bulma/sass/elements/button.sass'
-@import '~bulma/sass/elements/container.sass'
-@import '~bulma/sass/elements/title.sass'
-@import '~bulma/sass/form/_all.sass'
-@import '~bulma/sass/components/navbar.sass'
-@import '~bulma/sass/layout/hero.sass'
-@import '~bulma/sass/layout/section.sass'
+$steps-active-color: $navyblue
+
+@import '~bulma/bulma'
 // Import Extensions
 @import '~bulma-switch'
-@import '~bulma-timeline'
+@import '~bulma-steps'
 
 
 
@@ -96,16 +85,7 @@ $scheme-main: $navyblue
   .desktop
     display: none
 
-.is-cus-primary
-  background: $navyblue
-  color: $lightgray
-  transition: .2s
-  &:hover
-    background: $hnavyblue
-    color: #fff
-  &:focus
-    background: $hnavyblue
-    color: #fff
+
 .input
   &::-webkit-outer-spin-button, &::-webkit-inner-spin-button
     -webkit-appearance: none
@@ -148,8 +128,12 @@ $scheme-main: $navyblue
 .h4t
   border-bottom: 1px solid $navyblue
   margin-bottom: 1%
-.is-font-raleway
-  font-family: 'Raleway', sans serif
+
+.is-font
+  &-Noto
+    font-family: 'Noto Sans TC', sans serif
+  &-raleway
+    font-family: 'Raleway', sans serif
 .mt-auto
   margin-top: auto
 .mh-70
