@@ -30,7 +30,8 @@ export default {
 </script>
 <style lang="sass">
 html, body
-  // height: 100%
+  height: 100%
+  min-height: 100vh
 #app
   font-family: 'Noto Sanc TC', 'Raleway', sans-serif
   -webkit-font-smoothing: antialiased
@@ -39,5 +40,5 @@ html, body
   display: flex
   flex-direction: column
   height: 100%
-  min-height: 100%
+  min-height: 100% !important
 </style>
