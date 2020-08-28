@@ -1,5 +1,5 @@
 <template lang="pug">
-  section.body
+  section.section
     .container
       .event
         .date.tags.has-addons
@@ -15,6 +15,7 @@
 </template>
 <script>
 export default {
+  name: 'About',
 };
 </script>
 <style lang="sass" scoped>
