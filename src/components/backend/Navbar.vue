@@ -34,6 +34,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
+  name: 'Navbar',
   data() {
     return {
       drop: false,
@@ -65,7 +66,7 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $lightgray: #F4F3EA
 
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap')
 
 .hero-head
   background: $navyblue

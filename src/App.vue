@@ -1,17 +1,17 @@
 <template lang="pug">
   #app
-    message
+    Message
     router-view
 </template>
 <script>
 import { mapActions } from 'vuex';
 import { checkToken } from '@/apis/auth';
 import cookies from './cookies';
-import message from './components/MessageModal.vue';
+import Message from './components/MessageModal.vue';
 
 export default {
   components: {
-    message,
+    Message,
   },
   created() {
     checkToken()
@@ -19,8 +19,7 @@ export default {
         if (resp.data.success) {
           this.setLoginInfo(cookies.getItem('token') || '');
         }
-      })
-      .catch(() => {});
+      });
   },
   methods: {
     ...mapActions({
@@ -30,14 +29,15 @@ export default {
 };
 </script>
 <style lang="sass">
-@import '~bulma/bulma.sass'
-@import './assets/main'
-
+html, body
+  // height: 100%
 #app
   font-family: 'Noto Sanc TC', 'Raleway', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-align: center
-  color: #2c3e50
-  height: 100vh
+  display: flex
+  flex-direction: column
+  height: 100%
+  min-height: 100%
 </style>

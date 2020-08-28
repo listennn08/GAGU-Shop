@@ -15,6 +15,7 @@
 </template>
 <script>
 export default {
+  name: 'Carousel',
   props: {
     images: {
       type: Array,
@@ -28,7 +29,7 @@ export default {
   },
   computed: {
     current() {
-      return (i) => i === this.index;
+      return (idx) => idx === this.index;
     },
   },
   methods: {

@@ -8,7 +8,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'message',
+  name: 'Message',
   computed: {
     ...mapGetters(['msg']),
     showItem() {
