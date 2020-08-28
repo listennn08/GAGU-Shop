@@ -6,6 +6,10 @@
           .column.is-two-thirds
             Steps
             Order
+            router-link.my-5.button.is-primary(
+              v-if="currentStep === 3"
+              to="/products/"
+            ) 再去購物
 </template>
 <script>
 import { mapGetters } from 'vuex';
