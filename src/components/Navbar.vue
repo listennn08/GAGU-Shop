@@ -61,10 +61,8 @@ export default {
 <style lang="sass" scoped>
 
 $navyblue: #333D51
-$hnavyblue: #242b39
-$goldyellow: #D3AC2B
-$darkgray: #CBD0D8
-$lightgray: #F4F3EA
+$goldyellow: #986602
+
 *
   font-family: 'Noto Sans TC', sans serif
 .is-fixed-top
@@ -73,7 +71,6 @@ $lightgray: #F4F3EA
   top: 0
   z-index: 5
 .hero-head
-  // background: $lightgray
   .router-link-exact-active:not(.logo)
     color: $goldyellow
   .column
@@ -88,13 +85,13 @@ $lightgray: #F4F3EA
     position: absolute
     height: 0
     bottom: 0
-    border-bottom: 1px solid #c68400
+    border-bottom: 1px solid $goldyellow
     transition: .3s
   &:hover
-    color: #c68400
+    color: $goldyellow
     background: none
   &:focus
-    color: #c68400
+    color: $goldyellow
     background: none
   &::after
     left: 10%
