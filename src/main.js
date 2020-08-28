@@ -7,6 +7,7 @@ import './plugins/confirm';
 import './plugins/fontawesome';
 import './plugins/vee-validate';
 import './filters';
+import './assets/main.sass';
 
 Vue.config.productionTip = false;
 
