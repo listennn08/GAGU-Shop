@@ -7,24 +7,27 @@ import { Logout } from '@/apis/auth';
 import cookies from '@/cookies';
 
 export default {
+  name: 'Logout',
   created() {
     this.doLogout();
   },
   computed: {
     ...mapGetters({
-      token: 'loginModule/token',
+      token: 'login/token',
     }),
   },
   methods: {
     ...mapActions({
-      clearLoginInfo: 'loginModule/clearLoginInfo',
+      clearLoginInfo: 'login/clearLoginInfo',
     }),
     doLogout() {
+      const loader = this.$loading.show();
       if (this.token) {
         Logout().then(() => {
           this.clearLoginInfo();
           cookies.removeItem('token');
           this.$router.push('/');
+          loader.hide();
         });
       }
     },

@@ -1,53 +1,55 @@
 <template lang="pug">
-  .container.mt-5
-    .card.mt-2(v-if="tempProduct")
-      .columns
-        span.tag.is-warning.is-fixed.is-uppercase
-          | {{ tempProduct.category }}
-        .colum
-          .crad-image
-            figure.image
-              img(:src="tempProduct.imageUrl[0]")
-        .column.has-text-left
-          h4.title.is-4 {{ tempProduct.title }}
-          .tag.is-warning 產品說明
-          p.content {{ tempProduct.content }}
-          .tag.is-warning 產品資訊
-          p.content {{ tempProduct.description }}
-          .tag.is-warning 售價
-          .price.is-size-5.has-text-weight-bold {{ tempProduct.price | cash }}
-            span.is-size-6(:class="{strike: tempProduct.price}")
-              | {{ tempProduct.origin_price | cash }}
-          .card-foot
-            .field.has-addons.has-addons-lefted.mt-1
-              .control
-                button.button.is-left(
-                  @click="countQuantity('m')"
-                ) &minus;
-              .control
-                input.input.has-text-centered(
-                  type="number"
-                  v-model="tempProduct.quantity"
-                  @change="updateCartData(index)"
-                )
-              .control
-                button.button.is-right(
-                  @click="countQuantity('p')"
-                ) &plus;
-              button.button.is-cus-primary.addCart.mx-2.is-fullwidth(
-                @click="addToCart(tempProduct.id, tempProduct.quantity)"
-                :class="{'is-loading': isLoading}"
-              ) 加入購物車
-    button.button.is-text.my-5.is-pulled-left(
-      @click.prevent="$router.go(-1)"
-    ) &laquo; 上一頁
+  section.section.is-paddingless
+    .container.mt-5
+      .card.is-shadowless(v-if="tempProduct")
+        .columns
+          span.tag.is-primary.is-fixed.is-uppercase
+            | {{ tempProduct.category }}
+          .colum
+            .crad-image
+              figure.image
+                img(:src="tempProduct.imageUrl[0]")
+          .column.has-text-left
+            h4.title.is-4 {{ tempProduct.title }}
+            .tag.is-primary 產品說明
+            p.content {{ tempProduct.content }}
+            .tag.is-primary 產品資訊
+            p.content {{ tempProduct.description }}
+            .tag.is-primary 售價
+            .price.is-size-5.has-text-weight-bold {{ tempProduct.price | cash }}
+              span.is-size-6(:class="{strike: tempProduct.price}")
+                | {{ tempProduct.origin_price | cash }}
+            .card-foot
+              .field.has-addons.has-addons-lefted.mt-1
+                .control
+                  button.button.is-left(
+                    @click="countQuantity('m')"
+                    :disabled="quantityMinest"
+                  ) &minus;
+                .control
+                  input.input.has-text-centered(
+                    type="number"
+                    v-model="tempProduct.quantity"
+                    @change="updateCartData()"
+                  )
+                .control
+                  button.button.is-right(
+                    @click="countQuantity('p')"
+                  ) &plus;
+                button.button.is-primary.addCart.mx-2.is-fullwidth(
+                  @click="addToCart(tempProduct.id, tempProduct.quantity)"
+                  :class="{'is-loading': isLoading}"
+                ) 加入購物車
+      button.button.is-text.my-5.is-pulled-left(
+        @click.prevent="$router.go(-1)"
+      ) &laquo; 上一頁
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { addCart, getDataDetail } from '@/apis/frontend';
 
 export default {
-  name: 'product',
+  name: 'Product',
   data() {
     return {
       isLoading: false,
@@ -58,6 +60,9 @@ export default {
       tempProduct: 'product/tempProduct',
       loading: 'loading',
     }),
+    quantityMinest() {
+      return this.tempProduct.quantity === 1;
+    },
   },
   created() {
     const loader = this.$loading.show({
@@ -89,9 +94,14 @@ export default {
         this.tempProduct.quantity += 1;
       }
     },
+    updateCartData() {
+      if (this.tempProduct.quantity < 1) {
+        this.tempProduct.quantity = 1;
+      }
+    },
     addToCart(id, quantity) {
       this.isLoading = true;
-      if (id && quantity) {
+      if (id && quantity > 0) {
         addCart(id, quantity)
           .then(() => {
             this.setMsg({
@@ -116,6 +126,10 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
+html, body
+  height: 100%
+section
+  height: 100%
 .is-fixed
   width: 5%
   padding: 1% 4%

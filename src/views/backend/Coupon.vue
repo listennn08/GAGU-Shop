@@ -3,7 +3,7 @@
     .modal-background(@click="togglePage()")
     .modal-card
       header.modal-card-head
-          h4.is-size-4 {{ !coupon.id ? '新增' : '更新'}}優惠
+          h4.is-size-4 {{ title }}優惠
       section.modal-card-body
         .modal-conetnt
           .field.has-text-left
@@ -55,7 +55,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { createCuponData, updateCuponData } from '../../apis/backend';
+import { createCuponData, updateCuponData } from '@/apis/backend';
 
 export default {
   name: 'Coupon',
@@ -64,6 +64,9 @@ export default {
       coupon: 'coupon/coupon',
       loading: 'loading',
     }),
+    title() {
+      return !this.coupon.id ? '新增' : '更新';
+    },
     checkEnabled() {
       return (enabled) => (enabled ? '啟用' : '未啟用');
     },
@@ -124,7 +127,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap')
 .modal
   font-family: 'Noto Sans TC', sans serif
   position: fixed

@@ -1,7 +1,7 @@
 <template lang="pug">
-  .home
+  div
     Navbar
-    .hero.is-fullheight
+    .home
       router-view
     Footer
 </template>
@@ -43,5 +43,6 @@ export default {
 </script>
 <style lang="sass" scoped>
 .home
-  height: 100%
+  min-height: 100%
+  padding-bottom: 2%
 </style>

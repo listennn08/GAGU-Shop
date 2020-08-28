@@ -20,8 +20,9 @@
                   tr
                     td.col
                       .txt
-                        router-link.is-cus-text(
+                        router-link.is-text(
                           :to='`/payment/${order.id}`'
+                          :title="order.id"
                         ) {{ order.id | hideTitle }}
                     td.col {{ order.created.datetime }}
                     td.col 已建立
@@ -53,6 +54,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getAllOrders } from '@/apis/frontend';
 
 export default {
+  name: 'Orders',
   created() {
     this.loadOrders();
   },

@@ -1,22 +1,24 @@
 <template lang="pug">
-  #product-list.product-list
-    .container.is-fluid
-      .columns.is-multiline.is-marginless.is-variable.is-1-fullhd.is-2-desktop.is-desktop
-        .column.is-4-fullhd.is-5-widescreen.is-5-desktop-only.is-6-tablet-only.is-12-mobile(
+  section.section.is-paddingless
+    .container
+      .columns.is-multiline.is-marginless.is-variable.is-desktop.is-centered.columns-centered
+        .column.is-4-fullhd.is-5-widescreen.is-6-desktop.is-10-tablet.is-full-mobile(
           v-for="(item, index) in products"
           :data-id="item.id"
           :key="index"
+          @click="$router.push(`/product/${item.id}`)"
         )
-          .card.is-relative.has-text-left
+          .box.has-text-left.is-rounded
             .card-image.columns.is-marginless.is-cus-centered
-              .is-category {{ item.category }}
+              .has-background-primary.has-text-light.is-category {{ item.category }}
               figure.image.is-256x256
                 img.is-rounded(:src="item.imageUrl[0]")
             .card-content.is-paddingless.px-2.py-5.mb-auto
               .title.is-4(:title="item.title") {{ item.title }}
               .content.is-marginless {{ item.content | hideContent }}
               .has-text-right.is-marginless
-                router-link.descript-link(
+                router-link.descript-link.has-text-weight-bold(
+                  @click.stop=""
                   :to="`/product/${item.id}`"
                 ) 查看更多 &raquo;
               .is-marginless
@@ -25,28 +27,35 @@
                     span(
                       :class="{strike: item.price}"
                     ) {{ item.origin_price | cash }}
-              .card-footer
-                .field.has-addons.has-addons-centered.mt-1.is-fullwidth
-                  .control
-                    button.button.is-left(
-                      @click="countQuantity(index, 'm')"
-                    ) &minus;
-                  .control.is-expanded
-                    input.input.has-text-centered(
-                      type="number"
-                      v-model="item.quantity"
-                      @change="updateCartData(index)"
-                    )
-                  .control
-                    button.button.is-right(
-                      @click="countQuantity(index, 'p')"
-                    ) &plus;
-                  button.button.is-cus-primary.addCart.ml-1.is-fullwidth(
-                    @click="addToCart(index, item.id, item.quantity)"
-                    :class="{'is-loading': item.isLoading}"
-                  ) 加入購物車
-      template(v-if="pagination.current_page")
-        pagination(:pagination="pagination")
+            .card-footer
+              .columns.is-marginless.is-paddingless.is-mobile.is-vcentered
+                .column.is-6-mobile.is-paddingless
+                  .field.has-addons.has-addons-centered.mt-1.is-fullwidth
+                    .control
+                      button.button.is-left(
+                        @click.stop="countQuantity(index, 'm')"
+                        :disabled="quantityMinest(index)"
+                      ) &minus;
+                    .control.is-expanded
+                      input.input.has-text-centered(
+                        type="number"
+                        v-model="item.quantity"
+                        @click.stop=""
+                        @change="updateCartData(index)"
+                      )
+                    .control
+                      button.button.is-right(
+                        @click.stop="countQuantity(index, 'p')"
+                      ) &plus;
+                .column.is-paddingless
+                  .field.has-addons.has-addons-centered.mt-1.is-fullwidth
+                    .control.is-expanded
+                      button.button.is-primary.addCart.ml-1.is-fullwidth(
+                        @click.stop="addToCart(index, item.id, item.quantity)"
+                        :class="{'is-loading': item.isLoading}"
+                      ) 加入購物車
+      template(v-if="showPagination")
+        Pagination(:pagination="pagination")
       router-link(to="/shopcart").shop-cart
         .shop-container
           .cart-count(v-if="shopcart.quantity") {{ shopcart.quantity }}
@@ -58,13 +67,14 @@ import { mapGetters, mapActions } from 'vuex';
 import {
   getAllProducts, addCart, getCart,
 } from '@/apis/frontend';
-import productCategories from '../components/ProductCategories.vue';
-import pagination from '../components/Pagination.vue';
+import ProductCategories from '@/components/ProductCategories.vue';
+import Pagination from '@/components/Pagination.vue';
 
 export default {
+  name: 'ProductList',
   components: {
-    productCategories,
-    pagination,
+    ProductCategories,
+    Pagination,
   },
   data() {
     return {
@@ -105,6 +115,12 @@ export default {
       products: 'product/products',
       category: 'product/category',
     }),
+    showPagination() {
+      return this.pagination.current_page && this.pagination.total_pages > 1;
+    },
+    quantityMinest() {
+      return (index) => this.products[index].quantity === 1;
+    },
   },
   methods: {
     ...mapActions({
@@ -127,7 +143,13 @@ export default {
           this.pagination = resp.data.meta.pagination;
           loader.hide();
         })
-        .catch(() => {});
+        .catch(() => {
+          this.setMsg({
+            msg: '載入失敗，請重新載入頁面',
+            type: false,
+          });
+          loader.hide();
+        });
     },
     getShopcartQuantity() {
       getCart()
@@ -135,23 +157,23 @@ export default {
           this.shopcart.quantity = resp.data.meta.pagination.total;
         });
     },
-    countQuantity(i, operate) {
+    countQuantity(pid, operate) {
       if (operate === 'm') {
-        if (this.products[i].quantity > 1) {
-          this.products[i].quantity -= 1;
+        if (this.products[pid].quantity > 1) {
+          this.products[pid].quantity -= 1;
         }
       } else if (operate === 'p') {
-        this.products[i].quantity += 1;
+        this.products[pid].quantity += 1;
       }
     },
-    updateCartData(i) {
-      if (this.products[i].quantity < 1) {
-        this.products[i].quantity = 1;
+    updateCartData(index) {
+      if (this.products[index].quantity < 1) {
+        this.products[index].quantity = 1;
       }
     },
     addToCart(index, id, quantity) {
       this.products[index].isLoading = true;
-      if (id && quantity) {
+      if (id && quantity > 0) {
         addCart(id, quantity)
           .then(() => {
             this.getShopcartQuantity();
@@ -164,6 +186,8 @@ export default {
             });
             this.products[index].isLoading = false;
           });
+      } else {
+        this.products[index].isLoading = false;
       }
     },
   },
@@ -190,14 +214,21 @@ $lightgray: #F4F3EA
 @mixin mediumScreen()
   @media screen and (max-width: 1440px)
     @content
-.card
-  border-radius: 15px
-  border: 2px solid $navyblue
+@mixin mobileScreen()
+  @media screen and (max-width: 760px)
+    @content
+.section
+  min-height: 100%
+.box
   transition: .5s
-  height: 500px
+  cursor: pointer
   &:hover
-    border: 2px solid $hnavyblue
-    box-shadow: 2px 2px 5px $goldyellow
+    box-shadow: 3px 3px 5px $navyblue
+.columns-centered
+  display: flex
+  justify-content: flex-start
+  +mobileScreen
+    justify-content: center
 .is-cus-centered
   display: flex
   justify-content: center
@@ -215,10 +246,9 @@ $lightgray: #F4F3EA
   left: 0
   top: 0
   width: 30%
-  background: $goldyellow
   text-align: center
   padding: 1% 2%
-  border-radius: 13px 0 10px 0
+  border-radius: 10px
   font-size: 12px
   text-transform: uppercase
   z-index: 2
@@ -283,12 +313,4 @@ $lightgray: #F4F3EA
   .txt
     font-size: 6px
     overflow-wrap: nowrap
-#product
-  position: fixed
-  top: 10%
-  right: 50%
-  left: 50%
-  transform: translateX(-50%)
-  box-shadow: 2px 2px 5px $lightgray
-  z-index: 999
 </style>

@@ -1,5 +1,5 @@
 <template lang="pug">
-  nav.hero-head(:class="{'is-fixed-top': sticky}")
+  nav.hero-head.has-background-light(:class="{'is-fixed-top': sticky}")
     .columns.is-mobile.is-marginless
       .column.left
         h1.is-size-2.has-text-weight-bold: router-link.logo(to="/") GAGU
@@ -33,6 +33,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
+  name: 'Navbar',
   data() {
     return {
       drop: false,
@@ -58,7 +59,6 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
 
 $navyblue: #333D51
 $hnavyblue: #242b39
@@ -73,13 +73,13 @@ $lightgray: #F4F3EA
   top: 0
   z-index: 5
 .hero-head
-  background: $lightgray
+  // background: $lightgray
   .router-link-exact-active:not(.logo)
-    color: #c68400
+    color: $goldyellow
   .column
     padding: 0 0.75rem
 .logo
-  font-family: 'Raleway', sans-serif
+  font-family: 'Diplomata', 'Lobster', sans-serif
 .navbar-item
   padding: 0 0.75rem
   color: $navyblue

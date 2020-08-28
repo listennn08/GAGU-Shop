@@ -1,10 +1,12 @@
 <template lang="pug">
   nav.pagination.is-centered(role="navigation" aria-label="pagination")
     ul.pagination-list
-      li: a#prev.pagination-previous(
-      @click="changePage('m')"
-      :disabled="firstPage"
-      ) &laquo;
+      li
+        a#prev.pagination-previous(
+          href="#"
+          @click.prevent="changePage('m')"
+          :disabled="firstPage"
+        ) &laquo;
       li(
         v-for="(index) in pagination.total_pages"
         :key="index"
@@ -15,12 +17,14 @@
         ) {{ index }}
       li
         a#next.pagination-next(
-          @click="changePage('p')"
-          :disabled="lastPage") &raquo;
+          href="#"
+          @click.prevent="changePage('p')"
+          :disabled="lastPage"
+        ) &raquo;
 </template>
 <script>
 export default {
-  name: 'pagination',
+  name: 'Pagination',
   props: {
     pagination: Object,
   },
