@@ -42,12 +42,17 @@ export default {
       const resp = await getAllProducts();
       const { data } = resp.data;
       const { total } = resp.data.meta.pagination;
-      while (this.recommend.length < 5) {
-        const random = Math.floor(Math.random() * total);
-        if (!this.recommend.find((el) => el.id === data[random].id)) {
-          this.recommend.push(data[random]);
-        }
-      }
+      const randomArray = Array.from({ length: total })
+        .map((el, i) => i)
+        .sort(() => 0.5 - Math.random())
+        .filter((el, i) => i < 5);
+      randomArray.forEach((el) => { this.recommend.push(data[el]); });
+      // while (this.recommend.length < 5) {
+      //   const random = Math.floor(Math.random() * total);
+      //   if (!this.recommend.find((el) => el.id === data[random].id)) {
+      //     this.recommend.push(data[random]);
+      //   }
+      // }
     },
   },
 };
