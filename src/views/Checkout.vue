@@ -2,198 +2,209 @@
   section
     .hero-body
       .container
-        h4.h4t.has-text-left
-          font-awesome-icon.titleIcon(:icon="['far', 'clipboard']")
-          span &nbsp; 購物清單
-        .preview-content(
-          :class="{show: isCollapse}"
-        )
-          .columns.is-marginless.has-text-centered.is-vcentered(v-for="( item, index ) in products")
-            .column
-              figure.image.is-128x128
-                img(:src="item.product.imageUrl[0]")
-            .column {{ item.product.title }}
-            .column x{{ item.quantity }}
-            .column.is-font-raleway {{ itemTotal(index) | cash }}
-        .buy-item(v-if="products.length > 4")
-          button.collapse(
-            :class="isCollapse? 'up' : 'down'"
-            @click="toggleCollapse()"
-          )
-            font-awesome-icon(
-              :icon="['fas', isCollapse?'angle-double-up':'angle-double-down']"
+        .columns.is-centered
+          .column.is-two-thirds
+            Steps
+            h4.h4t.has-text-left
+              font-awesome-icon.titleIcon(:icon="['far', 'clipboard']")
+              span &nbsp; 購物清單
+            .preview-content(
+              :class="{show: isCollapse}"
             )
-        .field.has-addons.has-addons-right
-          p.control
-            input.input(
-              type="text"
-              placeholder="請輸入折扣碼"
-              v-model="discount.code"
-              @change="debounce(checkCoupon())"
+              .columns.is-marginless.has-text-centered.is-vcentered(
+                v-for="( item, index ) in products"
+                :key="index"
+              )
+                .column
+                  figure.image.is-128x128
+                    img(:src="item.product.imageUrl[0]")
+                .column {{ item.product.title }}
+                .column x{{ item.quantity }}
+                .column.is-font-raleway {{ itemTotal(index) | cash }}
+            .buy-item(v-if="products.length > 4")
+              button.collapse(
+                :class="isCollapse? 'up' : 'down'"
+                @click="toggleCollapse()"
+              )
+                font-awesome-icon(
+                  :icon="['fas', isCollapse?'angle-double-up':'angle-double-down']"
+                )
+            .field.has-addons.has-addons-right
+              p.control
+                input.input(
+                  type="text"
+                  placeholder="請輸入折扣碼"
+                  v-model="discount.code"
+                  @change="debounce(checkCoupon())"
+                )
+              p.control
+                label.button.is-static(:class="{'is-loading': isLoading}")
+                  font-awesome-icon(:icon="['fas', 'tags']")
+            div
+              .has-text-right(v-if="discount.code")
+                p(
+                  v-if="discount.code"
+                  :class="couponUseful"
+                ) {{ discount.msg }}
+            .subtitle.is-5.is-font-Noto.is-fullwidth
+              .has-text-right 總額
+                span.is-font-raleway {{ countAll | cash }}
+            h4.h4t.has-text-left
+              font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
+              span &nbsp; 訂單資訊
+
+            validation-observer(
+                v-slot="{ invalid }"
+                @submit.prevent="submitForm()"
             )
-          p.control
-            label.button.is-static(:class="{'is-loading': isLoading}")
-              font-awesome-icon(:icon="['fas', 'tags']")
-        .is-pulled-right(v-if="discount.code")
-          p(
-            v-if="discount.code"
-            :class="couponUseful"
-          ) {{ discount.msg }}
-
-        .has-cur-background-goldyellow 總額
-          span.is-font-raleway {{ countAll | cash }}
-        h4.h4t.has-text-left
-          font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
-          span &nbsp; 訂單資訊
-
-        validation-observer(
-            v-slot="{ invalid }"
-            @submit.prevent="submitForm()"
-        )
-          form
-            .field.is-horizontal
-                .field-label
-                  label.label.is-normal(for="name") 姓名
-                .field-body
-                  validation-provider(
-                    name="姓名"
-                    v-slot="{ errors, classes }"
-                    rules="required"
-                  ).field
-                    p.control.has-icons-left.has-icons-right
-                      span.icon.is-small.is-left
-                        font-awesome-icon(:icon="['fas', 'user']")
-                      input#name.input(
-                        type="text"
-                        v-model="form.name"
-                        :class="classes"
-                        required
-                      )
-                      span.icon.is-small.is-right
-                        font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
-                      span.has-text-left.help.is-danger(
-                        v-if="errors[0]"
-                      ) {{ errors[0] }}
-            .field.is-horizontal
-              .field-label
-                label.label(for="phone") 電話
-              .field-body
-                validation-provider.field(
-                  name="電話"
-                  v-slot="{ errors, classes }"
-                  rules="required|digits:10"
-                ).filed
-                  p.control.has-icons-left.has-icons-right
-                    span.icon.is-small.is-left
-                      font-awesome-icon(:icon="['fas', 'phone-alt']")
-                    input#phone.input(
-                      type="tel"
-                      v-model="form.tel"
-                      :class="classes"
-                      maxlength=10
-                      required
-                    )
-                    span.icon.is-small.is-right
-                      font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
-                    span.has-text-left.help.is-danger(
-                      v-if="errors[0]"
-                    ) {{ errors[0] }}
-
-            .field.is-horizontal
-              .field-label
-                label.label(for="email") 信箱
-              .field-body
-                validation-provider.field(
-                  name="信箱"
-                  v-slot="{ errors, classes }"
-                  rules="required|email"
-                )
-                  p.control.has-icons-left.has-icons-right
-                    span.icon.is-small.is-left
-                      font-awesome-icon(:icon="['fas', 'envelope']")
-                    input#email.input(
-                      type="email"
-                      v-model="form.email"
-                      :class="classes"
-                      required
-                    )
-                    span.icon.is-small.is-right
-                      font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
-                    span.has-text-left.help.is-danger(
-                      v-if="errors[0]"
-                    ) {{ errors[0] }}
-            .field.is-horizontal
-              .field-label
-                label.label(for="address") 收件地址
-              .field-body
-                validation-provider.field(
-                  name="收件地址"
-                  v-slot="{ errors, classes }"
-                  rules="required"
-                )
-                  p.control.has-icons-left.has-icons-right
-                    span.icon.is-small.is-left
-                      font-awesome-icon(:icon="['far', 'address-card']")
-                    input#address.input(
-                      type="text"
-                      v-model="form.address"
-                      :class="classes"
-                      required)
-                    span.icon.is-small.is-right
-                      font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
-                    span.has-text-left.help.is-danger(
-                      v-if="errors[0]"
-                    ) {{ errors[0] }}
-
-            .field.is-horizontal
-              .field-label
-                label.label(for="remark") 備註
-                  small.has-text-grey-light （選填)
-              .field-body
+              form
                 .field
-                  p.control.has-icons-left.has-icons-right
-                    textarea#remark.textarea(rows="5" v-model="form.remark")
+                    .field-label.has-text-left
+                      label.label.is-normal(for="name") 姓名
+                    .field-body
+                      validation-provider(
+                        name="姓名"
+                        v-slot="{ errors, classes }"
+                        rules="required"
+                      ).field
+                        p.control.has-icons-left.has-icons-right
+                          span.icon.is-small.is-left
+                            font-awesome-icon(:icon="['fas', 'user']")
+                          input#name.input(
+                            type="text"
+                            v-model="form.name"
+                            :class="classes"
+                            required
+                          )
+                          span.icon.is-small.is-right
+                            font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
+                          span.has-text-left.help.is-danger(
+                            v-if="errors[0]"
+                          ) {{ errors[0] }}
+                .field
+                  .field-label.has-text-left
+                    label.label(for="phone") 電話
+                  .field-body
+                    validation-provider.field(
+                      name="電話"
+                      v-slot="{ errors, classes }"
+                      rules="required|digits:10"
+                    ).filed
+                      p.control.has-icons-left.has-icons-right
+                        span.icon.is-small.is-left
+                          font-awesome-icon(:icon="['fas', 'phone-alt']")
+                        input#phone.input(
+                          type="tel"
+                          v-model="form.tel"
+                          :class="classes"
+                          maxlength=10
+                          required
+                        )
+                        span.icon.is-small.is-right
+                          font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
+                        span.has-text-left.help.is-danger(
+                          v-if="errors[0]"
+                        ) {{ errors[0] }}
 
-            .field.is-horizontal
-              .field-label
-                label.label(for="paytype") 付款方式
-              .field-body
-                validation-provider.field(
-                  name="付款方式"
-                  v-slot="{ errors, classes }"
-                  rules="required"
-                )
-                  .control.is-expended
-                    .select.is-fullwidth(:class="classes")
-                      select(
-                        name="payment"
-                        id="paytype"
-                        v-model="form.payment"
-                      )
-                        option(value="" disabled) ---請選擇付款方式---
-                        option(
-                          v-for="(type, index) in payment"
-                          :key="index"
-                          :value="type"
-                        ) {{ type }}
-                    span.has-text-left.help.is-danger(
-                      v-if="errors[0]"
-                    ) {{ errors[0] }}
+                .field
+                  .field-label.has-text-left
+                    label.label(for="email") 信箱
+                  .field-body
+                    validation-provider.field(
+                      name="信箱"
+                      v-slot="{ errors, classes }"
+                      rules="required|email"
+                    )
+                      p.control.has-icons-left.has-icons-right
+                        span.icon.is-small.is-left
+                          font-awesome-icon(:icon="['fas', 'envelope']")
+                        input#email.input(
+                          type="email"
+                          v-model="form.email"
+                          :class="classes"
+                          required
+                        )
+                        span.icon.is-small.is-right
+                          font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
+                        span.has-text-left.help.is-danger(
+                          v-if="errors[0]"
+                        ) {{ errors[0] }}
+                .field
+                  .field-label.has-text-left
+                    label.label(for="address") 收件地址
+                  .field-body
+                    validation-provider.field(
+                      name="收件地址"
+                      v-slot="{ errors, classes }"
+                      rules="required"
+                    )
+                      p.control.has-icons-left.has-icons-right
+                        span.icon.is-small.is-left
+                          font-awesome-icon(:icon="['far', 'address-card']")
+                        input#address.input(
+                          type="text"
+                          v-model="form.address"
+                          :class="classes"
+                          required)
+                        span.icon.is-small.is-right
+                          font-awesome-icon(:icon="['fas', checkedIcon(errors[0])]")
+                        span.has-text-left.help.is-danger(
+                          v-if="errors[0]"
+                        ) {{ errors[0] }}
 
-            .control.buttons.is-centered
-              button.button.is-text(type="button" @click="$router.go(-1)") 上一頁
-              button.button.is-cus-primary(
-                :class="{'is-loading': loading}"
-              ) 確認訂單
+                .field
+                  .field-label.has-text-left
+                    label.label(for="remark") 備註
+                      small.has-text-grey-light （選填)
+                  .field-body
+                    .field
+                      p.control.has-icons-left.has-icons-right
+                        textarea#remark.textarea(rows="5" v-model="form.remark")
+
+                .field
+                  .field-label.has-text-left
+                    label.label(for="paytype") 付款方式
+                  .field-body
+                    validation-provider.field(
+                      name="付款方式"
+                      v-slot="{ errors, classes }"
+                      rules="required"
+                    )
+                      .control.is-expended
+                        .select.is-fullwidth(:class="classes")
+                          select(
+                            name="payment"
+                            id="paytype"
+                            v-model="form.payment"
+                          )
+                            option(value="" disabled) ---請選擇付款方式---
+                            option(
+                              v-for="(type, index) in payment"
+                              :key="index"
+                              :value="type"
+                            ) {{ type }}
+                        span.has-text-left.help.is-danger(
+                          v-if="errors[0]"
+                        ) {{ errors[0] }}
+
+                .control.buttons.is-centered
+                  button.button.is-text(type="button" @click="$router.go(-1)") 上一頁
+                  button.button.is-primary(
+                    :class="{'is-loading': loading}"
+                  ) 確認訂單
     vue-confirm-dialog
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import * as moment from 'moment';
 import { getCart, checkCoupon, createOrder } from '@/apis/frontend';
+import Steps from '@/components/Steps.vue';
 
 export default {
-  name: 'checkout',
+  name: 'Checkout',
+  components: {
+    Steps,
+  },
   data() {
     return {
       payment: ['WebATM', 'ATM', 'Barcode', 'Credit', 'ApplePay', 'GooglePay'],
@@ -218,6 +229,7 @@ export default {
   },
   created() {
     this.getShopCartData();
+    this.setCurrentStep(1);
   },
   computed: {
     ...mapGetters({
@@ -266,6 +278,7 @@ export default {
       setProducts: 'shopcart/setShopcartItems',
       toggleLoading: 'toggleLoading',
       setMsg: 'setMsg',
+      setCurrentStep: 'setCurrentStep',
     }),
     getShopCartData() {
       const loader = this.$loading.show({
@@ -286,18 +299,19 @@ export default {
       createOrder(this.form)
         .then((resp) => {
           this.toggleLoading();
-          this.$confirm({
-            message: '訂單已建立',
-            button: {
-              no: '繼續購物',
-              yes: '去付款',
-            },
-            callback: (confirm) => {
-              if (confirm) {
-                this.$router.push(`payment/${resp.data.data.id}`);
-              }
-            },
-          });
+          this.$router.push(`payflow/${resp.data.data.id}`);
+          // this.$confirm({
+          //   message: '訂單已建立',
+          //   button: {
+          //     no: '繼續購物',
+          //     yes: '去付款',
+          //   },
+          //   callback: (confirm) => {
+          //     if (confirm) {
+          //       this.$router.push(`payflow/${resp.data.data.id}`);
+          //     }
+          //   },
+          // });
         });
     },
     checkCoupon() {

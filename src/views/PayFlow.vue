@@ -4,15 +4,22 @@
       .container
         .columns.is-centered
           .column.is-two-thirds
+            Steps
             Order
 </template>
 <script>
+import { mapGetters } from 'vuex';
+import Steps from '@/components/Steps.vue';
 import Order from '@/components/Order.vue';
 
 export default {
-  name: 'Payment',
+  name: 'PayFlow',
   components: {
+    Steps,
     Order,
+  },
+  computed: {
+    ...mapGetters(['currentStep']),
   },
 };
 </script>
