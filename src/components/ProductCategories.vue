@@ -1,36 +1,88 @@
 <template lang="pug">
-  aside.menu
-    ul.menu-list.has-cus-background-light
-      li
-        a(
-          :class="active('')"
-          @click="setCategory('')"
-        ) 全部商品
-      li
-        a(
-          :class="active('bed')"
-          @click="setCategory('bed')"
-        ) 床架／床墊
-      li
-        a(
-          :class="active('chair')"
-          @click="setCategory('chair')"
-        ) 椅子／沙發
-      li
-        a(
-          :class="active('case')"
-          @click="setCategory('case')"
-        ) 櫃子／桌子
-      li
-        a(
-          :class="active('curtain')"
-          @click="setCategory('curtain')"
-        ) 地毯／窗簾
+  section
+    .tabs.is-info.is-toggle.is-fullwidth.my-3.mx-3.desktop
+      ul.is-info
+        li.main-menu
+          a(
+            href="#"
+            :class="active('')"
+            @click.prevent="setCategory('')"
+          ) 全部商品
+        li
+          a(
+            href="#"
+            :class="active('bed')"
+            @click.prevent="setCategory('bed')"
+          ) 床架／床墊
+        li
+          a(
+            href="#"
+            :class="active('chair')"
+            @click.prevent="setCategory('chair')"
+          )
+            span
+              font-awesome-icon.mr-1(:icon="['fas', 'chair']")
+            span 椅子／沙發
+            span
+              font-awesome-icon.ml-1(:icon="['fas', 'couch']")
+        li
+          a(
+            href="#"
+            :class="active('case')"
+            @click.prevent="setCategory('case')"
+          ) 櫃子／桌子
+        li
+          a(
+            href="#"
+            :class="active('curtain')"
+            @click.prevent="setCategory('curtain')"
+          ) 地毯／窗簾
+    aside.menu.has-background-light.mobile(:class="{expand}")
+      ul.menu-list.mx-1
+          li
+            a(
+              href="#"
+              :class="active('')"
+              @click.prevent="setCategory('')"
+            ) 全部商品
+          li
+            a(
+              href="#"
+              :class="active('bed')"
+              @click.prevent="setCategory('bed')"
+            ) 床架／床墊
+          li
+            a(
+              href="#"
+              :class="active('chair')"
+              @click.prevent="setCategory('chair')"
+            )
+              span
+                font-awesome-icon.mr-1(:icon="['fas', 'chair']")
+              span 椅子／沙發
+              span
+                font-awesome-icon.ml-1(:icon="['fas', 'couch']")
+          li
+            a(
+              href="#"
+              :class="active('case')"
+              @click.prevent="setCategory('case')"
+            ) 櫃子／桌子
+          li
+            a(
+              href="#"
+              :class="active('curtain')"
+              @click.prevent="setCategory('curtain')"
+            ) 地毯／窗簾
+      .collapse(:class="{expand}")
+        button(@click="toggleCollapse")
+          font-awesome-icon(:icon="['fas',  'angle-double-right']")
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
+  name: 'ProductCategories',
   computed: {
     ...mapGetters({
       category: 'product/category',
@@ -39,11 +91,19 @@ export default {
       return (cat) => (this.category[0] === cat ? 'active' : '');
     },
   },
+  data() {
+    return {
+      expand: false,
+    };
+  },
   methods: {
     ...mapActions({
       setCategory: 'product/setCategory',
       sticky: 'sticky',
     }),
+    toggleCollapse() {
+      this.expand = !this.expand;
+    },
   },
   beforeDestroy() {
     this.setCategory('');
@@ -57,28 +117,57 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $darkgrayn: #46505e
 $lightgray: #F4F3EA
+@mixin mobile-lg
+  @media screen and (max-width: 440px)
+    @content
+@mixin mobile
+  @media screen and (max-width: 375px)
+    @content
 *
   font-family: 'Noto Sans TC', sans serif
 .menu
   box-sizing: border-box
-  top: 0
-  width: 80%
-  margin: 5% 10% 0
+  box-shadow: rgba($navyblue, .8) 1px 1px 4px
+  top: 9%
+  margin: 2%
   transition: top .5s
-  &.sticky
-    width: 19%
-    position: fixed
-    top: 10%
-    margin: 2%
+  border-radius: 6px
+  position: fixed
+  z-index: 997
+  left: -175px
+  transition: left .5s
+  &.expand
+    left: 0
+  .collapse
+    position: absolute
+    left: 105%
+    top: 0%
+    transform: translateY(-50%)
+    transition: left .5s
+    +mobile-lg
+      left: 145%
+    +mobile
+      left: 120%
+    &.expand
+      left: 95%
+      button
+        transform: rotate(180deg)
+        box-shadow: rgba($navyblue, .8) -1px -1px 4px
+    button
+      color: $navyblue
+      border: 0px
+      border-radius: 100%
+      outline: 0
+      transition: transform opacity .5s
+      box-shadow: rgba($navyblue, .8) 1px 1px 4px
+      opacity: .8
+      &:hover, &:focus
+        opacity: 1
+  +mobile-lg
+    left: -55%
+  +mobile
+    left: -50%
 .active
-  color: $goldyellow
+  color: $hnavyblue
 
-// .menu
-//   +sm
-//     position: fixed
-//     left: 0
-//     z-index: 999
-//   &.sticky
-//     +sm
-//       z-index: 999
 </style>
