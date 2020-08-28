@@ -19,17 +19,19 @@ const store = new Vuex.Store({
       open: false,
     },
     loading: false,
-    pagination: {
-      current_page: 1,
-    },
+    // pagination: {
+    //   current_page: 1,
+    // },
     sticky: false,
+    currentStep: 1,
   }),
   getters: {
     msg: (state) => state.msg,
     page: (state) => state.page,
     loading: (state) => state.loading,
-    pagination: (state) => state.pagination,
+    // pagination: (state) => state.pagination,
     sticky: (state) => state.sticky,
+    currentStep: (state) => state.currentStep,
   },
   actions: {
     setMsg({ commit }, { msg, type }) {
@@ -39,9 +41,9 @@ const store = new Vuex.Store({
       });
       setTimeout(() => commit('CLEAR_MSG'), 2000);
     },
-    setPagination({ commit }, data) {
-      commit('SET_PAGINATION', data);
-    },
+    // setPagination({ commit }, data) {
+    //   commit('SET_PAGINATION', data);
+    // },
     togglePage({ commit }) {
       commit('TOGGLE_PAGE');
     },
@@ -50,6 +52,9 @@ const store = new Vuex.Store({
     },
     toggleSticky({ commit }, data) {
       commit('TOGGLE_STICKY', data);
+    },
+    setCurrentStep({ commit }, step) {
+      commit('SET_CURRENTSTEP', step);
     },
   },
   mutations: {
@@ -62,9 +67,9 @@ const store = new Vuex.Store({
     CLEAR_MSG(state) {
       Vue.set(state, 'msg', { text: '' });
     },
-    SET_PAGINATION(state, data) {
-      Vue.set(state, 'pagination', { ...data });
-    },
+    // SET_PAGINATION(state, data) {
+    //   Vue.set(state, 'pagination', { ...data });
+    // },
     TOGGLE_STICKY(state, data) {
       Vue.set(state, 'sticky', data);
     },
@@ -73,6 +78,9 @@ const store = new Vuex.Store({
     },
     TOGGLE_PAGE(state) {
       Vue.set(state.page, 'open', !state.page.open);
+    },
+    SET_CURRENTSTEP(state, step) {
+      Vue.set(state, 'currentStep', step);
     },
   },
   modules: {
