@@ -64,6 +64,7 @@ import { getBackendAllCupons, updateCuponData } from '@/apis/backend';
 import Coupon from './Coupon.vue';
 
 export default {
+  name: 'Coupons',
   components: {
     Coupon,
   },
@@ -102,9 +103,9 @@ export default {
       }
       this.togglePage();
     },
-    changeAttr(i) {
-      const attr = this.coupons[i].enabled ? '啟用' : '停用';
-      updateCuponData(this.coupons[i].id, this.coupons[i])
+    changeAttr(index) {
+      const attr = this.coupons[index].enabled ? '啟用' : '停用';
+      updateCuponData(this.coupons[index].id, this.coupons[index])
         .then(() => {
           this.setMsg({
             msg: `已${attr}`,
@@ -112,7 +113,7 @@ export default {
           });
         })
         .catch(() => {
-          this.coupons[i].enabled = !this.coupons[i].enabled;
+          this.coupons[index].enabled = !this.coupons[index].enabled;
           this.setMsg({
             msg: `${attr}失敗`,
             type: false,
@@ -128,7 +129,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap')
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B

@@ -62,24 +62,25 @@
             )
               span.icon.is-small: font-awesome-icon(:icon="['fas', 'trash-alt']")
               span 刪除
-    productPage(
+    ProductPage(
       :class="{open: page.open}"
       :addNewItem.sync="addNewItem"
     )
     template(v-if="pagination.current_page")
-      pagination(:pagination="pagination")
+      Pagination(:pagination="pagination")
     vue-confirm-dialog
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import pagination from '@/components/Pagination.vue';
+import Pagination from '@/components/Pagination.vue';
 import { getBackendAllData, deleteData } from '@/apis/backend';
-import productPage from './Product.vue';
+import ProductPage from './Product.vue';
 
 export default {
+  name: 'Products',
   components: {
-    productPage,
-    pagination,
+    ProductPage,
+    Pagination,
   },
   data() {
     return {
@@ -218,7 +219,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap')
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B

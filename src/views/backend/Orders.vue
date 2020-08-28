@@ -58,6 +58,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { getBackendOrders, changeOrderPayment } from '@/apis/backend';
 
 export default {
+  name: 'Orders',
   data() {
     return {
       loading: false,
@@ -100,7 +101,7 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Raleway:wght@500;700&display=swap)
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Raleway:wght@500;700&display=swap')
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B
