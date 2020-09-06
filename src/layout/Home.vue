@@ -43,7 +43,6 @@ export default {
 </script>
 <style lang="sass" scoped>
 .home
-  height: 100%
-  min-height: 70vh !important
+  min-height: 90%
   padding-bottom: 2%
 </style>
