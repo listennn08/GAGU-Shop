@@ -6,7 +6,7 @@
         .columns
           h2.logo.column.is-full.is-size-1.has-text-weight-bold GAGU
         .columns.is-centered
-          .login.column.is-three-fifths.box
+          .login.column.is-three-fifths.is-one-third-fullhd.box
             h3.is-size-4.has-text-left.px-5 登入
             .card-content
               .content
