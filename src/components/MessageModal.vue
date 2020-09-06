@@ -28,7 +28,7 @@ export default {
     100%
       transform: scale(1) translate(-50%, -50%)
   .banner
-    position: absolute
+    position: fixed
     width: 100%
     height: 100vh
     overflow: hidden
