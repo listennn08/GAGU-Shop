@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import moment from 'moment';
 
 const couponModule = {
   namespaced: true,
@@ -9,10 +10,7 @@ const couponModule = {
       title: null,
       percent: null,
       enabled: false,
-      deadline: {
-        datetime: null,
-        diff: null,
-      },
+      deadline_at: null,
     },
   }),
   getters: {
@@ -38,31 +36,36 @@ const couponModule = {
     clearTempCoupon({ commit }) {
       commit('CLEAR_TEMP_COUPON');
     },
+    setEnabled({ commit }) {
+      commit('SET_ENABLED');
+    },
   },
   mutations: {
-    SET_ORDERS(state, data) {
-      Vue.set(state, 'orders', data);
-    },
-    SET_ORDER(state, data) {
-      Vue.set(state, 'order', { ...data });
-    },
     SET_COUPONS(state, data) {
       Vue.set(state, 'coupons', data);
     },
-    SET_COUPON(state, data) {
-      Vue.set(state, 'coupon', { ...data });
+    SET_COUPON(state, {
+      code, title, percent, enabled, deadline,
+    }) {
+      Vue.set(state, 'coupon', {
+        code,
+        title,
+        percent,
+        enabled,
+        deadline_at: moment(deadline.datetime).format('yyyy-MM-DDThh:mm:ss'),
+      });
     },
     CLEAR_TEMP_COUPON(state) {
       Vue.set(state, 'coupon', {
         id: null,
         title: null,
         percent: null,
-        enabled: null,
-        deadline: {
-          datetime: null,
-          diff: null,
-        },
+        enabled: false,
+        deadline_at: null,
       });
+    },
+    SET_ENABLED(state) {
+      Vue.set(state.coupon, 'enabled', !state.coupon.enabled);
     },
   },
 };
