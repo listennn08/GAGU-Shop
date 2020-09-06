@@ -10,11 +10,8 @@ $lightgray: #F4F3EA
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&family=Lobster&display=swap')
 
 // Set your brand colors
-$purple: #3a3237
-$pink: #FA7C91
 $brown: #757763
 $beige-light: #D0D1CD
-$beige-lighter: #EFF0EB
 
 // Update Bulma's global variables
 $family-sans-serif: "Nunito", sans-serif
@@ -32,7 +29,6 @@ $text: $navyblue
 $warning: $lightgray
 
 
-
 $gap: 20px
 $tablet: 576px
 $desktop: 768px
@@ -41,12 +37,17 @@ $widescreen-enabled: true
 $fullhd: 1200px
 $fullhd-enabled: true
 
+$tooltip-arrow-size: 15px
+$tooltip-background-color: $navyblue
+$tooltip-z-index: 5
+
 $steps-active-color: $navyblue
 
 @import '~bulma/bulma'
 // Import Extensions
 @import '~bulma-switch'
 @import '~bulma-steps'
+@import '~@creativebulma/bulma-tooltip'
 
 
 
@@ -90,7 +91,6 @@ $steps-active-color: $navyblue
   &::-webkit-outer-spin-button, &::-webkit-inner-spin-button
     -webkit-appearance: none
 .footer
-  padding: 1rem 1.5rem 2rem
   z-index: 2
 .is-fixed-bottom
   position: sticky
@@ -100,7 +100,8 @@ $steps-active-color: $navyblue
   color: $lightgray
 .has-cus-background-light
   background-color: $lightgray
-  // color: $lightgray
+.has-background-transparent
+  background-color: transparent
 
 .pagination-link,
 .pagination-previous,
