@@ -13,30 +13,25 @@
             href="#"
             :class="active('bed')"
             @click.prevent="setCategory('bed')"
-          ) 床架／床墊
+          ) 床架｜床墊
         li
           a(
             href="#"
             :class="active('chair')"
             @click.prevent="setCategory('chair')"
-          )
-            //- span
-            //-   font-awesome-icon.mr-1(:icon="['fas', 'chair']")
-            span 椅子／沙發
-            //- span
-            //-   font-awesome-icon.ml-1(:icon="['fas', 'couch']")
+          ) 椅子｜沙發
         li
           a(
             href="#"
             :class="active('case')"
             @click.prevent="setCategory('case')"
-          ) 櫃子／桌子
+          ) 櫃子｜桌子
         li
           a(
             href="#"
             :class="active('curtain')"
             @click.prevent="setCategory('curtain')"
-          ) 地毯／窗簾
+          ) 地毯｜窗簾
     aside.menu.has-background-light.mobile(:class="{expand}")
       ul.menu-list.mx-1
           li
@@ -50,7 +45,12 @@
               href="#"
               :class="active('bed')"
               @click.prevent="setCategory('bed')"
-            ) 床架／床墊
+            )
+              span
+                font-awesome-icon.mr-1(:icon="['fas', 'bed']")
+              span 床架 | 床墊
+              span
+                font-awesome-icon.ml-1(:icon="['fas', 'bed']")
           li
             a(
               href="#"
@@ -59,7 +59,7 @@
             )
               span
                 font-awesome-icon.mr-1(:icon="['fas', 'chair']")
-              span 椅子／沙發
+              span 椅子｜沙發
               span
                 font-awesome-icon.ml-1(:icon="['fas', 'couch']")
           li
@@ -67,13 +67,25 @@
               href="#"
               :class="active('case')"
               @click.prevent="setCategory('case')"
-            ) 櫃子／桌子
+            )
+              .item
+                span.mr-1
+                  img(:src="require('@/assets/wardrobe.svg')")
+                span 櫃子｜桌子
+                span.ml-1
+                  img(:src="require('@/assets/table.svg')")
           li
             a(
               href="#"
               :class="active('curtain')"
               @click.prevent="setCategory('curtain')"
-            ) 地毯／窗簾
+            )
+              .item
+                span.mr-1
+                  img(:src="require('@/assets/carpet.svg')")
+                span 地毯｜窗簾
+                span.ml-1
+                    img(:src="require('@/assets/window.svg')")
       .collapse(:class="{expand}")
         button(@click="toggleCollapse")
           font-awesome-icon(:icon="['fas',  'angle-double-right']")
@@ -130,7 +142,6 @@ $lightgray: #F4F3EA
   box-shadow: rgba($navyblue, .8) 1px 1px 4px
   top: 9%
   margin: 2%
-  transition: top .5s
   border-radius: 6px
   position: fixed
   z-index: 997
@@ -170,4 +181,12 @@ $lightgray: #F4F3EA
 .active
   color: $hnavyblue
 
+.item
+  display: flex
+  justify-content: center
+  align-items: center
+  span
+    img
+      width: 16px
+      display: block
 </style>
