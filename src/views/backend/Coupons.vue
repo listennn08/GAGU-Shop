@@ -101,6 +101,7 @@ export default {
       if (typeof args[0] === 'number') {
         this.setCoupon(this.coupons[args[0]]);
       }
+      this.$forceUpdate();
       this.togglePage();
     },
     changeAttr(index) {

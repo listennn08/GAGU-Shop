@@ -1,6 +1,6 @@
 <template lang="pug">
   .modal
-    .modal-background(@click="togglePage()")
+    .modal-background(@click="cancel()")
     .modal-card
       header.modal-card-head
           h4.is-size-4 {{ title }}優惠
@@ -9,32 +9,39 @@
           .field.has-text-left
             label 名稱
             .control
-              input.input(type="text" v-model="coupon.title")
+              input.input(
+                type="text"
+                v-model="coupon.title"
+              )
             label 折扣碼
             .control
-              input.input(type="text" v-model="coupon.code")
+              input.input(
+                type="text"
+                v-model="coupon.code"
+              )
             label 折扣
             .control
-              input.input(type="number" v-model="coupon.percent")
+              input.input(
+                type="number"
+                v-model="coupon.percent"
+              )
             label 到期日
             .control
               input.input(
                 type="datetime-local"
-                v-model="coupon.deadline.datetime"
+                v-model="coupon.deadline_at"
               )
             label 啟用狀態
-            .field.has-text-left
-              .control
-                input.switch(
-                  :class="{'is-success': coupon.enabled}"
-                  :id="coupon.id"
-                  type="checkbox"
-                  v-model="coupon.enabled"
-                  :value="coupon.enabled"
-                )
-                label(
-                  :for="coupon.id"
-                ) {{ checkEnabled(coupon.enabled) }}
+            .control
+              input.switch(
+                :class="{'is-success': coupon.enabled}"
+                :id="coupon.id"
+                type="checkbox"
+                v-model="coupon.enabled"
+              )
+              label(
+                :for="coupon.id"
+              ) {{ checkEnabled(coupon.enabled) }}
       footer.modal-card-foot
         button.button.is-cus-primary(
           :class="{'is-loading': loading}"
@@ -56,6 +63,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { createCuponData, updateCuponData } from '@/apis/backend';
+import moment from 'moment';
 
 export default {
   name: 'Coupon',
@@ -70,6 +78,14 @@ export default {
     checkEnabled() {
       return (enabled) => (enabled ? '啟用' : '未啟用');
     },
+    check: {
+      get() {
+        return this.coupon.enabled;
+      },
+      set() {
+        this.setEnabled();
+      },
+    },
   },
   methods: {
     ...mapActions({
@@ -78,13 +94,14 @@ export default {
       updateCoupon: 'coupon/updateCoupon',
       deleteCoupon: 'coupon/deleteCoupon',
       clearTempCoupon: 'coupon/clearTempCoupon',
+      setEnabled: 'coupon/setEnabled',
       toggleLoading: 'toggleLoading',
       togglePage: 'togglePage',
     }),
     edit(e) {
       this.toggleLoading();
       const { action } = e.target.dataset;
-      this.coupon.deadline.datetime = new Date(this.coupon.deadline.datetime);
+      this.coupon.deadline_at = moment(this.coupon.deadline_at).format('yyyy-MM-DD hh:mm:ss');
       if (action === 'create') {
         createCuponData(this.coupon)
           .then((resp) => {
@@ -93,6 +110,8 @@ export default {
                 msg: '優惠卷新增成功',
                 type: true,
               });
+              this.addCoupon(this.coupon);
+              this.toggleLoading();
             }
           })
           .catch(() => {
@@ -100,6 +119,7 @@ export default {
               msg: '優惠卷新增失敗',
               type: false,
             });
+            this.toggleLoading();
           });
       } else {
         updateCuponData(this.coupon.id, this.coupon)
@@ -109,6 +129,7 @@ export default {
                 msg: '優惠卷更新成功',
                 type: true,
               });
+              this.toggleLoading();
             }
           })
           .catch(() => {
@@ -116,6 +137,7 @@ export default {
               msg: '優惠卷更新失敗',
               type: false,
             });
+            this.toggleLoading();
           });
       }
     },
@@ -123,6 +145,9 @@ export default {
       this.clearTempCoupon();
       this.togglePage();
     },
+  },
+  beforeDestroy() {
+    this.clearTempCoupon();
   },
 };
 </script>
