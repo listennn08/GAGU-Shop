@@ -17,7 +17,9 @@
               del.ml-1: small.has-text-lightgray.is-font-raleway
                 | {{ data.origin_price | cash }}
             .fullheight.has-centered
-              button.button.is-primary(@click.stop="goTo(data.id)") 查看更多
+              button.button.is-primary(
+                @click.stop="goTo(data.id)"
+              ) 查看更多
 </template>
 <script>
 import { getAllProducts } from '@/apis/frontend';

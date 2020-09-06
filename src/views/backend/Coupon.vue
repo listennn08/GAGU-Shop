@@ -55,10 +55,12 @@
           v-else
           data-action="update"
           type="button"
-          @click.prevent="edit") 更新
+          @click.prevent="edit"
+        ) 更新
         button.button(
           @click="cancel"
-          type="button") 取消
+          type="button"
+        ) 取消
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';

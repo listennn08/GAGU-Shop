@@ -1,7 +1,7 @@
 <template lang="pug">
   article.container.is-fullheight
-    CategoryList.is-child(:class="{sticky}")
-    ProductList.is-child
+    CategoryList
+    ProductList
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -32,60 +32,3 @@ export default {
   },
 };
 </script>
-<style lang="sass" scoped>
-$navyblue: #333D51
-$hnavyblue: #242b39
-$goldyellow: #D3AC2B
-$darkgray: #CBD0D8
-$darkgrayn: #46505e
-$lightgray: #F4F3EA
-
-@mixin sm()
-  @media screen and (max-width: 564px)
-    @content
-.category
-  box-sizing: border-box
-  +sm
-    position: fixed
-    z-index: 999
-    width: 140px
-    height: 100vh
-    display: flex
-    flex-direction: column
-    justify-content: center
-    transform: translateX(0)
-    transition: .5s
-    &.close
-      transform: translateX(-100%)
-      .collapse
-        transform: translateX(70%)
-      button
-        transform:  rotate(-180deg)
-      .container
-        box-shadow: 0 0 0
-    .collapse
-      display: block
-      position: absolute
-      align-self: flex-end
-      transition: .5s
-      left: 100px
-      right: -20px
-      button
-        text-align: center
-        width: 36px
-        height: 36px
-        border: 1px solid $navyblue
-        color: $navyblue
-        border-radius: 200px
-        font-size: 20px
-        background: $lightgray
-        transition: .5s
-        &:focus
-          outline: none
-.collapse
-  display: none
-// .is-pd
-//   display: flex
-//   align-items: flex-start
-//   justify-content: center
-</style>
