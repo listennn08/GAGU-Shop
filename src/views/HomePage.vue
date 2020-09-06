@@ -82,13 +82,11 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import ProductCarousel from '@/components/ProductCarousel.vue';
 import RandomRecommend from '@/components/RandomRecommend.vue';
 
 export default {
   name: 'HomePage',
   components: {
-    ProductCarousel,
     RandomRecommend,
   },
   data() {
