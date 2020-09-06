@@ -300,18 +300,6 @@ export default {
         .then((resp) => {
           this.toggleLoading();
           this.$router.push(`payflow/${resp.data.data.id}`);
-          // this.$confirm({
-          //   message: '訂單已建立',
-          //   button: {
-          //     no: '繼續購物',
-          //     yes: '去付款',
-          //   },
-          //   callback: (confirm) => {
-          //     if (confirm) {
-          //       this.$router.push(`payflow/${resp.data.data.id}`);
-          //     }
-          //   },
-          // });
         });
     },
     checkCoupon() {
