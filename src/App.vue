@@ -10,6 +10,7 @@ import cookies from './cookies';
 import Message from './components/MessageModal.vue';
 
 export default {
+  name: 'App',
   components: {
     Message,
   },
