@@ -5,20 +5,27 @@
         .columns
           span.tag.is-primary.is-fixed.is-uppercase
             | {{ tempProduct.category }}
-          .colum
+          .colum.is-img-centered
             .crad-image
               figure.image
                 img(:src="tempProduct.imageUrl[0]")
           .column.has-text-left
             h4.title.is-4 {{ tempProduct.title }}
+              span(v-if="tempProduct.store < 5").ml-2.tag.is-danger HOT
             .tag.is-primary 產品說明
             p.content {{ tempProduct.content }}
             .tag.is-primary 產品資訊
-            p.content {{ tempProduct.description }}
+            .content
+              p(
+                v-for="(description, index) in descriptionDisplay(tempProduct.description)"
+                :key="index"
+              ) {{ description }}
             .tag.is-primary 售價
             .price.is-size-5.has-text-weight-bold {{ tempProduct.price | cash }}
               span.is-size-6(:class="{strike: tempProduct.price}")
                 | {{ tempProduct.origin_price | cash }}
+            .tag.is-primary 庫存
+            p {{ tempProduct.options.store }} {{ tempProduct.unit }}
             .card-foot
               .field.has-addons.has-addons-lefted.mt-1
                 .control
@@ -40,16 +47,53 @@
                   @click="addToCart(tempProduct.id, tempProduct.quantity)"
                   :class="{'is-loading': isLoading}"
                 ) 加入購物車
-      button.button.is-text.my-5.is-pulled-left(
-        @click.prevent="$router.go(-1)"
-      ) &laquo; 上一頁
+        .columns.is-marginless
+          .column
+            button.button.is-text.is-pulled-left(
+              @click.prevent="$router.push('/products')"
+            ) &laquo; 上一頁
+        .columns
+          .column(v-if="tempProduct.category")
+            RandomRecommend(
+              title="相關商品"
+              titleSide="has-text-left"
+              :type="tempProduct.category"
+              :id="tempProduct.id"
+            )
+      .box.is-shadowless.mt-1
+        .subtitle.is-4.is-clearfix.has-text-weight-bold.has-text-left 商品評論
+        .columns.is-multiline.is-desktop
+          .column.is-half-desktop(
+            v-for="feeback in tempProduct.options.feeback"
+            :key="feeback.id"
+          )
+            .box
+              article.media
+                .media-left
+                  figure.image.is-64x64
+                    img(:src="feeback.pic")
+                .media-content
+                  .content
+                    p.has-text-left
+                      strong.is-size-5.mr-2 {{ feeback.id }}
+                      span.star(
+                        v-for="x in 5"
+                        :key="x"
+                        :class="fill(x, feeback.star)"
+                      ) &#9733;
+                      br
+                      | {{ feeback.comment }}
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { addCart, getDataDetail } from '@/apis/frontend';
+import RandomRecommend from '@/components/RandomRecommend.vue';
 
 export default {
   name: 'Product',
+  components: {
+    RandomRecommend,
+  },
   data() {
     return {
       isLoading: false,
@@ -63,20 +107,26 @@ export default {
     quantityMinest() {
       return this.tempProduct.quantity === 1;
     },
+    descriptionDisplay() {
+      return (discription) => (discription
+        ? discription.split('\n')
+        : '');
+    },
+    fill() {
+      return (index, rate) => (index <= rate ? 'fill' : '');
+    },
   },
   created() {
-    const loader = this.$loading.show({
-      opacity: 1,
-    });
-    const { id } = this.$route.params;
-    getDataDetail(id)
-      .then((resp) => {
-        this.setTempProduct({
-          ...resp.data.data,
-          quantity: 1,
-        });
-        loader.hide();
-      });
+    this.getProduct();
+  },
+  watch: {
+    '$route.params': {
+      handler() {
+        if (this.$route.params !== this.tempProduct.id) {
+          this.getProduct();
+        }
+      },
+    },
   },
   methods: {
     ...mapActions({
@@ -85,23 +135,62 @@ export default {
       clearTempProduct: 'product/clearTempProduct',
       toggleLoading: 'toggleLoading',
     }),
+    getProduct() {
+      const loader = this.$loading.show({
+        opacity: 1,
+      });
+      const { id } = this.$route.params;
+      getDataDetail(id)
+        .then((resp) => {
+          const { data } = resp.data;
+          data.options = JSON.parse(data.options);
+          this.setTempProduct({
+            ...data,
+            quantity: 1,
+          });
+          loader.hide();
+        });
+    },
     countQuantity(operate) {
+      const { store } = this.tempProduct.options;
       if (operate === 'm') {
         if (this.tempProduct.quantity > 1) {
           this.tempProduct.quantity -= 1;
         }
       } else if (operate === 'p') {
-        this.tempProduct.quantity += 1;
+        if (this.tempProduct.quantity + 1 <= store) {
+          this.tempProduct.quantity += 1;
+        } else {
+          this.setMsg({
+            type: false,
+            msg: `商品只剩下 ${store} ${this.tempProduct.unit}`,
+          });
+        }
       }
     },
     updateCartData() {
+      const { store } = this.tempProduct.options;
       if (this.tempProduct.quantity < 1) {
         this.tempProduct.quantity = 1;
+      } else if (this.tempProduct.quantity > store) {
+        this.tempProduct.quantity = store;
+        this.setMsg({
+          type: false,
+          msg: `商品只剩下 ${store} ${this.tempProduct.unit}`,
+        });
       }
     },
     addToCart(id, quantity) {
       this.isLoading = true;
+      const { store } = this.tempProduct.options;
       if (id && quantity > 0) {
+        if (quantity < store) {
+          this.setMsg({
+            type: false,
+            msg: '下單數量超過商品庫存數量！',
+          });
+          return;
+        }
         addCart(id, quantity)
           .then(() => {
             this.setMsg({
@@ -131,12 +220,15 @@ html, body
 section
   height: 100%
 .is-fixed
-  width: 5%
-  padding: 1% 4%
+  padding: 1%
   position: absolute
   top: 0
   left: 0
   z-index: 1
+.is-img-centered
+  display: flex
+  align-items: center
+  justify-content: center
 .is-font-raleway
   font-family: 'Raleway', sans serif
 $darkgrayn: #46505e
@@ -146,4 +238,9 @@ $darkgrayn: #46505e
   overflow: hidden
   text-overflow: ellipsis
   color: $darkgrayn
+.star
+  color: #ddd
+  text-shadow: .05em .05em #aaa
+  &.fill
+    color: #fd0
 </style>
