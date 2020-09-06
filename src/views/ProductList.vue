@@ -6,9 +6,11 @@
           v-for="(item, index) in products"
           :data-id="item.id"
           :key="index"
-          @click="$router.push(`/product/${item.id}`)"
         )
-          .box.has-text-left.is-rounded
+          .box.has-text-left.is-rounded(
+            :class="{disabled: !item.store}"
+            @click="$router.push(`/product/${item.id}`)"
+          )
             .card-image.columns.is-marginless.is-cus-centered
               .has-background-primary.has-text-light.is-category {{ item.category }}
               figure.image.is-256x256
@@ -20,6 +22,7 @@
                 router-link.descript-link.has-text-weight-bold(
                   @click.stop=""
                   :to="`/product/${item.id}`"
+                  :disabled="!item.store"
                 ) 查看更多 &raquo;
               .is-marginless
                 .price.in-bottom(v-if="item.price")
@@ -28,31 +31,36 @@
                       :class="{strike: item.price}"
                     ) {{ item.origin_price | cash }}
             .card-footer
-              .columns.is-marginless.is-paddingless.is-mobile.is-vcentered
+              .columns.is-marginless.is-paddingless.is-mobile
                 .column.is-6-mobile.is-paddingless
                   .field.has-addons.has-addons-centered.mt-1.is-fullwidth
                     .control
                       button.button.is-left(
                         @click.stop="countQuantity(index, 'm')"
-                        :disabled="quantityMinest(index)"
+                        :disabled="quantityLimit(index, 'min', item.store)"
                       ) &minus;
                     .control.is-expanded
                       input.input.has-text-centered(
                         type="number"
                         v-model="item.quantity"
                         @click.stop=""
-                        @change="updateCartData(index)"
+                        @change="updateCartData(index, item.store)"
+                        :disabled="!item.store"
                       )
                     .control
                       button.button.is-right(
                         @click.stop="countQuantity(index, 'p')"
+                        :disabled="quantityLimit(index, 'max', item.store)"
                       ) &plus;
+                  .column.is-paddingless.is-marginless(v-if="item.store === 1")
+                    small.has-text-danger 熱銷商品！剩最後一組！
                 .column.is-paddingless
                   .field.has-addons.has-addons-centered.mt-1.is-fullwidth
                     .control.is-expanded
                       button.button.is-primary.addCart.ml-1.is-fullwidth(
                         @click.stop="addToCart(index, item.id, item.quantity)"
                         :class="{'is-loading': item.isLoading}"
+                        :disabled="!item.store"
                       ) 加入購物車
       template(v-if="showPagination")
         Pagination(:pagination="pagination")
@@ -118,8 +126,16 @@ export default {
     showPagination() {
       return this.pagination.current_page && this.pagination.total_pages > 1;
     },
-    quantityMinest() {
-      return (index) => this.products[index].quantity === 1;
+    quantityLimit() {
+      return (index, type, store) => {
+        if (store) {
+          if (type === 'min') {
+            return this.products[index].quantity === 1;
+          }
+          return this.products[index].quantity === this.products[index].store;
+        }
+        return true;
+      };
     },
   },
   methods: {
@@ -137,6 +153,7 @@ export default {
           this.setProducts([...resp.data.data].map((el) => {
             const tmpEl = el;
             tmpEl.quantity = 1;
+            tmpEl.store = parseInt(JSON.parse(tmpEl.options).store, 10);
             tmpEl.isLoading = false;
             return tmpEl;
           }));
@@ -166,9 +183,11 @@ export default {
         this.products[pid].quantity += 1;
       }
     },
-    updateCartData(index) {
+    updateCartData(index, store) {
       if (this.products[index].quantity < 1) {
         this.products[index].quantity = 1;
+      } else if (this.products[index].quantity > store) {
+        this.products[index].quantity = store;
       }
     },
     addToCart(index, id, quantity) {
@@ -223,7 +242,41 @@ $lightgray: #F4F3EA
   transition: .5s
   cursor: pointer
   &:hover
-    box-shadow: 3px 3px 5px $navyblue
+    box-shadow: 3px 3px 6px rgba($navyblue, .6)
+  &.disabled
+    cursor: default
+    pointer-events: none
+    position: relative
+    &::before
+      content: 'SOLD OUT'
+      position: absolute
+      width: 70%
+      height: 45%
+      padding: 25% 5%
+      top: 25%
+      left: 15%
+      border: 3px solid #888
+      border-radius: 50%
+      box-sizing: border-box
+      text-align: center
+      transform: rotate(-30deg)
+      color: #888
+      text-shadow: 3px 3px 3px #444
+      font-size: 36px
+      font-weight: 900
+      z-index: 3
+    &::after
+      content: ''
+      position: absolute
+      width: 100%
+      height: 100%
+      background: rgba(#ddd, .4)
+      z-index: 2
+      top: 0
+      left: 0
+    &:hover
+      box-shadow: none
+
 .columns-centered
   display: flex
   justify-content: flex-start
