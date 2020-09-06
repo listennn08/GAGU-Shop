@@ -62,7 +62,10 @@
         button.button.is-primary.checkout(
           @click="$router.push('checkout')"
         ) 去結帳 &rsaquo;&rsaquo;
-      RandomRecommend(title="精選推薦")
+      RandomRecommend(
+        title="精選推薦"
+        type="all"
+      )
   .container(v-else)
     NoCart
 </template>
