@@ -95,6 +95,7 @@ export default {
         })
         .catch(() => {
           this.setMsg({ msg: '登入失敗！', type: false });
+          this.toggleLoading();
         });
     },
     togglePWDShow() {
