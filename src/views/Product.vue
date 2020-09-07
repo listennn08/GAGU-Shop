@@ -46,6 +46,7 @@
                 button.button.is-primary.addCart.mx-2.is-fullwidth(
                   @click="addToCart(tempProduct.id, tempProduct.quantity)"
                   :class="{'is-loading': isLoading}"
+                  :disabled="tempProduct.options.store < 1"
                 ) 加入購物車
         .columns.is-marginless
           .column
