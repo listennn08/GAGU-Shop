@@ -180,7 +180,8 @@ $lightgray: #F4F3EA
     left: -50%
 .active
   color: $hnavyblue
-
+  background-color: whitesmoke
+  border-color: #D0D1CD
 .item
   display: flex
   justify-content: center
