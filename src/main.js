@@ -6,8 +6,10 @@ import './plugins/loading';
 import './plugins/confirm';
 import './plugins/fontawesome';
 import './plugins/vee-validate';
+import './plugins/aos';
 import './filters';
 import './assets/main.sass';
+import './plugins/wow';
 
 Vue.config.productionTip = false;
 
