@@ -114,6 +114,7 @@ export default {
             type: true,
           });
           this.setCurrentStep(3);
+          this.$router.push(`/paysuccess/${resp.data.data.id}`);
         })
         .catch(() => {
           this.toggleLoading();
