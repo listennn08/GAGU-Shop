@@ -6,3 +6,4 @@ Vue.filter('hideContent', (text) => {
   return ((t.length > 40) ? `${t.substring(0, 37)}...` : t);
 });
 Vue.filter('hideTitle', (text) => ((text.length > 10) ? `${text.substring(0, 9)}...` : text));
+Vue.filter('replaceTab', (s) => s.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'));
