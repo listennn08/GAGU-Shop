@@ -220,13 +220,6 @@ $darkgray: #CBD0D8
 $darkgrayn: #46505e
 $lightgray: #F4F3EA
 
-@keyframes cartAnimate
-  0%
-    transform: translateY(-20%)
-  50%
-    transform: translateY(0%)
-  100%
-    transform: translateY(-20%)
 @mixin largeScreen()
   @media screen and (min-width: 1441px)
     @content
@@ -348,7 +341,6 @@ $lightgray: #F4F3EA
     bottom: 4%
   &:hover
     box-shadow: 2px 2px 4px $goldyellow
-    animation: cartAnimate 2s infinite linear forwards
     text-decoration: underline
 .shop-container
   position: relative
