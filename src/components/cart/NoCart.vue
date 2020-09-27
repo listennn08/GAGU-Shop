@@ -21,3 +21,9 @@ export default {
   },
 };
 </script>
+<style lang="sass" scoped>
+.noItemAlert
+  margin: 50px 0
+  padding: 50px 0
+  font-size: 24px
+</style>
