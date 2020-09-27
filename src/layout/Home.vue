@@ -2,7 +2,7 @@
   div
     Navbar
     .home
-      router-view
+      router-view.view
     Footer
 </template>
 
@@ -43,6 +43,15 @@ export default {
 </script>
 <style lang="sass" scoped>
 .home
-  min-height: 90%
+  min-height: 100%
   padding-bottom: 2%
+.footer
+  position: sticky
+  height: 100px
+  padding: 25px
+  display: flex
+  align-items: center
+  justify-content: center
+.view
+  min-height: 65vh
 </style>
