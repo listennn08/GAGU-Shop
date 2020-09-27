@@ -21,6 +21,6 @@ library.add(
   faAngleRight, faClipboard, faAngleDoubleDown, faAngleDoubleUp, faInfoCircle,
   faInstagram, faFacebook, faExclamationCircle, faUser, faPhoneAlt, faExclamationTriangle,
   faAddressCard, faTags, faMinus, faFlag, faAngleDoubleLeft, faAngleDoubleRight,
-  faChair, faCouch, faGithub, faStar, faBed,
+  faChair, faCouch, faGithub, faStar, faBed, faTags,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
