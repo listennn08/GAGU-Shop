@@ -12,19 +12,21 @@
           .column.has-text-left
             h4.title.is-4 {{ tempProduct.title }}
               span(v-if="tempProduct.store < 5").ml-2.tag.is-danger HOT
-            .tag.is-primary 產品說明
-            p.content {{ tempProduct.content }}
-            .tag.is-primary 產品資訊
+            .tag.content-tag.is-light 產品說明
+            section.content
+              p.is-marginless(
+                v-html="descriptionDisplay(tempProduct.content)"
+              )
+            .tag.content-tag.is-light 產品資訊
             .content
-              p(
-                v-for="(description, index) in descriptionDisplay(tempProduct.description)"
-                :key="index"
-              ) {{ description }}
-            .tag.is-primary 售價
+              p.is-marginless(
+                v-html="descriptionDisplay(tempProduct.description)"
+              )
+            .tag.content-tag.is-light 售價
             .price.is-size-5.has-text-weight-bold {{ tempProduct.price | cash }}
               span.is-size-6(:class="{strike: tempProduct.price}")
                 | {{ tempProduct.origin_price | cash }}
-            .tag.is-primary 庫存
+            .tag.content-tag.is-light 庫存
             p {{ tempProduct.options.store }} {{ tempProduct.unit }}
             .card-foot
               .field.has-addons.has-addons-lefted.mt-1
@@ -83,7 +85,7 @@
                         :class="fill(x, feeback.star)"
                       ) &#9733;
                       br
-                      | {{ feeback.comment }}
+                      span.comment {{ feeback.comment }}
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -110,7 +112,7 @@ export default {
     },
     descriptionDisplay() {
       return (discription) => (discription
-        ? discription.split('\n')
+        ? discription.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
         : '');
     },
     fill() {
@@ -218,6 +220,7 @@ export default {
 <style lang="sass" scoped>
 html, body
   height: 100%
+  font-family: 'Noto Sans TC', sans serif
 section
   height: 100%
 .is-fixed
@@ -230,18 +233,23 @@ section
   display: flex
   align-items: center
   justify-content: center
-.is-font-raleway
-  font-family: 'Raleway', sans serif
 $darkgrayn: #46505e
+.content-tag
+  font-size: 16px
+  margin: 5px 0
 .content
   min-height: 120px
   max-height: 120px
   overflow: hidden
   text-overflow: ellipsis
   color: $darkgrayn
+.content, .price
+  margin-bottom: 5px
 .star
   color: #ddd
   text-shadow: .05em .05em #aaa
   &.fill
     color: #fd0
+.comment
+  font-size: 14px
 </style>
