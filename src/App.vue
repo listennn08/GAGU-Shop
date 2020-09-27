@@ -31,7 +31,7 @@ export default {
 </script>
 <style lang="sass">
 html, body
-  height: 100%
+  height: 100vh
   min-height: 100vh
 #app
   font-family: 'Noto Sanc TC', 'Raleway', sans-serif
@@ -40,6 +40,6 @@ html, body
   text-align: center
   display: flex
   flex-direction: column
-  height: 100%
-  min-height: 100% !important
+  height: 100vh
+  min-height: 100vh
 </style>
