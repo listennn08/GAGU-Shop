@@ -49,6 +49,10 @@ const routes = [
         path: 'payflow/:id',
         component: () => import('@/views/PayFlow.vue'),
       },
+      {
+        path: 'paysuccess/:id',
+        component: () => import('@/views/PaySuccess.vue'),
+      },
     ],
   },
   {
