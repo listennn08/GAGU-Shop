@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     Navbar
-    .home
+    .home(@click="toggleOpen()")
       router-view.view
     Footer
 </template>
@@ -23,7 +23,7 @@ export default {
     ...mapGetters(['sticky']),
   },
   methods: {
-    ...mapActions(['toggleSticky']),
+    ...mapActions(['toggleSticky', 'toggleMenuOpen']),
     handleScroll() {
       if (window.scrollY > 300) {
         this.toggleSticky(true);
@@ -38,13 +38,17 @@ export default {
         timer = setTimeout(() => func.apply(this, args), delay);
       };
     },
+    toggleOpen() {
+      this.toggleMenuOpen(false);
+    },
   },
 };
 </script>
 <style lang="sass" scoped>
 .home
-  min-height: 100%
+  min-height: 80%
   padding-bottom: 2%
+  overflow-x: hidden
 .footer
   position: sticky
   height: 100px
@@ -53,5 +57,5 @@ export default {
   align-items: center
   justify-content: center
 .view
-  min-height: 65vh
+  min-height: 60vh
 </style>

@@ -24,6 +24,7 @@ const store = new Vuex.Store({
     },
     sticky: false,
     currentStep: 1,
+    menuToggle: false,
   }),
   getters: {
     msg: (state) => state.msg,
@@ -32,6 +33,7 @@ const store = new Vuex.Store({
     pagination: (state) => state.pagination,
     sticky: (state) => state.sticky,
     currentStep: (state) => state.currentStep,
+    menuToggle: (state) => state.menuToggle,
   },
   actions: {
     setMsg({ commit }, { msg, type }) {
@@ -55,6 +57,9 @@ const store = new Vuex.Store({
     },
     setCurrentStep({ commit }, step) {
       commit('SET_CURRENTSTEP', step);
+    },
+    toggleMenuOpen({ commit }, toggle) {
+      commit('TOGGLE_MENU_OPEN', toggle);
     },
   },
   mutations: {
@@ -81,6 +86,9 @@ const store = new Vuex.Store({
     },
     SET_CURRENTSTEP(state, step) {
       Vue.set(state, 'currentStep', step);
+    },
+    TOGGLE_MENU_OPEN(state, toggle) {
+      Vue.set(state, 'menuToggle', toggle);
     },
   },
   modules: {

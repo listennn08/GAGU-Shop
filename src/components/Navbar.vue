@@ -1,7 +1,7 @@
 <template lang="pug">
   nav.hero-head.has-background-light(:class="{'is-fixed-top': sticky}")
     .columns.is-mobile.is-marginless
-      .column.left
+      .column.left(@click.stop="toggleDrop(false)")
         h1.is-size-2.has-text-weight-bold: router-link.logo(to="/") GAGU
       .column.center.desktop
         router-link.navbar-item(to="/about") 關於我們
@@ -12,14 +12,12 @@
         router-link.navbar-item.desktop(v-if="hasLogin" to="/admin") 去後台
         router-link.navbar-item.desktop(v-if="!hasLogin" to="/login") 登入
         router-link.navbar-item.desktop(v-else to="/logout") 登出
-        .dropdown.is-right.mobile(:class="{'is-active': hide}")
-          .dropdown-trigger(@click="toggleDrop")
+        .dropdown.is-right.mobile(:class="{'is-active': menuToggle}")
+          .dropdown-trigger(@click.stop="toggleDrop")
             button.button.is-text(aria-haspopup="true" aria-controls="dropdown-menu")
               span: font-awesome-icon(:icon="['fas', 'bars']")
-              span.icon.is-small
-                font-awesome-icon(:icon="['fas', 'angle-down']")
           #dropdown-menu.dropdown-menu(role="menu")
-            .dropdown-content
+            .dropdown-content(@click.stop="toggleDrop")
               router-link.dropdown-item(to="/about") 關於我們
               router-link.dropdown-item(to="/products") 產品列表
               router-link.dropdown-item(to="/shopcart") 購物車
@@ -30,7 +28,7 @@
               router-link.dropdown-item(v-else to="/logout") 登出
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Navbar',
@@ -39,21 +37,30 @@ export default {
       drop: false,
     };
   },
+  props: {
+    open: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     ...mapGetters({
       isLogin: 'login/isLogin',
       sticky: 'sticky',
+      menuToggle: 'menuToggle',
     }),
     hasLogin() {
       return this.isLogin;
     },
-    hide() {
-      return this.drop;
-    },
   },
   methods: {
-    toggleDrop() {
-      this.drop = !this.drop;
+    ...mapActions(['toggleMenuOpen']),
+    toggleDrop(toggle) {
+      if (typeof toggle === 'boolean') {
+        this.toggleMenuOpen(toggle);
+      } else {
+        this.toggleMenuOpen(!this.menuToggle);
+      }
     },
   },
 };
