@@ -2,7 +2,7 @@
   section.section.is-paddingless
     .container.mt-5
       .card.is-shadowless(v-if="tempProduct")
-        .columns
+        .columns.px-2
           span.tag.is-primary.is-fixed.is-uppercase
             | {{ tempProduct.category }}
           .colum.is-img-centered
@@ -12,22 +12,22 @@
           .column.has-text-left
             h4.title.is-4 {{ tempProduct.title }}
               span(v-if="tempProduct.store < 5").ml-2.tag.is-danger HOT
-            .tag.content-tag.is-light 產品說明
-            section.content
+            .tag.content-tag.is-light.mb-1 產品說明
+            section.description.mb-3
               p.is-marginless(
                 v-html="descriptionDisplay(tempProduct.content)"
               )
-            .tag.content-tag.is-light 產品資訊
-            .content
+            .tag.content-tag.is-light.mb-1 產品資訊
+            section.content.mb-3
               p.is-marginless(
                 v-html="descriptionDisplay(tempProduct.description)"
               )
-            .tag.content-tag.is-light 售價
-            .price.is-size-5.has-text-weight-bold {{ tempProduct.price | cash }}
+            .tag.content-tag.is-light.mb-1 售價
+            .price.is-size-5.has-text-weight-bold.mb-3 {{ tempProduct.price | cash }}
               span.is-size-6(:class="{strike: tempProduct.price}")
                 | {{ tempProduct.origin_price | cash }}
-            .tag.content-tag.is-light 庫存
-            p {{ tempProduct.options.store }} {{ tempProduct.unit }}
+            .tag.content-tag.is-light.mb-1 庫存
+            p.mb-3 {{ tempProduct.options.store }} {{ tempProduct.unit }}
             .card-foot
               .field.has-addons.has-addons-lefted.mt-1
                 .control
@@ -187,7 +187,7 @@ export default {
       this.isLoading = true;
       const { store } = this.tempProduct.options;
       if (id && quantity > 0) {
-        if (quantity < store) {
+        if (quantity > store) {
           this.setMsg({
             type: false,
             msg: '下單數量超過商品庫存數量！',
@@ -218,6 +218,9 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
+@mixin small
+  @media screen and (max-width: 1280px)
+    @content
 html, body
   height: 100%
   font-family: 'Noto Sans TC', sans serif
@@ -237,6 +240,14 @@ $darkgrayn: #46505e
 .content-tag
   font-size: 16px
   margin: 5px 0
+.description
+  min-height: 120px
+  max-height: 200px
+  +small
+    max-height: 215px
+  overflow: hidden
+  text-overflow: ellipsis
+  color: $darkgrayn
 .content
   min-height: 120px
   max-height: 120px
@@ -244,7 +255,7 @@ $darkgrayn: #46505e
   text-overflow: ellipsis
   color: $darkgrayn
 .content, .price
-  margin-bottom: 5px
+  margin-bottom: 10px
 .star
   color: #ddd
   text-shadow: .05em .05em #aaa

@@ -88,6 +88,7 @@
                     img(:src="require('@/assets/window.svg')")
       .collapse(:class="{expand}")
         button(@click="toggleCollapse")
+          | 產品分類
           font-awesome-icon(:icon="['fas',  'angle-double-right']")
 </template>
 <script>
@@ -135,6 +136,9 @@ $lightgray: #F4F3EA
 @mixin mobile
   @media screen and (max-width: 375px)
     @content
+@mixin mobile-xs
+  @media screen and (max-width: 320px)
+    @content
 *
   font-family: 'Noto Sans TC', sans serif
 .menu
@@ -153,31 +157,37 @@ $lightgray: #F4F3EA
     position: absolute
     left: 105%
     top: 0%
-    transform: translateY(-50%)
+    // transform: translateY(-50%)
     transition: left .5s
     +mobile-lg
       left: 145%
     +mobile
-      left: 120%
+      left: 130%
+    +mobile-xs
+      left: 110%
     &.expand
       left: 95%
       button
-        transform: rotate(180deg)
-        box-shadow: rgba($navyblue, .8) -1px -1px 4px
+        box-shadow: rgba($navyblue, .8) 1px 1px 4px
+        svg
+          transform: rotate(180deg)
     button
+      padding: 5% 20%
       color: $navyblue
       border: 0px
-      border-radius: 100%
+      border-radius: 15px
       outline: 0
-      transition: transform opacity .5s
+      transition: opacity .5s
       box-shadow: rgba($navyblue, .8) 1px 1px 4px
       opacity: .8
       &:hover, &:focus
         opacity: 1
+      svg
+        transition: transform .5s
   +mobile-lg
     left: -55%
   +mobile
-    left: -50%
+    left: -55%
 .active
   color: $hnavyblue
   background-color: whitesmoke

@@ -2,7 +2,7 @@
   section
     .hero-body
       .container
-        .columns.is-centered
+        .columns.is-centered.is-desktop
           .column.is-two-thirds
             Steps
             h4.h4t.has-text-left
@@ -11,16 +11,17 @@
             .preview-content(
               :class="{show: isCollapse}"
             )
-              .columns.is-marginless.has-text-centered.is-vcentered(
+              .columns.is-marginless.has-text-centered.is-vcentered.is-desktop(
                 v-for="( item, index ) in products"
                 :key="index"
               )
-                .column
-                  figure.image.is-128x128
+                .column.is-3
+                  figure.image.is-128x128.is-inline-block.mr-1
                     img(:src="item.product.imageUrl[0]")
-                .column {{ item.product.title }}
-                .column x{{ item.quantity }}
-                .column.is-font-raleway {{ itemTotal(index) | cash }}
+                  .mobile {{ item.product.title }}
+                .column.desktop {{ item.product.title }}
+                .column.is-1.is-marginless.is-paddingless x{{ item.quantity }}
+                .column.is-2.mb-1.is-paddingless {{ itemTotal(index) | cash }}
             .buy-item(v-if="products.length > 4")
               button.collapse(
                 :class="isCollapse? 'up' : 'down'"
@@ -31,14 +32,22 @@
                 )
             .field.has-addons.has-addons-right
               p.control
-                input.input(
+                input.input.desktop(
+                  type="text"
+                  placeholder="請輸入折扣碼"
+                  v-model="discount.code"
+                  @change="debounce(checkCoupon())"
+                )
+                input.input.is-small.mobile(
                   type="text"
                   placeholder="請輸入折扣碼"
                   v-model="discount.code"
                   @change="debounce(checkCoupon())"
                 )
               p.control
-                label.button.is-static(:class="{'is-loading': isLoading}")
+                label.button.is-static.desktop(:class="{'is-loading': isLoading}")
+                  font-awesome-icon(:icon="['fas', 'tags']")
+                label.button.is-static.is-small.mobile(:class="{'is-loading': isLoading}")
                   font-awesome-icon(:icon="['fas', 'tags']")
             div
               .has-text-right(v-if="discount.code")
@@ -48,7 +57,7 @@
                 ) {{ discount.msg }}
             .subtitle.is-5.is-font-Noto.is-fullwidth
               .has-text-right 總額
-                span.is-font-raleway {{ countAll | cash }}
+                span {{ countAll | cash }}
             h4.h4t.has-text-left
               font-awesome-icon.titleIcon(:icon="['fas', 'info-circle']")
               span &nbsp; 訂單資訊
@@ -359,7 +368,18 @@ export default {
 </script>
 <style lang="sass" scoped>
 $darkgray: #CBD0D8
-
+@mixin tablet
+  @media screen and (min-width: 576px) and (max-width: 767px)
+    @content
+@mixin desktop
+  @media screen and (min-width: 768px)
+    @content
+@mixin widescreen
+  @media screen and (min-width: 993px)
+    @content
+@mixin xxs
+  @media screen and (max-width: 375px)
+    @content
 @keyframes collapseAnimation
   0%
     transform: translateY(0)
@@ -386,10 +406,10 @@ $darkgray: #CBD0D8
   font-font-family: 'Noto Sans TC', sans serif
   span
     display: inline-block
-    font-font-family: 'Raleway', sans serif
     margin-left: 5%
 .preview-content
-  max-height: 300px
+  +desktop
+    max-height: 300px
   overflow-y: hidden
   &.show
     animation: collpaseList .5s 1 linear forwards

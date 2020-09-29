@@ -1,6 +1,5 @@
 <template lang="pug">
-  .container.is-fluid
-    Cart
+  Cart
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -36,7 +35,6 @@ $lightgray: #F4F3EA
 .price
   width: 100%
   text-align: left
-  font-family: 'Raleway', sans-serif
   font-weight: 500
   span.strike
     margin-left: 1%
@@ -45,11 +43,6 @@ $lightgray: #F4F3EA
     color: #888
   &.in-bottom
     margin-top: auto
-.item-total
-  font-family: 'Raleway', sans-serif
-.total
-  td
-    font-family: 'Raleway', sans-serif
 .checkout
   &:hover
     background: $hnavyblue

@@ -229,6 +229,9 @@ $lightgray: #F4F3EA
 @mixin mobileScreen()
   @media screen and (max-width: 760px)
     @content
+@mixin xxs()
+  @media screen and (max-width: 320px)
+    @content
 .section
   min-height: 100%
 .box
@@ -258,6 +261,9 @@ $lightgray: #F4F3EA
       font-size: 36px
       font-weight: 900
       z-index: 3
+      +xxs
+        height: 38%
+        padding: 18% 5%
     &::after
       content: ''
       position: absolute

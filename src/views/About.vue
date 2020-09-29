@@ -81,11 +81,12 @@ $lightgray: #F4F3EA
 @mixin mobile()
   @media screen and (max-width: 380px)
     @content
+body
+  overflow-x: hidden
 .container
   display: flex
   flex-direction: column
   justify-content: center
-  // margin-top: 20px
 .event
   box-sizing: border-box
   width: 46%
@@ -94,6 +95,13 @@ $lightgray: #F4F3EA
   position: relative
   display: flex
   flex-direction: column
+  +sm
+    display: block
+  +xs
+    display: block
+    width: 100%
+  +mobile
+    width: 100%
   &:nth-of-type(odd)
     align-self: flex-start
     align-items: flex-end
@@ -111,11 +119,17 @@ $lightgray: #F4F3EA
       justify-content: flex-end
   &:nth-of-type(even)
     align-self: flex-end
+    +sm
+      align-self: flex-start
+      .date
+        &::before
+          left: 109.4% !important
+          right: -10% !important
+          height: 150% !important
     .date
       &::before
         content: ''
         position: absolute
-        top: -5
         left: -8%
         height: 150%
         border: 1px solid #888

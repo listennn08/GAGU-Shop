@@ -1,5 +1,20 @@
 <template lang="pug">
-  .container.is-fluid
+  .container.is-fluid.is-paddingless
+    //- mobile
+    .banner.mobile.first
+      .image.is-2by1.img-1(data-aos="fade-in")
+        .text-in-img.center.mobile(data-aos="fade-right")
+          button.button.is-light.link(
+            class="wow bounceIn"
+            @click="goToProduct('')"
+          ) 購物去
+        .box.box-set.is-fixed-top.has-background-light.o-8.wow.fadeInOut
+          .text
+            p
+              span.logo GAGU
+              | 有豐富的傢俱
+            p 多種多樣的傢俱任君挑選
+            p 還等什麼，馬上就去購物吧～
     .container
       .banner.banner-1.desktop
         .image.is-3by1.img-1(data-aos="fade-in")
@@ -16,14 +31,6 @@
             p 多種多樣的傢俱任君挑選
             p 還會不定期有優惠活動，照顧支持 GAGU 的你們
             p 還等什麼，馬上就去購物吧～
-      //- mobile
-      .banner.mobile
-        .image.is-2by1.img-1(data-aos="fade-in")
-          .text-in-img.center.mobile(data-aos="fade-right")
-            button.button.is-light.link(
-              class="wow bounceIn"
-              @click="goToProduct('')"
-            ) 購物去
       .banner.banner-1.desktop
         .image.is-3by1.is-fixed-right.img-2(data-aos="fade-in")
           .text-in-img.right
@@ -102,17 +109,18 @@
         .image.is-2by1.img-5.mobile
         .box.box-set.is-shadowless.mt-1.has-background-transparent
           .has-text-left(data-aos="fade-down")
-            p.is-size-7-mobile 不想老是錯過 GAGU 的最新消息？
-            p.is-size-7-mobile 那就訂閱電子報吧！GAGU 的所有最新資訊都在這！
+            p.is-size-6-mobile.has-text-centered 不想老是錯過 GAGU 的最新消息？
+            p.is-size-6-mobile.has-text-centered 那就訂閱電子報吧！
+            p.is-size-6-mobile.has-text-centered GAGU 的所有最新資訊都在這！
           .field.has-addons.has-addons-centered.mt-1.is-fullwidth(data-aos="fade-down")
             .control.is-expanded
-              input.input(
+              input.input.is-small(
                 placeholder="輸入電子郵件"
                 type="mail"
                 v-model="email"
               )
             .control
-              button.button.is-primary(
+              button.button.is-primary.is-small(
                 type="button"
                 @click="subcribe()"
               ) 訂閱電子報
@@ -238,7 +246,7 @@ $darkgrayn: #46505e
 $lightgray: #F4F3EA
 *
   font-family: 'Noto Sans TC', sans serif
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@700;900&family=Lobster&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Lobster&display=swap')
 @mixin tablet
   @media screen and (min-width: 576px) and (max-width: 767px)
     @content
@@ -248,7 +256,9 @@ $lightgray: #F4F3EA
 @mixin widescreen
   @media screen and (min-width: 993px)
     @content
-
+@mixin xxs
+  @media screen and (max-width: 375px)
+    @content
 $navyblue: #333D50
 $hnavyblue: #242b39
 .img-1
@@ -262,10 +272,14 @@ $hnavyblue: #242b39
   background: url('../static/photo-1493663284031-b7e3aefcae8e.jpg') center center / 100%
 .img-5
   background: url('../static/sincerely-media-OOHsoUNRxt8-unsplash.jpg') center 60% / 100%
+  &.mobile
+    background: url('../static/sincerely-media-OOHsoUNRxt8-unsplash.jpg') center 60% / 200%
 .logo
   font-family: 'Lobster', sans serif
   margin-right: 1%
-
+.container
+  padding-left: 20px
+  padding-right: 20px
 .banner
   width: 100%
   box-sizing: border-box
@@ -280,6 +294,8 @@ $hnavyblue: #242b39
   @media screen and ( min-width: 767px )
     &.mobile
       display: none
+  &.mobile.first
+    margin: 0
   &:not(:last-of-type)
     margin: 5% 0
   &-1
@@ -293,7 +309,13 @@ $hnavyblue: #242b39
     flex-direction: column
     color: $hnavyblue
   &.is-fixed-top
-    // margin-bottom: 20%
+    top: 10%
+    left: 20%
+    right: 20%
+    +xxs
+      top: 5%
+      left: 10%
+      right: 10%
   &.is-fixed-right
     top: 10%
     left: 50%
@@ -393,6 +415,9 @@ $hnavyblue: #242b39
           opacity: 1
           z-index: 80
           right: 60px
+          +xxs
+            left: -250px
+            top: -80px
 .is-outlinedless
   background: transparent
   border: 0
