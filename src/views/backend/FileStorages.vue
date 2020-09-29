@@ -116,7 +116,6 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Raleway:wght@500;700&display=swap')
 $navyblue: #333D51
 $hnavyblue: #242b39
 $goldyellow: #D3AC2B
@@ -167,8 +166,6 @@ $lightgray: #F4F3EA
   border-left: 1px solid $navyblue
   font-weight: 500
   font-family: 'Noto Sans TC', sans-serif
-.raleway
-  font-family: 'Raleway', sans-serif
 .col
   border: 1px solid $navyblue
   width: 8%
@@ -177,7 +174,6 @@ $lightgray: #F4F3EA
   white-space: nowrap
   &:first-of-type, &:nth-of-type(6), &:nth-of-type(7),  &:nth-of-type(8)
     text-transform: uppercase
-    font-family: 'Raleway', sans-serif
   .text
     width: 100%
     padding: 2%

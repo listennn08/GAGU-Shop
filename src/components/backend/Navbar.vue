@@ -66,7 +66,7 @@ $goldyellow: #D3AC2B
 $darkgray: #CBD0D8
 $lightgray: #F4F3EA
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&family=Raleway:wght@500;700&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap')
 
 .hero-head
   background: $navyblue
@@ -75,9 +75,6 @@ $lightgray: #F4F3EA
     color: $goldyellow
   .column
     padding: 0 0.75rem
-.logo
-  color: $lightgray
-  font-family: 'Raleway', sans-serif
 .navbar-item
   padding: 0 0.75rem
   color: $lightgray

@@ -13,8 +13,7 @@
             img(:src="prod.product.imageUrl[0]")
         .column {{ prod.product.title }}
         .column x{{ prod.quantity }}
-        .column
-          .is-font-raleway {{ prod.product.price | cash }}
+        .column {{ prod.product.price | cash }}
     .columns.is-marginless.collapse.is-centered(
       v-if="showCollapseButton"
     )

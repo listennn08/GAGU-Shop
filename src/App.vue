@@ -34,7 +34,7 @@ html, body
   height: 100vh
   min-height: 100vh
 #app
-  font-family: 'Noto Sanc TC', 'Raleway', sans-serif
+  font-family: 'Noto Sanc TC', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-align: center
