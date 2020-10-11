@@ -8,12 +8,22 @@
         v-for="prod in order.products"
         :key="prod.product.id"
       )
-        .column
+        .column.is-paddingless.is-marginless.is-3.mobile
+          .box.is-shadowless.py-1.px-2
+            .media
+              .media-left
+                figure.image.is-64x64.is-inline-block.mr-1
+                  img(:src="prod.product.imageUrl[0]")
+              .content
+                .is-5.has-text-weight-bold {{ prod.product.title }}
+                p.is-marginless x{{ prod.quantity }}
+                p.is-marginless {{ prod.product.price | cash }}
+        .column.desktop
           figure.image.is-128x128
             img(:src="prod.product.imageUrl[0]")
-        .column {{ prod.product.title }}
-        .column x{{ prod.quantity }}
-        .column {{ prod.product.price | cash }}
+        .column.desktop {{ prod.product.title }}
+        .column.desktop x{{ prod.quantity }}
+        .column.desktop {{ prod.product.price | cash }}
     .columns.is-marginless.collapse.is-centered(
       v-if="showCollapseButton"
     )
@@ -83,7 +93,7 @@ export default {
     },
     showCollapseButton() {
       return this.order.products
-        ? this.order.products.length > 3
+        ? this.order.products.length > 2
         : false;
     },
     paidStatus() {
@@ -134,10 +144,31 @@ export default {
     transform: translateY(10%)
   100%
     transform: translateY(20%)
+@mixin pad
+  @media screen and (max-width: 768px)
+    @content
+@mixin mobile-large
+  @media screen and (max-width: 414px)
+    @content
+@mixin mobile
+  @media screen and (max-width: 413px) and (min-width: 375px)
+    @content
+@mixin xxs
+  @media screen and (max-width: 375px)
+    @content
+
 .list
   overflow: hidden
   &.hide
     max-height: 450px
+    +pad
+      max-height: 300px
+    +mobile-large
+      max-height: 190px
+    +mobile
+      max-height: 200px
+    +xxs
+      max-height: 210px
 .collapse__btn
   cursor: pointer
   padding: 1% 2%

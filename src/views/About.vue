@@ -96,12 +96,13 @@ body
   display: flex
   flex-direction: column
   +sm
-    display: block
+    // display: block
   +xs
     display: block
-    width: 100%
+    width: 90%
   +mobile
-    width: 100%
+    margin: .5em auto
+    width: 90%
   &:nth-of-type(odd)
     align-self: flex-start
     align-items: flex-end
@@ -110,21 +111,23 @@ body
         content: ''
         position: absolute
         right: -10%
-        top: -5
+        // top: -5%
         height: 150%
         border: 1px solid #888
         z-index: -10
+        +sm
+          // border: 0
     .box
       display: flex
       justify-content: flex-end
   &:nth-of-type(even)
     align-self: flex-end
     +sm
-      align-self: flex-start
+      // align-self: flex-start
       .date
         &::before
-          left: 109.4% !important
-          right: -10% !important
+          left: -8% !important
+          // right: -10% !important
           height: 150% !important
     .date
       &::before

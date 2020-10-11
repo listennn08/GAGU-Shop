@@ -11,85 +11,157 @@
         li
           a(
             href="#"
+            :class="active('curtain')"
+            @click.prevent="setCategory('curtain')"
+          ) 窗簾
+        li
+          a(
+            href="#"
             :class="active('bed')"
             @click.prevent="setCategory('bed')"
-          ) 床架｜床墊
+          ) 床架
         li
           a(
             href="#"
             :class="active('chair')"
             @click.prevent="setCategory('chair')"
-          ) 椅子｜沙發
+          ) 椅子
         li
           a(
             href="#"
-            :class="active('case')"
-            @click.prevent="setCategory('case')"
-          ) 櫃子｜桌子
+            :class="active('sofa')"
+            @click.prevent="setCategory('sofa')"
+          ) 沙發
         li
           a(
             href="#"
-            :class="active('curtain')"
-            @click.prevent="setCategory('curtain')"
-          ) 地毯｜窗簾
-    aside.menu.has-background-light.mobile(:class="{expand}")
-      ul.menu-list.mx-1
+            :class="active('lamp')"
+            @click.prevent="setCategory('lamp')"
+          ) 檯燈
+        li
+          a(
+            href="#"
+            :class="active('bookcase')"
+            @click.prevent="setCategory('bookcase')"
+          ) 書櫃
+        li
+          a(
+            href="#"
+            :class="active('wardrobe')"
+            @click.prevent="setCategory('wardrobe')"
+          ) 衣櫃
+        li
+          a(
+            href="#"
+            :class="active('cabinet')"
+            @click.prevent="setCategory('cabinet')"
+          ) 電視櫃
+        li
+          a(
+            href="#"
+            :class="active('table')"
+            @click.prevent="setCategory('table')"
+          ) 吧台桌
+    .menu.has-background-light.mobile
+      .collapse
+        button.button.is-small.is-text(@click="toggleCollapse")
+          font-awesome-icon(:icon="['fas',  expand ? 'angle-double-up' : 'angle-double-down']")
+      ul.menu-list.mx-1(:class="{expand}")
+          li
+            a(href="#" disabled) {{ currentCategory }}
           li
             a(
               href="#"
               :class="active('')"
-              @click.prevent="setCategory('')"
+              @click.prevent="setCategory('');toggleCollapse();"
             ) 全部商品
           li
             a(
               href="#"
-              :class="active('bed')"
-              @click.prevent="setCategory('bed')"
+              :class="active('curtain')"
+              @click.prevent="setCategory('curtain');toggleCollapse();"
             )
-              span
-                font-awesome-icon.mr-1(:icon="['fas', 'bed']")
-              span 床架 | 床墊
-              span
-                font-awesome-icon.ml-1(:icon="['fas', 'bed']")
+              .item
+                span 窗簾
+                span.ml-1
+                    img(:src="require('@/assets/window.svg')")
+          li
+            a(
+              href="#"
+              :class="active('bed')"
+              @click.prevent="setCategory('bed');toggleCollapse();"
+            )
+              span 床架
+              span.ml-1
+                font-awesome-icon(:icon="['fas', 'bed']")
           li
             a(
               href="#"
               :class="active('chair')"
-              @click.prevent="setCategory('chair')"
+              @click.prevent="setCategory('chair');toggleCollapse();"
             )
-              span
-                font-awesome-icon.mr-1(:icon="['fas', 'chair']")
-              span 椅子｜沙發
-              span
-                font-awesome-icon.ml-1(:icon="['fas', 'couch']")
+              span 椅子
+              span.ml-1
+                font-awesome-icon(:icon="['fas', 'chair']")
           li
             a(
               href="#"
-              :class="active('case')"
-              @click.prevent="setCategory('case')"
+              :class="active('sofa')"
+              @click.prevent="setCategory('sofa');toggleCollapse();"
+            )
+              span 沙發
+              span.ml-1
+                font-awesome-icon(:icon="['fas', 'couch']")
+          li
+            a(
+              href="#"
+              :class="active('lamp')"
+              @click.prevent="setCategory('lamp');toggleCollapse();"
             )
               .item
-                span.mr-1
+                span 檯燈
+                span.ml-1
+                  img(:src="require('@/assets/lamp.svg')")
+          li
+            a(
+              href="#"
+              :class="active('bookcase')"
+              @click.prevent="setCategory('bookcase');toggleCollapse();"
+            )
+              .item
+                span 書櫃
+                span.ml-1
+                  img(:src="require('@/assets/shelving.svg')")
+          li
+            a(
+              href="#"
+              :class="active('wardrobe')"
+              @click.prevent="setCategory('wardrobe');toggleCollapse();"
+            )
+              .item
+                span 衣櫃
+                span.ml-1
                   img(:src="require('@/assets/wardrobe.svg')")
-                span 櫃子｜桌子
-                span.ml-1
-                  img(:src="require('@/assets/table.svg')")
           li
             a(
               href="#"
-              :class="active('curtain')"
-              @click.prevent="setCategory('curtain')"
+              :class="active('cabinet')"
+              @click.prevent="setCategory('cabinet');toggleCollapse();"
             )
               .item
-                span.mr-1
-                  img(:src="require('@/assets/carpet.svg')")
-                span 地毯｜窗簾
+                span 電視櫃
                 span.ml-1
-                    img(:src="require('@/assets/window.svg')")
-      .collapse(:class="{expand}")
-        button(@click="toggleCollapse")
-          | 產品分類
-          font-awesome-icon(:icon="['fas',  'angle-double-right']")
+                  img(:src="require('@/assets/cupboard.svg')")
+          li
+            a(
+              href="#"
+              :class="active('table')"
+              @click.prevent="setCategory('table');toggleCollapse();"
+            )
+              .item
+                span 吧台桌
+                span.ml-1
+                  img(:src="require('@/assets/bar.svg')")
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
@@ -101,12 +173,27 @@ export default {
       category: 'product/category',
     }),
     active() {
-      return (cat) => (this.category[0] === cat ? 'active' : '');
+      return (cat) => (this.category === cat ? 'active' : '');
+    },
+    currentCategory() {
+      return (this.category === '' ? this.categoryList.all : this.categoryList[this.category]);
     },
   },
   data() {
     return {
       expand: false,
+      categoryList: {
+        all: '全部商品',
+        bed: '床架',
+        chair: '椅子',
+        lamp: '檯燈',
+        sofa: '沙發',
+        bookcase: '書櫃',
+        cabinet: '電視櫃',
+        wardrobe: '衣櫃',
+        table: '桌子',
+        curtain: '窗簾',
+      },
     };
   },
   methods: {
@@ -134,60 +221,41 @@ $lightgray: #F4F3EA
   @media screen and (max-width: 440px)
     @content
 @mixin mobile
-  @media screen and (max-width: 375px)
+  @media screen and (min-width: 375px)
     @content
 @mixin mobile-xs
-  @media screen and (max-width: 320px)
+  @media screen and (max-width: 374px)
     @content
 *
   font-family: 'Noto Sans TC', sans serif
 .menu
   box-sizing: border-box
   box-shadow: rgba($navyblue, .8) 1px 1px 4px
-  top: 9%
-  margin: 2%
+  top: 8%
+  left: 5%
+  width: 85%
+  margin: 1%
   border-radius: 6px
   position: fixed
-  z-index: 997
-  left: -175px
-  transition: left .5s
+  z-index: 3
+  transition: .2s
+  opacity: .8
+  +mobile-xs
+    top: 10%
+  &:hover
+    opacity: 1
+.collapse
+  position: absolute
+  right: 1%
+  padding: 1% 0
+  button
+    outline: none
+.menu-list
+  height: 36px
+  overflow: hidden
+  transition: height .2s
   &.expand
-    left: 0
-  .collapse
-    position: absolute
-    left: 105%
-    top: 0%
-    // transform: translateY(-50%)
-    transition: left .5s
-    +mobile-lg
-      left: 145%
-    +mobile
-      left: 130%
-    +mobile-xs
-      left: 110%
-    &.expand
-      left: 95%
-      button
-        box-shadow: rgba($navyblue, .8) 1px 1px 4px
-        svg
-          transform: rotate(180deg)
-    button
-      padding: 5% 20%
-      color: $navyblue
-      border: 0px
-      border-radius: 15px
-      outline: 0
-      transition: opacity .5s
-      box-shadow: rgba($navyblue, .8) 1px 1px 4px
-      opacity: .8
-      &:hover, &:focus
-        opacity: 1
-      svg
-        transition: transform .5s
-  +mobile-lg
-    left: -55%
-  +mobile
-    left: -55%
+    height: 400px
 .active
   color: $hnavyblue
   background-color: whitesmoke

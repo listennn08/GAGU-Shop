@@ -12,8 +12,8 @@
               figure.image
                 img(:src="data.imageUrl[0]")
             .media-content
-              .content
-                p.mh-70.card-title {{ data.title }}
+              .rnd-content
+                p.has-text-left.mh-70.card-title {{ data.title }}
                 .has-text-primary
                   span {{ data.price | cash }}
                   del.ml-1: small.has-text-lightgray

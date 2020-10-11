@@ -1,68 +1,69 @@
 <template lang="pug">
   section.section.is-paddingless
-    .container.mt-5
-      .card.is-shadowless(v-if="tempProduct")
-        .columns.px-2
-          span.tag.is-primary.is-fixed.is-uppercase
-            | {{ tempProduct.category }}
-          .colum.is-img-centered
-            .crad-image
-              figure.image
-                img(:src="tempProduct.imageUrl[0]")
-          .column.has-text-left
-            h4.title.is-4 {{ tempProduct.title }}
-              span(v-if="tempProduct.store < 5").ml-2.tag.is-danger HOT
-            .tag.content-tag.is-light.mb-1 產品說明
-            section.description.mb-3
-              p.is-marginless(
-                v-html="descriptionDisplay(tempProduct.content)"
-              )
-            .tag.content-tag.is-light.mb-1 產品資訊
-            section.content.mb-3
-              p.is-marginless(
-                v-html="descriptionDisplay(tempProduct.description)"
-              )
-            .tag.content-tag.is-light.mb-1 售價
-            .price.is-size-5.has-text-weight-bold.mb-3 {{ tempProduct.price | cash }}
-              span.is-size-6(:class="{strike: tempProduct.price}")
-                | {{ tempProduct.origin_price | cash }}
-            .tag.content-tag.is-light.mb-1 庫存
-            p.mb-3 {{ tempProduct.options.store }} {{ tempProduct.unit }}
-            .card-foot
-              .field.has-addons.has-addons-lefted.mt-1
-                .control
-                  button.button.is-left(
-                    @click="countQuantity('m')"
-                    :disabled="quantityMinest"
-                  ) &minus;
-                .control
-                  input.input.has-text-centered(
-                    type="number"
-                    v-model="tempProduct.quantity"
-                    @change="updateCartData()"
+    .container.mt-1
+      .columns.is-desktop
+        .column.is-full
+          .box.is-shadowless(v-if="tempProduct")
+            .columns
+              span.tag.is-primary.is-fixed.is-uppercase
+                | {{ tempProduct.category }}
+              .colum.is-img-centered
+                .crad-image
+                  figure.image
+                    img(:src="tempProduct.imageUrl[0]")
+              .column.has-text-left
+                h4.title.is-4 {{ tempProduct.title }}
+                  span(v-if="tempProduct.store < 5").ml-2.tag.is-danger HOT
+                .tag.content-tag.is-light.mb-1 產品說明
+                section.description.mb-3
+                  p.is-marginless(
+                    v-html="descriptionDisplay(tempProduct.content)"
                   )
-                .control
-                  button.button.is-right(
-                    @click="countQuantity('p')"
-                  ) &plus;
-                button.button.is-primary.addCart.mx-2.is-fullwidth(
-                  @click="addToCart(tempProduct.id, tempProduct.quantity)"
-                  :class="{'is-loading': isLoading}"
-                  :disabled="tempProduct.options.store < 1"
-                ) 加入購物車
-        .columns.is-marginless
-          .column
-            button.button.is-text.is-pulled-left(
-              @click.prevent="$router.push('/products')"
-            ) &laquo; 上一頁
-        .columns
-          .column(v-if="tempProduct.category")
-            RandomRecommend(
-              title="相關商品"
-              titleSide="has-text-left"
-              :type="tempProduct.category"
-              :id="tempProduct.id"
-            )
+                .tag.content-tag.is-light.mb-1 產品資訊
+                section.content.mb-3
+                  p.is-marginless(
+                    v-html="descriptionDisplay(tempProduct.description)"
+                  )
+                .tag.content-tag.is-light.mb-1 售價
+                .price.is-size-5.has-text-weight-bold.mb-3 {{ tempProduct.price | cash }}
+                  span.is-size-6(:class="{strike: tempProduct.price}")
+                    | {{ tempProduct.origin_price | cash }}
+                .tag.content-tag.is-light.mb-1 庫存
+                p.mb-3 {{ tempProduct.options.store }} {{ tempProduct.unit }}
+                .card-foot
+                  .field.has-addons.has-addons-lefted.mt-1
+                    .control
+                      button.button.is-left(
+                        @click="countQuantity('m')"
+                        :disabled="quantityMinest"
+                      ) &minus;
+                    .control
+                      input.input.has-text-centered(
+                        type="number"
+                        v-model="tempProduct.quantity"
+                        @change="updateCartData()"
+                      )
+                    .control
+                      button.button.is-right(
+                        @click="countQuantity('p')"
+                      ) &plus;
+                    button.button.is-primary.addCart.mx-2.is-fullwidth(
+                      @click="addToCart(tempProduct.id, tempProduct.quantity)"
+                      :class="{'is-loading': isLoading}"
+                      :disabled="tempProduct.options.store < 1"
+                    ) 加入購物車
+        .column
+          button.button.is-text.is-pulled-left(
+            @click.prevent="$router.push('/products')"
+          ) &laquo; 上一頁
+      .columns
+        .column(v-if="tempProduct.category")
+          RandomRecommend(
+            title="相關商品"
+            titleSide="has-text-left"
+            :type="tempProduct.category"
+            :id="tempProduct.id"
+          )
       .box.is-shadowless.mt-1
         .subtitle.is-4.is-clearfix.has-text-weight-bold.has-text-left 商品評論
         .columns.is-multiline.is-desktop
@@ -76,16 +77,20 @@
                   figure.image.is-64x64
                     img(:src="feeback.pic")
                 .media-content
-                  .content
+                  .comment-content
                     p.has-text-left
                       strong.is-size-5.mr-2 {{ feeback.id }}
-                      span.star(
+                      span.star.desktop(
                         v-for="x in 5"
                         :key="x"
                         :class="fill(x, feeback.star)"
                       ) &#9733;
-                      br
-                      span.comment {{ feeback.comment }}
+                      p.has-text-left.is-marginless.mobile: span.star(
+                        v-for="x in 5"
+                        :key="x"
+                        :class="fill(x, feeback.star)"
+                      ) &#9733;
+                      span.has-text-left.comment {{ feeback.comment }}
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -227,10 +232,9 @@ html, body
 section
   height: 100%
 .is-fixed
-  padding: 1%
   position: absolute
-  top: 0
-  left: 0
+  top: 1.25rem
+  left: 1.25rem
   z-index: 1
 .is-img-centered
   display: flex

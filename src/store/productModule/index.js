@@ -3,7 +3,7 @@ import Vue from 'vue';
 const productModule = {
   namespaced: true,
   state: () => ({
-    category: [''],
+    category: '',
     products: [],
     tempProduct: {
       id: null,
@@ -22,14 +22,7 @@ const productModule = {
   }),
   getters: {
     products: (state) => (
-      (state.category.length > 1)
-        ? state.products.filter((el) => {
-          const cat = el.category.toLowerCase();
-          return cat.indexOf(state.category[0]) > -1 || cat.indexOf(state.category[1]) > -1;
-        })
-        : state.products.filter((el) => el.category
-          .toLowerCase()
-          .indexOf(state.category[0]) > -1)
+      state.products.filter((el) => el.category.toLowerCase().indexOf(state.category) > -1)
     ),
     tempProduct: (state) => state.tempProduct,
     category: (state) => state.category,
@@ -100,20 +93,22 @@ const productModule = {
       });
     },
     SET_CATEGORY(state, category) {
-      switch (category) {
-        case 'bed':
-        case 'curtain':
-          Vue.set(state, 'category', [category]);
-          break;
-        case 'chair':
-          Vue.set(state, 'category', [category, 'sofa']);
-          break;
-        case 'case':
-          Vue.set(state, 'category', [category, 'table']);
-          break;
-        default:
-          Vue.set(state, 'category', [category]);
-      }
+      Vue.set(state, 'category', category);
+      // switch (category) {
+      //   case 'bed':
+      //     break;
+      //   case 'curtain':
+      //     Vue.set(state, 'category', [category]);
+      //     break;
+      //   case 'chair':
+      //     Vue.set(state, 'category', [category, 'sofa']);
+      //     break;
+      //   case 'case':
+      //     Vue.set(state, 'category', [category, 'table']);
+      //     break;
+      //   default:
+      //     Vue.set(state, 'category', [category]);
+      // }
     },
   },
 };

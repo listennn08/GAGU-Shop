@@ -25,7 +25,7 @@ export default {
   methods: {
     ...mapActions(['toggleSticky', 'toggleMenuOpen']),
     handleScroll() {
-      if (window.scrollY > 300) {
+      if (window.scrollY > 100) {
         this.toggleSticky(true);
       } else {
         this.toggleSticky(false);
@@ -57,5 +57,5 @@ export default {
   align-items: center
   justify-content: center
 .view
-  min-height: 60vh
+  min-height: 78vh
 </style>

@@ -234,6 +234,9 @@ $lightgray: #F4F3EA
     @content
 .section
   min-height: 100%
+.container
+  +mobileScreen
+    margin-top: 10%
 .box
   transition: .5s
   cursor: pointer
