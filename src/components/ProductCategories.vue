@@ -63,12 +63,11 @@
             @click.prevent="setCategory('table')"
           ) 吧台桌
     .menu.has-background-light.mobile
-      .collapse
-        button.button.is-small.is-text(@click="toggleCollapse")
-          font-awesome-icon(:icon="['fas',  expand ? 'angle-double-up' : 'angle-double-down']")
       ul.menu-list.mx-1(:class="{expand}")
-          li
+          li.collapse(@click="toggleCollapse()")
             a(href="#" disabled) {{ currentCategory }}
+            button(@click.stop="toggleCollapse")
+              font-awesome-icon(:icon="['fas',  expand ? 'angle-up' : 'angle-down']")
           li
             a(
               href="#"
@@ -228,28 +227,32 @@ $lightgray: #F4F3EA
     @content
 *
   font-family: 'Noto Sans TC', sans serif
+.menu-list a
+  font-size: 16px
 .menu
   box-sizing: border-box
   box-shadow: rgba($navyblue, .8) 1px 1px 4px
-  top: 8%
-  left: 5%
-  width: 85%
-  margin: 1%
-  border-radius: 6px
+  top: 61px
+  left: 0
+  width: 100%
   position: fixed
-  z-index: 3
+  z-index: 6
   transition: .2s
-  opacity: .8
+  text-align: left
+  padding: .75rem .5rem
   +mobile-xs
     top: 10%
-  &:hover
-    opacity: 1
 .collapse
-  position: absolute
-  right: 1%
-  padding: 1% 0
+  display: flex
+  align-items: center
+  justify-content: space-between
   button
     outline: none
+    border: 0
+    margin-right: 2%
+    padding: .5em .75em
+    font-size: 16px
+    background-color: transparent
 .menu-list
   height: 36px
   overflow: hidden
@@ -261,11 +264,8 @@ $lightgray: #F4F3EA
   background-color: whitesmoke
   border-color: #D0D1CD
 .item
-  display: flex
-  justify-content: center
-  align-items: center
   span
     img
       width: 16px
-      display: block
+      display: inline-block
 </style>
