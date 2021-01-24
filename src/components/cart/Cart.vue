@@ -98,10 +98,11 @@
         ) 去結帳 &rsaquo;&rsaquo;
     .container(v-else)
       NoCart
-    RandomRecommend(
-      title="精選推薦"
-      type="all"
-    )
+    .container
+      RandomRecommend(
+        title="精選推薦"
+        type="all"
+      )
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
