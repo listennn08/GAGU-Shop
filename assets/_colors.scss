@@ -1,0 +1,39 @@
+$navyblue: #333d51;
+$hnavyblue: #242b39;
+$goldyellow: #d3ac2b;
+$darkgray: #cbd0d8;
+$darkgrayn: #46505e;
+$lightgray: #f4f3ea;
+
+// Set your brand colors
+$brown: #757763;
+$beige-light: #d0d1cd;
+
+// Update Bulma's global variables
+$family-sans-serif: 'Nunito', sans-serif;
+$grey-dark: $brown;
+$grey-light: $beige-light;
+$primary: $navyblue;
+$link: $navyblue;
+$link-hover: $hnavyblue;
+$link-hover-border: $hnavyblue;
+$link-active: $goldyellow;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+$scheme-main: #fff;
+$text: $navyblue;
+$warning: $lightgray;
+
+$gap: 20px;
+$tablet: 576px;
+$desktop: 768px;
+$widescreen: 993px;
+$widescreen-enabled: true;
+$fullhd: 1200px;
+$fullhd-enabled: true;
+
+$tooltip-arrow-size: 15px;
+$tooltip-background-color: $navyblue;
+$tooltip-z-index: 5;
+
+$steps-active-color: $navyblue;

@@ -1,0 +1,19 @@
+{
+  "about": "關於我們",
+  "product": "產品列表",
+  "cart": "購物車",
+  "order": "我的訂單",
+  "client": "前台",
+  "management": "管理",
+  "signup": "註冊",
+  "signin": "登入",
+  "signout": "登出",
+  "manage": {
+    "product": "商品管理",
+    "coupon": "優惠管理",
+    "order": "訂單管理",
+    "image": "圖片管理"
+  },
+  "add-to-cart": "加入購物車",
+  "sold-out": "已售完"
+}

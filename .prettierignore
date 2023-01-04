@@ -1,0 +1,6 @@
+# Ignore artifacts:
+.nuxt
+build
+coverage
+*-lock.yaml
+README.md

@@ -1,0 +1,23 @@
+{
+  "about": "About",
+  "product": "Products",
+  "cart": "Cart",
+  "order": "Order",
+  "client": "Client",
+  "management": "Management",
+  "signup": "Sign up",
+  "signin": "Sign in",
+  "signout": "Sign out",
+  "manage": {
+    "product": "Manage products",
+    "coupon": "Manage coupons",
+    "order": "Manage orders",
+    "image": "Manage images"
+  },
+  "add-to-cart": "Add to cart",
+  "sold-out": "Sold out",
+  "sofa": "Sofa",
+  "bed-frame": "Bed frame",
+  "bar-table": "Bar table",
+  "bookcase": "Bookcase"
+}
