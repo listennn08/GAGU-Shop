@@ -1,66 +1,36 @@
-<script lang="ts" setup>
-import { timeline } from '~~/assets/about/about.json'
+<script setup lang="ts">
+import dayjs from 'dayjs'
+import { timeline } from '~/assets/about/timeline'
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
+
+function formatDate(year: number, month: number) {
+  return dayjs(`${year}-${month}-1`).format('YYYY/MM')
+}
 </script>
 
 <template>
-  <section class="static">
-    <div class="container">
-      <TimelineEvent
-        v-for="obj in timeline"
-        :year="obj.year"
-        :month="obj.month"
-        :header="obj.header"
-        :animtaion="obj.animation"
-      >
-        {{ obj.content }}
-      </TimelineEvent>
-    </div>
-    <div class="in_right">
+  <section class="static py-4">
+    <p-timeline :value="timeline" align="alternate">
+      <template #content="{ item }">
+        <div v-p-animateonscroll="item.animation" class="animate-duration-1000">
+          <p-tag
+            :value="formatDate(item.year, item.month)"
+            severity="secondary"
+            class="mb-2"
+          />
+          <p-panel :header="item[locale].header">
+            <div v-html="item[locale].content.join('<br />')" />
+          </p-panel>
+        </div>
+      </template>
+    </p-timeline>
+
+    <div
+      class="fixed inset-y-0 right-0 pointer-events-none z-[-1] before:content-[''] before:w-full before:h-full before:right-0 before:bottom-0 before:absolute before:bg-[linear-gradient(90deg,#ffffff,transparent)])"
+    >
       <img src="/img/photo-1591822459440-5db10556435a.jpg" alt="" />
     </div>
   </section>
 </template>
-
-<style scoped lang="scss">
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    top: 0;
-    bottom: 0;
-    border: 1px solid $navyblue;
-    @include xs {
-      border-color: transparent;
-    }
-  }
-}
-
-.in_right {
-  position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: -20;
-  & > img {
-    height: 100vh;
-    position: relative;
-    z-index: -21;
-  }
-  &::before {
-    content: '';
-    width: 100%;
-    height: 100%;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    background: linear-gradient(90deg, #fff, transparent);
-  }
-}
-</style>

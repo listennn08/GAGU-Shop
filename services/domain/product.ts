@@ -1,5 +1,5 @@
-import { IProduct } from '~~/store/productStore'
-import { IProductClient } from '../infra'
+import type { IProduct } from '~~/store/productStore'
+import type { IProductClient } from '../infra'
 
 export interface IProductService {
   getAllProducts(p?: number): Promise<{

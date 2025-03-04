@@ -11,7 +11,7 @@ export const useCart = async () => {
   const removeAllContainer = ref()
 
   const countAll = computed(() =>
-    cartStore.shopcartItems.reduce(
+    cartStore.shopCartItems.reduce(
       (pre, cur) =>
         pre + cur.quantity * (cur.price ? cur.price : cur.origin_price),
       0,
@@ -19,18 +19,18 @@ export const useCart = async () => {
   )
 
   const itemTotal = (index: number) => {
-    const item = cartStore.shopcartItems[index]
+    const item = cartStore.shopCartItems[index]
     return item.quantity * (item.price ? item.price : item.origin_price)
   }
   const quantityMinest = (index: number) =>
-    cartStore.shopcartItems[index].quantity === 1
+    cartStore.shopCartItems[index].quantity === 1
 
   const getShopCartData = async () => {
-    if (cartStore.loading === true || cartStore.shopcartItems.length) return
+    if (cartStore.loading === true || cartStore.shopCartItems.length) return
     try {
       cartStore.loading = true
       const resp = await cartService.getAllCartItems()
-      cartStore.setShopcartItems(resp)
+      cartStore.setShopCartItems(resp)
     } catch (e) {
       console.error(e)
     } finally {
@@ -39,7 +39,7 @@ export const useCart = async () => {
   }
 
   const countQuantity = (index: number, operate: string) => {
-    const item = cartStore.shopcartItems[index]
+    const item = cartStore.shopCartItems[index]
     const product = productStore.products.find((el) => el.id === item.id)
     if (operate === 'm' && item.quantity > 1) {
       item.quantity -= 1
@@ -50,15 +50,15 @@ export const useCart = async () => {
   }
 
   const updateCartData = (index: number) => {
-    const { id, quantity } = cartStore.shopcartItems[index]
+    const { id, quantity } = cartStore.shopCartItems[index]
     if (quantity < 1) {
-      cartStore.shopcartItems[index].quantity = 1
+      cartStore.shopCartItems[index].quantity = 1
     }
     const product = productStore.products.find((el) => el.id === id)
     if (product && quantity < product.store) {
       updateCart(
-        cartStore.shopcartItems[index].id,
-        cartStore.shopcartItems[index].quantity,
+        cartStore.shopCartItems[index].id,
+        cartStore.shopCartItems[index].quantity,
       )
     }
   }
@@ -68,9 +68,9 @@ export const useCart = async () => {
   async function deleteCartData(idx: number): Promise<void>
   async function deleteCartData(eOrIndex: number | MouseEvent): Promise<void> {
     if (typeof eOrIndex === 'number') {
-      const item = cartStore.shopcartItems[eOrIndex]
+      const item = cartStore.shopCartItems[eOrIndex]
       item.isLoading = true
-      await deleteCart(cartStore.shopcartItems[eOrIndex].id)
+      await deleteCart(cartStore.shopCartItems[eOrIndex].id)
       cartStore.deleteItem(eOrIndex)
     } else {
       // const loader = this.$loading.show({
@@ -86,7 +86,7 @@ export const useCart = async () => {
   await useAsyncData(getShopCartData)
 
   return {
-    shopcartItems: cartStore.shopcartItems,
+    shopCartItems: cartStore.shopCartItems,
     countAll,
     removeAllContainer,
     itemTotal,

@@ -10,13 +10,18 @@ const store = useAppStore()
 const productStore = useProductStore()
 const productService = ProductService(ProductClient())
 const isLoading = ref(false)
-const quantityMinest = computed(() => productStore.tempProduct.quantity === 1)
-const descriptionDisplay = (discription?: string) =>
-  discription
-    ? discription
-        .replace(/\n/g, '<br>')
-        .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-    : ''
+const isQuantityMinimum = computed(
+  () => productStore.tempProduct.quantity === 1,
+)
+
+function descriptionDisplay(description?: string) {
+  if (description) {
+    return description
+      .replace(/\n/g, '<br>')
+      .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+  }
+  return ''
+}
 
 const getProduct = async () => {
   const { id } = route.params
@@ -85,160 +90,103 @@ const addToCart = async (id: string, quantity: number) => {
   }
 }
 
-const { data, pending, error } = useAsyncData(getProduct)
+const { data, status, error } = useAsyncData(getProduct)
 onBeforeUnmount(productStore.clearTempProduct)
 </script>
 
 <template>
-  <loader v-show="pending" />
-  <section v-show="!pending" class="section is-paddingless">
-    <div class="container mt-1">
-      <div class="columns is-desktop">
-        <div class="column is-full">
-          <div class="box is-shadowless" v-if="productStore.tempProduct">
-            <div class="columns">
-              <span class="tag is-primary is-fixed is-uppercase">
-                {{ kebabToUpper(productStore.tempProduct.category) }}
-              </span>
-              <div class="colum is-img-centered">
-                <div class="crad-image">
-                  <figure
-                    class="image"
-                    v-if="productStore.tempProduct.imageUrl"
-                  >
-                    <nuxt-img
-                      v-for="url in productStore.tempProduct.imageUrl"
-                      :key="url"
-                      :src="url"
-                      loading="lazy"
-                      format="webp"
-                      alt=""
-                    />
-                  </figure>
-                </div>
-              </div>
-              <div class="column has-text-left">
-                <h4 class="title is-4 flex items-center">
-                  {{ productStore.tempProduct.title }}
-                  <span
-                    v-if="productStore.tempProduct.store < 5"
-                    class="ml-2 tag is-danger"
-                  >
-                    HOT
-                  </span>
-                </h4>
-                <div class="tag content-tag is-light mb-1">產品說明</div>
-                <section class="description mb-3">
-                  <p
-                    class="is-marginless"
-                    v-html="
-                      descriptionDisplay(productStore.tempProduct.content)
-                    "
-                  />
-                </section>
-                <div class="tag content-tag is-light mb-1">產品資訊</div>
-                <section class="content mb-3">
-                  <p
-                    class="is-marginless"
-                    v-html="
-                      descriptionDisplay(productStore.tempProduct.description)
-                    "
-                  />
-                </section>
-                <div class="tag content-tag is-light mb-1">售價</div>
-                <div class="price is-size-5 has-text-weight-bold mb-3">
-                  {{ toCash(productStore.tempProduct.price) }}
-                  <span
-                    class="is-size-6"
-                    :class="{
-                      strike: productStore.tempProduct.price,
-                    }"
-                  >
-                    {{ toCash(productStore.tempProduct.origin_price) }}
-                  </span>
-                </div>
-                <div class="tag content-tag is-light mb-1">庫存</div>
-                <p class="mb-3">
-                  {{ productStore.tempProduct.store }}
-                  {{ productStore.tempProduct.unit }}
-                </p>
-                <div class="card-foot">
-                  <div class="field has-addons has-addons-lefted mt-1">
-                    <div class="control">
-                      <button
-                        class="button is-left"
-                        @click="countQuantity('m')"
-                        :disabled="quantityMinest"
-                      >
-                        &minus;
-                      </button>
-                    </div>
-                    <div class="control">
-                      <input
-                        class="input has-text-centered"
-                        type="number"
-                        v-model="productStore.tempProduct.quantity"
-                        @change="updateCartData()"
-                      />
-                    </div>
-                    <div class="control">
-                      <button
-                        class="button is-right"
-                        @click="countQuantity('p')"
-                      >
-                        &plus;
-                      </button>
-                    </div>
-                    <button
-                      class="button is-primary addCart mx-2 is-fullwidth"
-                      @click="
-                        addToCart(
-                          productStore.tempProduct.id,
-                          productStore.tempProduct.quantity,
-                        )
-                      "
-                      :class="{ 'is-loading': isLoading }"
-                      :disabled="productStore.tempProduct.store < 1"
-                    >
-                      {{
-                        $t(
-                          productStore.tempProduct.store
-                            ? 'add-to-cart'
-                            : 'sold-out',
-                        )
-                      }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mb-8" v-if="productStore.tempProduct.category">
-        <random-recommends
-          title="相關商品"
-          titleSide="has-text-left"
-          :type="productStore.tempProduct.category"
-          :id="productStore.tempProduct.id"
-        />
-      </div>
-      <div>
-        <div
-          class="subtitle is-4 is-clearfix has-text-weight-bold has-text-left"
-        >
-          商品評論
-        </div>
-        <div class="flex flex-wrap -mx-2">
-          <comment
-            v-for="feedback in productStore.tempProduct.feedback"
-            :key="feedback.id"
-            :feedback="feedback"
+  <p-fluid>
+    <p-card class="relative m-4">
+      <template #header>
+        <p-galleria :value="productStore.tempProduct.imageUrl">
+          <template #item="{ item }">
+            <p-skeleton
+              v-if="status !== 'success' && status !== 'error'"
+              width="100%"
+              height="100%"
+            />
+            <nuxt-img v-else :src="item" loading="lazy" format="webp" alt="" />
+          </template>
+        </p-galleria>
+        <div class="absolute top-2 inset-x-2 flex">
+          <p-tag
+            :value="kebabToUpper(productStore.tempProduct.category)"
+            severity="secondary"
+            class="ml-auto"
+          />
+          <p-tag
+            v-if="productStore.tempProduct.store < 5"
+            value="HOT"
+            severity="danger"
+            class="ml-2"
           />
         </div>
-      </div>
-    </div>
-  </section>
+      </template>
+
+      <template #title>
+        {{ productStore.tempProduct.title }}
+      </template>
+
+      <template #content>
+        <h3 class="font-semibold mb-2">商品說明</h3>
+        <p
+          class="mb-4"
+          v-html="descriptionDisplay(productStore.tempProduct.content)"
+        />
+        <h3 class="font-semibold mb-2">商品資訊</h3>
+        <p
+          class="mb-4"
+          v-html="descriptionDisplay(productStore.tempProduct.description)"
+        />
+        <h3 class="font-semibold mb-2">售價</h3>
+        <div class="price is-size-5 has-text-weight-bold mb-4">
+          {{ toCash(productStore.tempProduct.price) }}
+          <span :class="{ strike: productStore.tempProduct.price }">
+            {{ toCash(productStore.tempProduct.origin_price) }}
+          </span>
+        </div>
+        <h3 class="font-semibold mb-2">庫存</h3>
+        <p class="mb-4">
+          {{ productStore.tempProduct.store }}
+          {{ productStore.tempProduct.unit }}
+        </p>
+      </template>
+
+      <template #footer>
+        <div class="flex gap-x-4">
+          <p-input-number
+            v-model="productStore.tempProduct.quantity"
+            class="text-center"
+            showButtons
+            :max="Number(productStore.tempProduct.store)"
+            buttonLayout="horizontal"
+            @change="updateCartData"
+          >
+            <template #decrementbuttonicon>
+              <span class="pi pi-minus" />
+            </template>
+            <template #incrementbuttonicon>
+              <span class="pi pi-plus" />
+            </template>
+          </p-input-number>
+
+          <p-button
+            :label="
+              $t(productStore.tempProduct.store ? 'add-to-cart' : 'sold-out')
+            "
+            :loading="isLoading"
+            :disabled="productStore.tempProduct.store < 1"
+            @click="
+              addToCart(
+                productStore.tempProduct.id,
+                productStore.tempProduct.quantity,
+              )
+            "
+          />
+        </div>
+      </template>
+    </p-card>
+  </p-fluid>
 </template>
 
 <style lang="scss" scoped>
@@ -263,9 +211,7 @@ section {
 .description {
   min-height: 120px;
   max-height: 200px;
-  @include small {
-    max-height: 215px;
-  }
+
   overflow: hidden;
   text-overflow: ellipsis;
   color: $darkgrayn;

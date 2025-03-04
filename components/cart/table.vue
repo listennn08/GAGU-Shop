@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ICartProduct } from '~~/store/cartStore'
+import { type ICartProduct } from '~~/store/cartStore'
 
 defineProps<{
-  shopcartItems: ICartProduct[]
+  shopCartItems: ICartProduct[]
   countQuantity: (i: number, ope: string) => void
   quantityMinest: (i: number) => boolean
   updateCartData: (i: number) => void
@@ -15,16 +15,18 @@ defineProps<{
 <template>
   <table class="table is-fullwidth desktop">
     <thead>
-      <th class="text-center">編號</th>
-      <th class="text-center">圖示</th>
-      <th class="text-center">產品名稱</th>
-      <th class="text-center">售價</th>
-      <th class="text-center">購買數量</th>
-      <th class="text-center">總價</th>
-      <th class="text-center">移除</th>
+      <tr>
+        <th class="text-center">編號</th>
+        <th class="text-center">圖示</th>
+        <th class="text-center">產品名稱</th>
+        <th class="text-center">售價</th>
+        <th class="text-center">購買數量</th>
+        <th class="text-center">總價</th>
+        <th class="text-center">移除</th>
+      </tr>
     </thead>
     <tbody ref="preivew">
-      <tr v-for="(item, index) in shopcartItems" :key="item.id">
+      <tr v-for="(item, index) in shopCartItems" :key="item.id">
         <td class="is-vcentered" scoped="row">
           {{ index + 1 }}
         </td>

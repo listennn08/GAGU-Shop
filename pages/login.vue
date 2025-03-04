@@ -1,8 +1,9 @@
-<script lang="ts" setup>
-import IconEnvelope from '~icons/fa-solid/envelope'
-import IconLock from '~icons/fa-solid/lock'
-import IconEyeSlash from '~icons/fa-solid/eye-slash'
-import IconEye from '~icons/fa-solid/eye'
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { Form } from '@primevue/forms'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { z } from 'zod'
+
 import { AuthClient } from '~~/services/infra'
 import { AuthService } from '~~/services/domain/auth'
 import { useAppStore } from '~~/store/appStore'
@@ -12,177 +13,174 @@ definePageMeta({
   layout: 'login',
 })
 
-const authService = AuthService(AuthClient())
+const { t } = useI18n()
+const authService = new AuthService(AuthClient())
 const store = useAppStore()
+const toast = useToast()
 const loginStore = useLoginStore()
+const isLogin = ref(false)
 const pwdShow = ref(false)
+const state = reactive<{
+  email?: string
+  password?: string
+}>({
+  email: '',
+  password: '',
+})
+const resolver = zodResolver(
+  z.object({
+    email: z
+      .string({ message: t('form-validation.email-invalid') })
+      .email({ message: t('form-validation.email-invalid') }),
+    password: z
+      .string({ required_error: t('form-validation.password-required') })
+      .min(8, { message: t('form-validation.password-min') }),
+  }),
+)
 const togglePWDShow = () => (pwdShow.value = !pwdShow.value)
 
-const login = async () => {
-  store.toggleLoading()
-  const email = document.querySelector<HTMLInputElement>('#email')!.value
-  const password = document.querySelector<HTMLInputElement>('#pwd')!.value
-  if (!email) {
-    document.querySelector<HTMLInputElement>('#email')!.reportValidity()
-    store.toggleLoading()
-    return
-  }
-  if (!password) {
-    document.querySelector<HTMLInputElement>('#pwd')!.reportValidity()
-    store.toggleLoading()
-    return
-  }
+async function login() {
   try {
-    // const token = await authService.loginUser(email, password)
-    await useFetch('/api/auth/login', {
-      method: 'post',
-      body: {
-        email,
-        password,
-      },
-    })
+    isLogin.value = true
+    await authService.loginUser(state.email!, state.password!)
+    // const { error } = await useFetch('/api/auth/login', {
+    //   method: 'post',
+    //   body: {
+    //     email: state.email,
+    //     password: state.password,
+    //   },
+    // })
+
     // loginStore.setLoginInfo(token)
-    store.setMsg({ msg: '登入成功！', type: true })
+    toast.add({
+      severity: 'success',
+      summary: t('toast.success'),
+      detail: t('login.success-detail'),
+      life: 3000,
+    })
     setTimeout(() => {
       navigateTo('/admin')
     }, 1000)
   } catch (e) {
-    store.setMsg({ msg: '登入失敗！', type: false })
+    toast.add({
+      severity: 'error',
+      summary: t('toast.error'),
+      detail: t('login.error-detail'),
+      life: 3000,
+    })
   } finally {
-    store.toggleLoading()
+    isLogin.value = false
   }
 }
 </script>
 
 <template>
-  <section class="hero">
-    <div class="h-screen is-fluid is-centered">
-      <div class="container">
-        <div class="columns">
-          <h2
-            class="logo column is-full is-size-1 has-text-weight-bold text-center"
-          >
-            GAGU
+  <p-fluid
+    class="flex items-center justify-center min-h-screen"
+    :pt:root:style="{
+      background:
+        'linear-gradient(45deg, #fff, transparent), url(/img/login.jpg) no-repeat center center/cover',
+    }"
+  >
+    <Form v-slot="$form" :resolver="resolver" @submit="login">
+      <p-card>
+        <template #header>
+          <h1 class="text-center text-4xl py-4">
+            <span class="logo">GAGU</span>
+          </h1>
+          <h2 class="text-center text-2xl font-semibold">
+            {{ $t('sign-in') }}
           </h2>
-        </div>
-        <div class="columns is-centered w-full">
-          <div class="login column is-three-fifths is-one-third-fullhd box">
-            <form>
-              <h3 class="is-size-4 has-text-left px-5">登入</h3>
-              <div class="card-content">
-                <div class="content">
-                  <div class="mb-3">
-                    <div class="control has-icons-left">
-                      <input
-                        id="email"
-                        class="input"
-                        type="email"
-                        autofocus
-                        autocomplete="email"
-                        required
-                        placeholder="信箱"
-                      />
-                      <span class="icon is-left">
-                        <IconEnvelope />
-                      </span>
-                    </div>
-                  </div>
-                  <div class="field has-addons">
-                    <div
-                      class="control has-icons-left has-icon-right is-expanded"
-                    >
-                      <input
-                        id="pwd"
-                        class="input"
-                        :type="pwdShow ? 'text' : 'password'"
-                        @keyup.enter="login"
-                        placeholder="密碼"
-                        autocomplete="current-password"
-                        required
-                      />
-                      <span class="icon is-left">
-                        <IconLock />
-                      </span>
-                    </div>
-                    <div class="control">
-                      <button
-                        class="is-right button"
-                        type="button"
-                        @click="togglePWDShow"
-                      >
-                        <component :is="pwdShow ? IconEyeSlash : IconEye" />
-                      </button>
-                    </div>
-                  </div>
-                  <div class="flex justify-center">
-                    <NuxtLink
-                      class="button is-cus-primary mx-1"
-                      :class="{ 'is-disabled': store.loading }"
-                      to="/"
-                    >
-                      返回
-                    </NuxtLink>
-                    <button
-                      class="button is-primary mx-1"
-                      type="button"
-                      @click="login"
-                      :class="{ 'is-loading': store.loading }"
-                    >
-                      登入
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="img">
-      <nuxt-img src="/img/login.jpg" />
-    </div>
-  </section>
-</template>
+        </template>
 
-<style lang="scss" scoped>
-.container {
-  height: 100vh;
-  font-family: 'Noto Sans TC', sans serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-25%);
-}
-.login {
-  box-shadow: 2px 2px 5px $navyblue;
-}
-/* .logo {
-  font-family: 'Lobster', sans-serif;
-} */
-.img {
-  z-index: -999;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  img {
-    width: 100%;
-    display: block;
-    position: relative;
-  }
-  &::before {
-    content: '';
-    width: 100%;
-    height: 100%;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    background: linear-gradient(45deg, #fff, transparent);
-    z-index: 900;
-  }
-}
-</style>
+        <template #content>
+          <div class="flex flex-col gap-y-4 mb-4">
+            <div>
+              <p-input-group class="mb-1">
+                <p-input-group-addon
+                  :pt:root:class="{
+                    '!border-red-500 !text-red-500': $form.email?.invalid,
+                  }"
+                >
+                  <i class="pi pi-envelope" />
+                </p-input-group-addon>
+                <p-input-text
+                  v-model="state.email"
+                  name="email"
+                  type="email"
+                  autofocus
+                  autocomplete="email"
+                  :placeholder="$t('email')"
+                />
+              </p-input-group>
+              <p-message
+                v-if="$form.email?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+              >
+                {{ $form.email?.error?.message }}
+              </p-message>
+            </div>
+            <div>
+              <p-input-group class="mb-1">
+                <p-input-group-addon
+                  :pt:root:class="{
+                    '!border-red-500 !text-red-500': $form.password?.invalid,
+                  }"
+                >
+                  <i class="pi pi-lock" />
+                </p-input-group-addon>
+
+                <p-input-text
+                  v-model="state.password"
+                  name="password"
+                  :type="pwdShow ? 'text' : 'password'"
+                  @keyup.enter="login"
+                  :placeholder="$t('password')"
+                  autocomplete="current-password"
+                />
+
+                <p-button
+                  :icon="`pi ${pwdShow ? 'pi-eye-slash' : 'pi-eye'}`"
+                  outlined
+                  :pt:root:class="{
+                    '!border-l-0 !border-red-500 !text-red-500':
+                      $form.password?.invalid,
+                  }"
+                  severity="secondary"
+                  @click="togglePWDShow"
+                />
+              </p-input-group>
+
+              <p-message
+                v-if="$form.password?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+              >
+                {{ $form.password?.error?.message }}
+              </p-message>
+            </div>
+          </div>
+        </template>
+
+        <template #footer>
+          <div class="flex items-center justify-center gap-x-4">
+            <nuxt-link :class="{ 'is-disabled': store.loading }" to="/">
+              {{ $t('back') }}
+            </nuxt-link>
+
+            <p-button
+              :label="$t('sign-in')"
+              :loading="isLogin"
+              :fluid="false"
+              type="submit"
+            />
+          </div>
+        </template>
+      </p-card>
+    </Form>
+    <p-toast />
+  </p-fluid>
+</template>

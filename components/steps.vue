@@ -1,39 +1,31 @@
 <script lang="ts" setup>
-import { useAppStore } from '~~/store/appStore'
+import { useI18n } from 'vue-i18n'
 
-const appStore = useAppStore()
+const { t } = useI18n()
 const steps = [
   {
     no: 1,
-    text: '填寫訂單',
+    text: t('checkout.fill-order'),
   },
   {
     no: 2,
-    text: '訂單確認',
+    text: t('checkout.order-confirm'),
   },
   {
     no: 3,
-    text: '確認付款',
+    text: t('checkout.confirm-payment'),
   },
 ]
-const inStep = (index: number) =>
-  appStore.currentStep >= index ? 'is-active is-success' : ''
 </script>
 
 <template>
-  <div class="steps">
-    <div
-      v-for="step in steps"
-      :key="step.no"
-      :class="inStep(step.no)"
-      class="step-item"
-    >
-      <div class="step-marker">{{ step.no }}</div>
-      <div class="step-details">
-        <p class="step-title">{{ step.text }}</p>
-      </div>
-    </div>
-  </div>
+  <p-stepper class="mb-4">
+    <p-step-list>
+      <p-step v-for="step in steps" :key="step.no" :value="step.no">
+        {{ step.text }}
+      </p-step>
+    </p-step-list>
+  </p-stepper>
 </template>
 
 <style scoped></style>

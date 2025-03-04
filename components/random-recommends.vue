@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getAllProducts } from '~~/services/frontend'
-import { IProduct } from '~~/store/productStore'
+import type { IProduct } from '~~/store/productStore'
 
 const route = useRoute()
 const props = withDefaults(
@@ -17,13 +17,27 @@ const props = withDefaults(
   },
 )
 
-const pending = ref(false)
-const recommend = reactive<IProduct[]>([])
-const getRandomProducts = async () => {
+const pending = ref(true)
+const recommend = reactive<IProduct[]>(
+  Array.from({ length: 6 }).map(
+    (_, index) =>
+      ({
+        id: index.toString(),
+        title: '',
+        price: 0,
+        origin_price: 0,
+        imageUrl: [''],
+        category: '',
+      } as IProduct),
+  ),
+)
+async function getRandomProducts() {
   try {
     pending.value = true
+
     const resp = await getAllProducts()
     const { data } = resp.data as { data: IProduct[] }
+    recommend.splice(0, recommend.length)
     if (props.type === 'all') {
       const { total } = resp.data.meta.pagination
       const randomArray = Array.from({ length: total })
@@ -53,34 +67,47 @@ const getRandomProducts = async () => {
     pending.value = false
   }
 }
-const goTo = (path: string) => {
-  if (route.path.indexOf('product') > -1) navigateTo(path)
-  else navigateTo(`product/${path}`)
+await useAsyncData('random-products', getRandomProducts)
+function goTo(path: string) {
+  if (route.path.indexOf('product') > -1) {
+    navigateTo(path)
+  } else {
+    navigateTo(`product/${path}`)
+  }
 }
-
-onBeforeMount(getRandomProducts)
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <h4 class="text-2xl font-semibold mb-2" :class="titleSide">
       {{ title }}
     </h4>
-    <div
-      v-show="pending"
-      class="w-full min-h-20 flex items-center justify-center"
-    >
-      <i class="icon i-fa-solid-spinner animate-spin animate-3s text-3xl" />
-    </div>
-    <div v-show="!pending" class="flex flex-wrap -mx-4 cursor-pointer">
-      <div
-        class="mx-2 rounded shadow-md p-4 flex mb-1 w-[calc(95%-1rem)] md:w-[calc(33%-1rem)]"
+
+    <div class="flex flex-wrap -mx-8 cursor-pointer">
+      <p-card
         v-for="data in recommend"
+        class="mx-2 rounded shadow-md p-4 m-4 flex mb-1 w-[calc(95%-1rem)] md:w-[calc(50%-1rem)] lg:w-[calc(33%-1rem)]"
         :key="data.id"
-        @click="goTo(data.id)"
+        :pt="{
+          body: {
+            style: {
+              '--p-card-body-padding': '0',
+            },
+          },
+        }"
       >
-        <div class="w-1/2">
-          <figure class="w-full">
+        <template #content>
+          <div v-if="pending" class="flex gap-x-2">
+            <p-skeleton size="150px" />
+
+            <div class="flex flex-col flex-1 justify-between">
+              <p-skeleton height="40px" width="150px" class="mb-auto" />
+              <p-skeleton height="20px" width="150px" class="mb-2" />
+              <p-skeleton height="30px" width="150px" />
+            </div>
+          </div>
+
+          <div v-else class="flex gap-x-2">
             <nuxt-img
               :src="data.imageUrl[0]"
               width="150"
@@ -88,33 +115,27 @@ onBeforeMount(getRandomProducts)
               preload
               format="webp"
               loading="lazy"
-            />
-          </figure>
-        </div>
-        <div class="w-1/2 flex flex-col">
-          <h5
-            class="text-lg whitespace-nowrap font-semibold text-ellipsis overflow-hidden"
-            :title="data.title"
-          >
-            {{ data.title }}
-          </h5>
-          <div class="has-text-primary mt-auto">
-            <span> {{ toCash(data.price) }} </span>
-            <del class="ml-1">
-              <small class="has-text-lightgray">
-                {{ toCash(data.origin_price) }}
-              </small>
-            </del>
+              v-slot="{ src, isLoaded, imgAttrs }"
+            >
+              <img v-if="isLoaded" :src="src" v-bind="imgAttrs" />
+              <p-skeleton v-else height="150px" width="150px" />
+            </nuxt-img>
+            <div class="flex flex-col justify-between flex-1">
+              <h3 class="font-semibold mb-auto">{{ data.title }}</h3>
+              <div>
+                <price :price="data.price" :origin-price="data.origin_price" />
+              </div>
+
+              <p-button
+                :label="$t('view-more')"
+                size="small"
+                severity="primary"
+                @click="goTo(data.id)"
+              />
+            </div>
           </div>
-          <button
-            @click.stop="goTo(data.id)"
-            class="button is-primary is-small"
-          >
-            查看更多
-          </button>
-        </div>
-      </div>
+        </template>
+      </p-card>
     </div>
   </div>
 </template>
-<style lang="scss" scoped></style>

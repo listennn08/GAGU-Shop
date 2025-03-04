@@ -1,88 +1,79 @@
 <script setup lang="ts">
-import { ICartProduct } from '~~/store/cartStore'
+import { useCartStore } from '~~/store/cartStore'
 
-const props = defineProps<{ products: ICartProduct[] }>()
+const props = defineProps<{
+  products: any[]
+  loading: boolean
+  countAll: number
+}>()
 const isCollapse = ref(false)
 
-const collapseIcon = computed(() => (isCollapse.value ? 'up' : 'down'))
 const showCollapseButton = computed(() =>
   props.products ? props.products.length > 2 : false,
 )
-const toggleCollapse = () => {
+function toggleCollapse() {
   isCollapse.value = !isCollapse.value
 }
+const maxRows = computed(() => (isCollapse.value ? props.products.length : 2))
 </script>
 <template>
-  <h4 class="h4t has-text-left">
-    <i class="icon is-small i-fa-regular-clipboard" />
-    <span>&nbsp; 購物清單</span>
-  </h4>
-  <div class="list" :class="{ hide: !isCollapse }">
-    <div
-      class="columns is-marginless has-text-centered is-vcentered"
-      v-for="prod in products"
-      :key="prod.id"
-    >
-      <div class="column is-paddingless is-marginless is-3 mobile">
-        <div class="box is-shadowless py-1 px-2">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-64x64 is-inline-block mr-1">
-                <img :src="prod.imageUrl?.[0]" />
-              </figure>
-            </div>
-            <div class="content">
-              <div class="is-5 has-text-weight-bold">{{ prod.title }}</div>
-              <p class="is-marginless">x{{ prod.quantity }}</p>
-              <p class="is-marginless">{{ toCash(prod.price) }}</p>
-            </div>
+  <div>
+    <h4 class="text-lg font-bold border-b border-black border-solid mb-2">
+      <i class="pi pi-clipboard" />
+      <span>{{ $t('shop-cart.shop-list') }}</span>
+    </h4>
+    <p-data-view :loading="loading" :value="products" data-key="id">
+      <template #empty>
+        <div
+          v-if="loading"
+          class="flex justify-center items-center h-full py-4"
+        >
+          <p-progress-spinner
+            style="width: 3rem; height: 3rem"
+            stroke-width="4"
+          />
+        </div>
+        <div v-else class="text-center py-4">
+          {{ $t('checkout.no-items') }}
+        </div>
+      </template>
+      <template #list="{ items }">
+        <div
+          v-for="prod in items.slice(0, maxRows)"
+          :key="prod.id"
+          class="grid grid-cols-4 gap-2 px-3 py-4"
+        >
+          <div>
+            <nuxt-img
+              :src="prod.imageUrl?.[0]"
+              height="128px"
+              v-slot="{ src, isLoaded, imgAttrs }"
+            >
+              <img v-if="isLoaded" v-bind="imgAttrs" :src="src" />
+              <p-skeleton v-else height="128px" width="128px" />
+            </nuxt-img>
+          </div>
+          <div>{{ prod.title }}</div>
+          <div>x{{ prod.quantity }}</div>
+          <div>{{ toCash(prod.price) }}</div>
+        </div>
+      </template>
+
+      <template v-if="products?.length" #footer>
+        <div class="grid grid-cols-4 gap-2">
+          <div class="col-start-4 text-lg font-bold">
+            {{ $t('shop-cart.total') }} {{ toCash(countAll) }}
           </div>
         </div>
-      </div>
-      <div class="column desktop">
-        <figure class="image is-128x128">
-          <img :src="prod.imageUrl?.[0]" />
-        </figure>
-      </div>
-      <div class="column desktop">{{ prod.title }}</div>
-      <div class="column desktop">x{{ prod.quantity }}</div>
-      <div class="column desktop">{{ toCash(prod.price) }}</div>
-    </div>
-  </div>
-  <div
-    class="columns is-marginless collapse is-centered"
-    v-if="showCollapseButton"
-  >
-    <div class="column is-full text-center">
-      <button
-        class="collapse__btn"
-        :class="collapseIcon"
-        @click="toggleCollapse()"
-      >
-        <i
-          class="icon"
-          :class="`i-fa-solid-angle-double-${isCollapse ? 'up' : 'down'}`"
-        />
-      </button>
+      </template>
+    </p-data-view>
+
+    <div v-if="showCollapseButton" class="text-center">
+      <p-button
+        variant="text"
+        :icon="`pi pi-angle-${isCollapse ? 'up' : 'down'}`"
+        @click="toggleCollapse"
+      />
     </div>
   </div>
 </template>
-<style lang="scss">
-.collapse__btn {
-  cursor: pointer;
-  padding: 1% 2%;
-  border: 0;
-  background: transparent;
-  outline: none;
-  transform: translateY(0);
-  &.down {
-    animation: collapseAnimation 1s infinite linear forwards;
-  }
-  &.up {
-    animation: collapseAnimation 1s infinite linear reverse forwards;
-  }
-  &:hover {
-    animation-play-state: paused;
-  }
-}
-</style>

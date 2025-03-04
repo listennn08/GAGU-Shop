@@ -1,13 +1,18 @@
 {
-  "about": "關於我們",
-  "product": "產品列表",
-  "cart": "購物車",
-  "order": "我的訂單",
+  "menu": {
+    "about": "關於我們",
+    "product-list": "產品列表",
+    "cart": "購物車",
+    "order": "我的訂單"
+  },
   "client": "前台",
   "management": "管理",
-  "signup": "註冊",
-  "signin": "登入",
+  "sign-up": "註冊",
+  "sign-in": "登入",
   "signout": "登出",
+  "email": "信箱",
+  "password": "密碼",
+  "back": "返回",
   "manage": {
     "product": "商品管理",
     "coupon": "優惠管理",
@@ -15,5 +20,105 @@
     "image": "圖片管理"
   },
   "add-to-cart": "加入購物車",
-  "sold-out": "已售完"
+  "sold-out": "已售完",
+  "hot-sale": "熱銷商品",
+  "toast": {
+    "success": "成功",
+    "add-to-cart-success": "加入購物車成功",
+    "error": "錯誤",
+    "add-to-cart-error": "加入購物車失敗",
+    "loading-failed": "載入資料失敗"
+  },
+  "product": {
+    "all": "全部商品",
+    "bed": "床架",
+    "chair": "椅子",
+    "lamp": "檯燈",
+    "sofa": "沙發",
+    "bookcase": "書櫃",
+    "cabinet": "電視櫃",
+    "wardrobe": "衣櫃",
+    "table": "桌子",
+    "curtain": "窗簾"
+  },
+  "view-more": "查看更多",
+  "order": {
+    "order-number": "訂單編號",
+    "date": "日期",
+    "status": "訂單狀態",
+    "amount": "總價",
+    "payment-method": "付款方式",
+    "payment-status": "付款狀態",
+    "product-name": "商品名稱",
+    "quantity": "數量",
+    "unit-price": "單價",
+    "details": "看明細",
+    "no-orders": "尚無訂單"
+  },
+  "payment-status": {
+    "paid": "已付款",
+    "unpaid": "未付款"
+  },
+  "order-status": {
+    "created": "已建立",
+    "pending": "待出貨",
+    "shipped": "已出貨",
+    "delivered": "已送達",
+    "cancelled": "已取消"
+  },
+  "recommend": "精選推薦",
+  "shop-cart": {
+    "delete-all": "刪除所有商品",
+    "continue-shopping": "繼續購物",
+    "checkout": "去結帳",
+    "no-cart-items": "還沒有把喜愛的商品加入購物車唷 趕快去購物吧！",
+    "image": "圖片",
+    "title": "商品名稱",
+    "price": "售價",
+    "quantity": "購買數量",
+    "total": "總價",
+    "remove": "移除",
+    "shop-list": "購物清單"
+  },
+  "checkout": {
+    "fill-order": "填寫訂單",
+    "order-confirm": "訂單確認",
+    "confirm-order": "確認訂單",
+    "confirm-payment": "確認付款",
+    "coupon-placeholder": "請輸入折扣碼",
+    "name-placeholder": "請輸入姓名",
+    "tel-placeholder": "請輸入電話",
+    "email-placeholder": "請輸入信箱",
+    "address-placeholder": "請輸入地址",
+    "remark-placeholder": "請輸入備註",
+    "payment-placeholder": "請選擇付款方式",
+    "order-info": "訂單資訊",
+    "back": "返回",
+    "name": "姓名",
+    "tel": "電話",
+    "email": "信箱",
+    "address": "地址",
+    "remark": "備註",
+    "payment": "付款方式",
+    "no-items": "尚無商品"
+  },
+  "coupon": {
+    "expired": "酷碰卷已過期",
+    "discount": "酷碰卷折扣 {percent}%"
+  },
+  "form-validation": {
+    "name-required": "姓名不能為空",
+    "tel-required": "電話不能為空",
+    "tel-length": "電話號碼必須為10位數",
+    "email-required": "信箱不能為空",
+    "email-invalid": "信箱格式不正確",
+    "address-required": "地址不能為空",
+    "payment-required": "付款方式不能為空",
+    "password-required": "密碼不能為空",
+    "password-min": "密碼必須至少8個字元"
+  },
+  "login": {
+    "success-detail": "登入成功",
+    "error-detail": "登入失敗"
+  }
 }

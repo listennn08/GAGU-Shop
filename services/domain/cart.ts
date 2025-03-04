@@ -24,7 +24,7 @@ export const CartService = (client: ICartClient): ICartService => {
     async addCartItem(product: string, quantity: number) {
       const cartStore = useCartStore()
       try {
-        const cartItem = cartStore.shopcartItems.find(
+        const cartItem = cartStore.shopCartItems.find(
           ({ id }: { id: string }) => id === product,
         )
         if (cartItem === undefined) {

@@ -1,234 +1,245 @@
 <script lang="ts" setup>
-import { Form, useForm } from 'vee-validate'
-import { debounce } from 'lodash'
-import dayjs from 'dayjs'
-import { checkCoupon } from '~~/services/frontend'
-import { useAppStore } from '~~/store/appStore'
-import { useCartStore } from '~~/store/cartStore'
-import { CartService } from '~~/services/domain/cart'
+import _ from 'lodash'
+import { InputText, Textarea, Select, AutoComplete } from 'primevue'
+import { Form } from '@primevue/forms'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { z } from 'zod'
+import { useI18n } from 'vue-i18n'
+
 import { OrderService } from '~~/services/domain/order'
-import { CartClient, OrderClient } from '~~/services/infra'
+import { OrderClient } from '~~/services/infra'
+import { useCartStore } from '~/store/cartStore'
 
-const { values, handleSubmit } = useForm({
-  initialValues: {
-    name: '',
-    tel: '',
-    email: '',
-    payment: '',
-    address: '',
-    remark: '',
-    coupon: '',
+const PAYMENT_METHODS = [
+  'WebATM',
+  'ATM',
+  'Barcode',
+  'Credit',
+  'ApplePay',
+  'GooglePay',
+] as const
+
+const { t } = useI18n()
+const toast = useToast()
+const {
+  shopCartItems: products,
+  loading,
+  countAll,
+} = storeToRefs(useCartStore())
+const resolver = zodResolver(
+  z.object({
+    name: z
+      .string({ message: t('form-validation.name-required') })
+      .min(1, { message: t('form-validation.name-required') }),
+    tel: z
+      .string({ message: t('form-validation.tel-required') })
+      .min(10, { message: t('form-validation.tel-length') })
+      .max(10, { message: t('form-validation.tel-length') }),
+    email: z
+      .string({ message: t('form-validation.email-required') })
+      .min(1, { message: t('form-validation.email-required') })
+      .email({ message: t('form-validation.email-invalid') }),
+    address: z
+      .string({ message: t('form-validation.address-required') })
+      .min(1, { message: t('form-validation.address-required') }),
+    remark: z.string().nullable().optional(),
+    payment: z.enum(PAYMENT_METHODS, {
+      message: t('form-validation.payment-required'),
+    }),
+  }),
+)
+const form = reactive<
+  Partial<{
+    name: string
+    tel: string
+    email: string
+    address: string
+    remark: string
+    coupon: string
+    payment: string
+  }>
+>({
+  name: '',
+  tel: '',
+  email: '',
+  address: '',
+  remark: '',
+  payment: '',
+})
+const mailRecommend = ref<string[]>([])
+const formElements = computed(() => [
+  {
+    is: InputText,
+    label: 'checkout.name',
+    name: 'name',
+    type: 'text',
+    placeholder: 'checkout.name-placeholder',
   },
-})
+  {
+    is: InputText,
+    label: 'checkout.tel',
+    name: 'tel',
+    type: 'tel',
+    placeholder: 'checkout.tel-placeholder',
+  },
+  {
+    is: AutoComplete,
+    label: 'checkout.email',
+    name: 'email',
+    type: 'email',
+    placeholder: 'checkout.email-placeholder',
+    suggestions: mailRecommend.value,
+    onComplete: (e: any) => {
+      const [mail, suffix] = e.query.split('@')
+      const MAIL_SUFFIX = [
+        'gmail.com',
+        'yahoo.com',
+        'hotmail.com',
+        'outlook.com',
+        'msn.com',
+        'live.com',
+        'live.com',
+      ]
+      if (mail && suffix) {
+        mailRecommend.value = MAIL_SUFFIX.filter((suffix) =>
+          RegExp(_.escapeRegExp(suffix)).test(suffix),
+        )
+      } else {
+        mailRecommend.value = MAIL_SUFFIX.map((suffix) => `${mail}@${suffix}`)
+      }
+    },
+  },
+  {
+    is: InputText,
+    label: 'checkout.address',
+    name: 'address',
+    type: 'text',
+    placeholder: 'checkout.address-placeholder',
+  },
+  {
+    is: Textarea,
+    label: 'checkout.remark',
+    name: 'remark',
+    placeholder: 'checkout.remark-placeholder',
+  },
+  {
+    is: Select,
+    label: 'checkout.payment',
+    name: 'payment',
+    placeholder: 'checkout.payment-placeholder',
+    options: PAYMENT_METHODS,
+  },
+])
 
-const appStore = useAppStore()
 const cartStore = useCartStore()
-const cartService = CartService(CartClient())
+const discountStore = useDiscount()
+const { discountPercent, discountType, discountMsg } =
+  storeToRefs(discountStore)
 const orderService = OrderService(OrderClient())
-const payment = ['WebATM', 'ATM', 'Barcode', 'Credit', 'ApplePay', 'GooglePay']
-const discount = reactive({
-  code: '',
-  percent: 0,
-  msg: '',
-  type: false,
-})
+
 const isLoading = ref(false)
 
-const countAll = computed(() => {
-  const total = cartStore.shopcartItems.reduce(
-    (cur, el) => cur + el.quantity * (el.price ? el.price : el.origin_price),
-    0,
-  )
-  return total * (discount.percent / 100 || 1)
-})
-
 const couponUseful = computed(() =>
-  discount.type ? 'has-text-success' : 'has-text-danger',
+  discountType.value ? 'has-text-success' : 'has-text-danger',
 )
 
-const getShopCartData = async () => {
-  // const loader = this.$loading.show({
-  //   container: this.$refs.preivew,
-  //   isFullPage: false,
-  // });
+async function submitForm() {
   try {
-    const resp = await cartService.getAllCartItems()
-    cartStore.setShopcartItems(resp)
-    // loader.hide();
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-const submitForm = handleSubmit(async (values) => {
-  try {
-    appStore.toggleLoading()
-    if (discount.code) values.coupon = discount.code
-    const resp = await orderService.createOrder(values)
+    isLoading.value = true
+    if (discountStore.code) form.coupon = discountStore.code
+    const resp = await orderService.createOrder(form as Required<typeof form>)
     navigateTo(`payflow/${resp.data.data.id}`)
   } catch (err) {
-    console.log(err)
+    toast.add({
+      severity: 'error',
+      summary: t('checkout.error'),
+      detail: t('checkout.error-message'),
+    })
   } finally {
-    appStore.toggleLoading()
-  }
-})
-
-const doCheckCoupon = async () => {
-  // this.isLoading = true;
-  try {
-    const resp = await checkCoupon(discount.code)
-    if (dayjs(resp.data.data.deadline.datetime).isAfter(new Date())) {
-      discount.percent = resp.data.data.percent
-      discount.type = true
-      discount.msg = `折扣${resp.data.data.percent}%`
-      isLoading.value = false
-    } else {
-      const msg = '酷碰卷已過期'
-      // this.setMsg({
-      //   msg,
-      //   type: false,
-      // });
-      discount.percent = 0
-      discount.type = false
-      discount.msg = msg
-      isLoading.value = false
-    }
-  } catch (err: any) {
-    const msg = err.response.data.message
-    // this.setMsg({
-    //   msg,
-    //   type: false,
-    // });
-    discount.percent = 0
-    discount.type = false
-    discount.msg = msg
-    // this.isLoading = false;
+    isLoading.value = false
   }
 }
 </script>
 
 <template>
-  <section class="hero-body">
-    <div class="container">
-      <div class="columns is-centered is-desktop">
-        <div class="column is-two-thirds">
-          <steps />
-          <shop-list :products="cartStore.shopcartItems" />
-          <div class="field has-addons has-addons-right">
-            <p class="control">
-              <input
-                class="input desktop"
-                type="text"
-                placeholder="請輸入折扣碼"
-                v-model="discount.code"
-                @change="debounce(doCheckCoupon, 500)"
-              />
-            </p>
-            <p class="control mobile is-expanded">
-              <input
-                class="input is-small mobile"
-                type="text"
-                placeholder="請輸入折扣碼"
-                v-model="discount.code"
-                @change="debounce(doCheckCoupon, 500)"
-              />
-            </p>
-            <p class="control">
-              <label
-                class="button is-static desktop"
-                :class="{ 'is-loading': isLoading }"
-              >
-                <i class="i-fa-solid-tags" />
-              </label>
-              <label
-                class="button is-static is-small mobile"
-                :class="{ 'is-loading': isLoading }"
-              >
-                <i class="i-fa-solid-tags" />
-              </label>
-            </p>
-          </div>
-          <div>
-            <div class="has-text-right" v-if="discount.code">
-              <p v-if="discount.code" :class="couponUseful">
-                {{ discount.msg }}
-              </p>
-            </div>
-          </div>
-          <div class="subtitle is-5 is-font-Noto is-fullwidth">
-            <div class="has-text-right">
-              總額
-              <span>{{ toCash(countAll) }}</span>
-            </div>
-          </div>
-          <h4 class="h4t has-text-left">
-            <i class="icon i-fa-solid-info-circle" />
-            <span>&nbsp; 訂單資訊</span>
-          </h4>
-          <Form as="div">
-            <form @submit="submitForm">
-              <Field
-                rules="required"
-                label="姓名"
-                name="name"
-                v-model="values.name"
-                left-icon="i-fa-solid-user"
-              />
-              <Field
-                rules="required|digits:10"
-                label="電話"
-                name="tel"
-                v-model="values.tel"
-                left-icon="i-fa-solid-phone-alt"
-              />
-              <Field
-                rules="required|email"
-                label="信箱"
-                name="email"
-                v-model="values.email"
-                left-icon="i-fa-solid-envelope"
-              />
-              <Field
-                rules="required"
-                label="收件地址"
-                name="address"
-                v-model="values.address"
-                left-icon="i-fa-regular-address-card"
-              />
-              <Field
-                label="備註"
-                name="remark"
-                v-model="values.remark"
-                type="textarea"
-              />
-              <Field
-                rules="required"
-                label="付款方式"
-                name="payment"
-                v-model="values.payment"
-                type="select"
-                :options="payment"
-              />
-              <div class="control buttons is-centered">
-                <button
-                  class="button is-text"
-                  type="button"
-                  @click="$router.go(-1)"
-                >
-                  上一頁
-                </button>
-                <button
-                  class="button is-primary"
-                  :class="{ 'is-loading': appStore.loading }"
-                >
-                  確認訂單
-                </button>
-              </div>
-            </form>
-          </Form>
-        </div>
+  <section class="max-w-screen-md mx-auto">
+    <steps />
+    <shop-list :products="products" :loading="loading" :count-all="countAll" />
+    <div class="flex justify-end">
+      <p-input-group class="!md:w-1/3">
+        <p-input-group-addon>
+          <i class="pi pi-tag" />
+        </p-input-group-addon>
+        <p-input-text
+          v-model="discountStore.code"
+          :placeholder="$t('checkout.coupon-placeholder')"
+        />
+        <p-input-group-addon>
+          <p-button variant="text" @click="discountStore.handleCheckCoupon">
+            Apply
+          </p-button>
+        </p-input-group-addon>
+      </p-input-group>
+    </div>
+    <div>
+      <div class="has-text-right" v-if="discountStore.code">
+        <p v-if="discountStore.code" :class="couponUseful">
+          {{ discountStore.discountMsg }}
+        </p>
       </div>
     </div>
+    <h4 class="text-lg font-bold border-b border-black border-solid mb-2">
+      <i class="pi pi-info-circle" />
+      <span>&nbsp; {{ $t('checkout.order-info') }}</span>
+    </h4>
+    <Form
+      v-slot="$form"
+      :resolver="resolver"
+      class="flex flex-col gap-4"
+      @submit="submitForm"
+    >
+      <div v-for="element in formElements" :key="element.name">
+        <p-ifta-label variant="over" :invalid="$form[element.name]?.invalid">
+          <component
+            :is="element.is"
+            v-model="form[element.name as keyof typeof form]"
+            :input-id="element.name"
+            :type="element.type"
+            :name="element.name"
+            :options="element.options"
+            :suggestions="element.suggestions"
+            @complete="element.onComplete"
+            fluid
+          />
+          <label :for="element.name">
+            {{ $t(element.label) }}
+          </label>
+        </p-ifta-label>
+        <p-message
+          v-if="$form[element.name]?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+        >
+          {{ $form[element.name].error.message }}
+        </p-message>
+      </div>
+
+      <div class="text-center">
+        <p-button
+          variant="text"
+          type="button"
+          :label="$t('checkout.back')"
+          :disabled="isLoading"
+          @click="$router.go(-1)"
+        />
+        <p-button
+          :label="$t('checkout.confirm-order')"
+          :disabled="isLoading || cartStore.shopCartItems.length === 0"
+          type="submit"
+        />
+      </div>
+    </Form>
   </section>
   <!-- <vue-confirm-dialog /> -->
 </template>

@@ -33,6 +33,7 @@ export const checkCoupon = (code) =>
   })
 
 export const createOrder = (data) => Request.post('orders', { ...data })
-export const getAllOrders = () => Request.get('orders')
+export const getAllOrders = (p = 1, paged = 25, orderBy = 'created_at') =>
+  Request.get(`orders?page=${p}&paged=${paged}&orderBy=${orderBy}`)
 export const getOrder = (id) => Request.get(`orders/${id}`)
 export const payOrder = (id) => Request.post(`orders/${id}/paying`)

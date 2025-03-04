@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
 import { HttpClient } from './core'
 
 export interface IAuthClient {
@@ -24,7 +24,7 @@ export const AuthClient = (): IAuthClient => {
   const client = HttpClient({
     timeout: 30000,
     prefix: 'auth',
-    onReponse(cfg) {
+    onResponse(cfg) {
       console.log(cfg)
       return cfg
     },

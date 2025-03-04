@@ -1,12 +1,8 @@
 <script lang="ts" setup></script>
 
 <template>
-  <section class="container">
-    <div class="columns is-centered">
-      <div class="column is-two-thirds">
-        <order />
-      </div>
-    </div>
+  <section class="max-w-screen-md mx-auto">
+    <order />
   </section>
 </template>
 

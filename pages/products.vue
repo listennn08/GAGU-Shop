@@ -2,10 +2,14 @@
 import { useProductStore } from '~~/store/productStore'
 import { ProductClient } from '~~/services/infra'
 import { ProductService } from '~~/services/domain/product'
+import { useI18n } from 'vue-i18n'
+import type { MenuItemCommandEvent } from 'primevue/menuitem'
 
+const { t } = useI18n()
+const router = useRouter()
 const productStore = useProductStore()
 const productService = ProductService(ProductClient())
-const getData = async () => {
+async function getData() {
   if (productStore.loading || productStore.products.length > 0) return
   try {
     const resp = await productService.getAllProducts()
@@ -16,7 +20,33 @@ const getData = async () => {
   }
 }
 
-const { pending } = await useAsyncData(getData)
+await useAsyncData(getData)
+
+const pt = reactive({
+  root: {
+    class: 'flex',
+  },
+})
+
+const categoryMap = reactive<string[]>([
+  'all',
+  'bed',
+  'chair',
+  'lamp',
+  'sofa',
+  'bookcase',
+  'cabinet',
+  'wardrobe',
+  'table',
+  'curtain',
+])
+const categoryList = categoryMap.map((key) => ({
+  label: t(`product.${key}`),
+  value: key,
+  command: ({ item }: MenuItemCommandEvent) => {
+    router.push(`/products?category=${item.value}`)
+  },
+}))
 
 watch(productStore.pagination, async (cur, old) => {
   if (cur.current_page === old.current_page) return
@@ -31,12 +61,23 @@ watch(productStore.pagination, async (cur, old) => {
 </script>
 
 <template>
-  <!-- if use v-if will throw error, I think is server render and client render issue -->
-  <loader v-show="pending" />
-  <article class="container is-fullheight">
-    <category-list />
-    <product-list />
-  </article>
+  <p-fluid :pt>
+    <div class="ml-50 flex-1 min-h-app-screen">
+      <product-list />
+    </div>
+    <p-menu
+      :pt="{
+        root: {
+          class: 'fixed top-15 inset-y-0',
+          style: {
+            '--p-menu-border-radius': '0px',
+          },
+        },
+      }"
+      :model="categoryList"
+      :fluid="false"
+    />
+  </p-fluid>
 </template>
 
 <style scoped></style>

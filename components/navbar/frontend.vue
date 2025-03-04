@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useAppStore } from '~~/store/appStore'
-
+import { useI18n } from 'vue-i18n'
 const drop = ref(false)
+const { t } = useI18n()
 const store = useAppStore()
 const toggleDrop = (toggle: boolean | MouseEvent) => {
   if (typeof toggle === 'boolean') {
@@ -10,112 +11,47 @@ const toggleDrop = (toggle: boolean | MouseEvent) => {
     drop.value = !drop.value
   }
 }
+
+const items = [
+  { label: t('menu.about'), route: '/about' },
+  { label: t('menu.product-list'), route: '/products' },
+  { label: t('menu.cart'), route: '/shop-cart' },
+  { label: t('menu.order'), route: '/orders' },
+]
 </script>
+
 <template>
-  <nav
-    class="hero-head has-background-light"
-    :class="{ 'is-fixed-top': store.sticky }"
+  <p-menubar
+    :model="items"
+    :pt="{
+      root: {
+        style: {
+          '--p-menubar-gap': '2rem',
+        },
+        class: 'fixed top-0 inset-x-0',
+      },
+      item: {
+        class: 'navbar-item',
+      },
+    }"
   >
-    <div class="columns is-mobile is-marginless">
-      <div class="column left" @click.stop="toggleDrop(false)">
-        <h1 class="is-size-2 has-text-weight-bold">
-          <NuxtLink class="logo" to="/">GAGU</NuxtLink>
-        </h1>
-      </div>
-      <div class="column center desktop">
-        <NuxtLink class="navbar-item" to="/about">
-          {{ $t('about') }}
-        </NuxtLink>
-        <NuxtLink class="navbar-item" to="/products">
-          {{ $t('product') }}
-        </NuxtLink>
-        <NuxtLink class="navbar-item" to="/shopcart">
-          {{ $t('cart') }}
-        </NuxtLink>
-        <NuxtLink class="navbar-item" to="/orders">
-          {{ $t('order') }}
-        </NuxtLink>
-      </div>
-      <div class="column right">
-        <slot />
-        <div class="dropdown is-right mobile" :class="{ 'is-active': drop }">
-          <div class="dropdown-trigger" @click.stop="toggleDrop">
-            <button
-              class="button is-text"
-              aria-haspopup="true"
-              aria-controls="dropdown-menu"
-            >
-              <i class="icon is-small i-fa-solid-bars" />
-            </button>
-          </div>
-          <div id="dropdown-menu" class="dropdown-menu" role="menu">
-            <div class="dropdown-content" @click.stop="toggleDrop">
-              <NuxtLink class="dropdown-item" to="/about">
-                {{ $t('about') }}
-              </NuxtLink>
-              <NuxtLink class="dropdown-item" to="/products">
-                {{ $t('product') }}
-              </NuxtLink>
-              <NuxtLink class="dropdown-item" to="/shopcart">
-                {{ $t('cart') }}
-              </NuxtLink>
-              <NuxtLink class="dropdown-item" to="/orders">
-                {{ $t('order') }}
-              </NuxtLink>
-              <hr class="dropdown-divider" />
-              <slot name="dropdown" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+    <template #start>
+      <h1><nuxt-link to="/" class="logo">GAGU</nuxt-link></h1>
+    </template>
+    <template #item="{ item }">
+      <nuxt-link class="navbar-item" :to="item.route">
+        {{ item.label }}
+      </nuxt-link>
+    </template>
+
+    <template #end>
+      <slot />
+    </template>
+  </p-menubar>
 </template>
-<style lang="scss" scoped>
-.is-fixed-top {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 5;
-}
-.hero-head {
-  .router-link-exact-active:not(.logo) {
-    color: $goldyellow;
-  }
-  .column {
-    padding: 0 0.75rem;
-  }
-}
 
-:deep(.navbar-item) {
-  padding: 0 0.75rem;
-  color: $navyblue;
-  &::after {
-    content: '';
-    position: absolute;
-    height: 0;
-    bottom: 0;
-    border-bottom: 1px solid $goldyellow;
-    transition: 0.3s;
-  }
-  &:hover {
-    color: $goldyellow;
-    background: none;
-  }
-  &:focus {
-    color: $goldyellow;
-    background: none;
-  }
-  &::after {
-    left: 10%;
-    right: 90%;
-  }
-  &:hover::after {
-    right: 10%;
-  }
-}
-
-:deep(.dropdown-item) {
-  padding: 0.375rem 3rem;
+<style scoped>
+.navbar-item.router-link-active {
+  @apply text-primary/90;
 }
 </style>

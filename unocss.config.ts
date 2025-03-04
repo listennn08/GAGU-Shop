@@ -8,8 +8,23 @@ export default defineConfig({
       scale: 1.2,
     }),
   ],
+  theme: {
+    colors: {
+      primary: '#333d51',
+    },
+  },
   // core options
-  shortcuts: [],
+  shortcuts: [
+    [
+      'logo',
+      'text-4xl no-underline leading-tight text-primary font-extrabold hover:text-primary/90',
+    ],
+    [
+      'navbar-item',
+      'text-lg no-underline leading-tight text-primary font-extrabold hover:text-primary/90',
+    ],
+    ['min-h-app-screen', 'min-h-[calc(100vh-162px)]'],
+  ],
   rules: [],
   safelist: [
     'i-fa-solid-minus',

@@ -1,10 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { usePrimeVue } from '@primevue/core'
+
+const $primevue = usePrimeVue()
+
+console.log($primevue.config.theme)
+</script>
 <template>
-  <div>
-    <Navbar type="admin" />
-    <section class="hero is-fullheight">
+  <div class="min-h-screen">
+    <div class="pt-16 min-h-screen overflow-hidden">
       <slot />
-    </section>
+      <p-toast />
+    </div>
+    <Navbar type="admin" />
   </div>
 </template>
 <style lang="scss" scoped></style>

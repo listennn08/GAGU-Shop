@@ -1,13 +1,14 @@
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'url'
 import VueI18nVitePlugin from '@intlify/unplugin-vue-i18n/vite'
+import MyTheme from './theme'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: 'zh-Hant-TW',
+        lang: 'zh-Hant-TW ',
       },
       title: 'GAGU Shop',
       meta: [
@@ -28,7 +29,8 @@ export default defineNuxtConfig({
         },
         {
           name: 'keywords',
-          content: 'GAGU, gagu, 傢俱, 桌子, 椅子, 床',
+          content:
+            'GAGU, gagu, 傢俱, 桌子, 椅子, 床, furniture, table, chair, bed',
         },
         {
           name: 'author',
@@ -59,9 +61,12 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   modules: [
-    '@nuxt/image-edge',
+    '@nuxt/image',
     '@unocss/nuxt',
+    '@primevue/nuxt-module',
+    '@vueuse/nuxt',
     [
       'unplugin-icons/nuxt',
       {
@@ -70,22 +75,35 @@ export default defineNuxtConfig({
     ],
     ['@pinia/nuxt', { autoImports: ['defineStore', 'useStore'] }],
   ],
+
+  primevue: {
+    options: {
+      theme: {
+        preset: MyTheme,
+        options: {
+          darkModeSelector: '.my-app-dark',
+        },
+      },
+    },
+    components: {
+      prefix: 'P',
+    },
+    directives: {
+      prefix: 'P',
+    },
+  },
+
   css: [
     'reset-css/reset.css',
-    '@/assets/main.scss',
-    'wow.js/css/libs/animate.css',
-    'aos/dist/aos.css',
-    'vue-simple-confirm/dist/index.css',
+    // '@/assets/main.scss',
+    // 'aos/dist/aos.css',
+    'primeicons/primeicons.css',
   ],
-  unocss: {
-    // presets
-    uno: true, // enabled `@unocss/preset-uno`
-    icons: true, // enabled `@unocss/preset-icons`
-    attributify: true, // enabled `@unocss/preset-attributify`,
-  },
+
   image: {
     domains: ['hexschool-api.s3.us-west-2.amazonaws.com', 'randomuser.me/'],
   },
+
   plugins: [
     {
       src: '@/plugins/animate.client.ts',
@@ -98,30 +116,36 @@ export default defineNuxtConfig({
       mode: 'client',
     },
   ],
+
   runtimeConfig: {
     public: {
-      apiBASE: process.env.NUXI_API_BASE,
-      apiUUID: process.env.NUXI_API_UUID,
-      baseURL: process.env.NUXI_BASE_URL,
+      apiBASE: process.env.NUXT_API_BASE,
+      apiUUID: process.env.NUXT_API_UUID,
+      baseURL: process.env.NUXT_BASE_URL,
     },
   },
+  ssr: false,
+
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
+          api: 'modern',
           additionalData: `
             @use "@/assets/_colors.scss" as *;
-            @use "@/assets/_mixins.scss" as *;
           `,
         },
       },
     },
     plugins: [
       VueI18nVitePlugin({
+        runtimeOnly: false,
         include: [
           resolve(dirname(fileURLToPath(import.meta.url)), './locales/*.json'),
         ],
       }),
     ],
   },
+
+  compatibilityDate: '2024-10-10',
 })

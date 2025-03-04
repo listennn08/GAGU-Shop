@@ -42,11 +42,6 @@ withDefaults(defineProps<IProps>(), {
   display: flex;
   flex-direction: column;
 
-  @include xs {
-    display: block;
-    width: 90%;
-  }
-
   &:nth-of-type(odd) {
     align-self: flex-start;
     align-items: flex-end;
@@ -57,9 +52,6 @@ withDefaults(defineProps<IProps>(), {
   }
   &:nth-of-type(even) {
     align-self: flex-end;
-    @include xs {
-      align-self: flex-start;
-    }
   }
 }
 .month {

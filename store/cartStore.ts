@@ -17,23 +17,40 @@ export interface ICartProduct {
 
 interface CartState {
   loading: boolean
-  shopcartItems: ICartProduct[]
+  shopCartItems: ICartProduct[]
 }
 
-export const useCartStore = defineStore('cart', {
-  state: (): CartState => ({
+export const useCartStore = defineStore('cart', () => {
+  const discountStore = useDiscount()
+  const { discountPercent } = storeToRefs(discountStore)
+  const state = reactive<CartState>({
     loading: false,
-    shopcartItems: [],
-  }),
-  actions: {
-    setShopcartItems(data: any) {
-      this.shopcartItems = [...data]
-    },
-    deleteItem(index: number) {
-      this.shopcartItems.splice(index, 1)
-    },
-    deleteAllItem() {
-      this.shopcartItems = []
-    },
-  },
+    shopCartItems: [],
+  })
+  const countAll = computed(() => {
+    const total = state.shopCartItems.reduce(
+      (cur: number, el: ICartProduct) =>
+        cur + el.quantity * (el.price ? el.price : el.origin_price),
+      0,
+    )
+    return total * (discountPercent.value / 100 || 1)
+  })
+
+  function setShopCartItems(data: any) {
+    state.shopCartItems = [...data]
+  }
+  function deleteItem(index: number) {
+    state.shopCartItems.splice(index, 1)
+  }
+  function deleteAllItem() {
+    state.shopCartItems = []
+  }
+
+  return {
+    ...toRefs(state),
+    countAll,
+    setShopCartItems,
+    deleteItem,
+    deleteAllItem,
+  }
 })

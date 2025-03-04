@@ -1,18 +1,19 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import NavbarBackend from './navbar/backend.vue'
 import NavbarFrontend from './navbar/frontend.vue'
 import { AuthClient } from '~~/services/infra'
 import { AuthService } from '~~/services/domain/auth'
 import { useLoginStore } from '~~/store/loginStore'
 
-const props = defineProps<{
+interface Props {
   type?: string
-}>()
+}
+const props = defineProps<Props>()
 
 const isAdmin = computed(() => props.type === 'admin')
 const loginStore = useLoginStore()
-const logout = async () => {
-  const auth = AuthService(AuthClient())
+async function logout() {
+  const auth = new AuthService(AuthClient())
   try {
     // await auth.logoutUser()
     useFetch('/api/auth/logout')
@@ -31,17 +32,14 @@ const logout = async () => {
     >
       {{ $t(isAdmin ? 'client' : 'management') }}
     </NuxtLink>
-    <NuxtLink
-      v-if="!loginStore.isLogin"
-      class="navbar-item desktop"
-      to="/login"
-    >
+    <NuxtLink v-if="!loginStore.isLogin" class="navbar-item" to="/login">
       <i
         v-show="loginStore.checking"
-        class="i-fa-solid-spinner animate-spin animate-3s"
+        name="pi pi-spin pi-spinner"
+        class="text-2xl"
       />
       <span v-show="!loginStore.checking">
-        {{ $t('signin') }}
+        {{ $t('sign-in') }}
       </span>
     </NuxtLink>
     <button
@@ -69,7 +67,7 @@ const logout = async () => {
         class="dropdown-item"
         to="/login"
       >
-        {{ $t('signin') }}
+        {{ $t('sign-in') }}
       </NuxtLink>
       <button
         v-else
@@ -82,14 +80,3 @@ const logout = async () => {
     </template>
   </component>
 </template>
-<style lang="scss" scoped>
-button.is-text {
-  text-decoration: none;
-  outline: none;
-  background-color: transparent;
-
-  &:hover {
-    background-color: transparent;
-  }
-}
-</style>

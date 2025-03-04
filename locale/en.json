@@ -1,23 +1,126 @@
 {
-  "about": "About",
-  "product": "Products",
-  "cart": "Cart",
-  "order": "Order",
+  "menu": {
+    "about": "About",
+    "product-list": "Products",
+    "cart": "Cart",
+    "order": "Order"
+  },
   "client": "Client",
   "management": "Management",
-  "signup": "Sign up",
-  "signin": "Sign in",
+  "sign-up": "Sign up",
+  "sign-in": "Sign in",
   "signout": "Sign out",
+  "email": "Email",
+  "password": "Password",
+  "back": "Back",
   "manage": {
-    "product": "Manage products",
-    "coupon": "Manage coupons",
-    "order": "Manage orders",
-    "image": "Manage images"
+    "product": "Products",
+    "coupon": "Coupons",
+    "order": "Orders",
+    "image": "Images"
   },
   "add-to-cart": "Add to cart",
   "sold-out": "Sold out",
-  "sofa": "Sofa",
-  "bed-frame": "Bed frame",
-  "bar-table": "Bar table",
-  "bookcase": "Bookcase"
+  "hot-sale": "Hot sale",
+  "toast": {
+    "success": "Success",
+    "add-to-cart-success": "Added to cart successfully",
+    "error": "Error",
+    "add-to-cart-error": "Failed to add to cart",
+    "loading-failed": "Failed to load data"
+  },
+  "product": {
+    "all": "All products",
+    "bed": "Bed frame",
+    "chair": "Chair",
+    "lamp": "Lamp",
+    "sofa": "Sofa",
+    "bookcase": "Bookcase",
+    "cabinet": "Cabinet",
+    "wardrobe": "Wardrobe",
+    "table": "Table",
+    "curtain": "Curtain"
+  },
+  "view-more": "View more",
+  "order": {
+    "order-number": "Order Number",
+    "date": "Date",
+    "status": "Status",
+    "amount": "Amount",
+    "payment-method": "Payment Method",
+    "payment-status": "Payment Status",
+    "product-name": "Product Name",
+    "quantity": "Quantity",
+    "unit-price": "Unit Price",
+    "details": "Details",
+    "no-orders": "No orders"
+  },
+  "payment-status": {
+    "paid": "Paid",
+    "unpaid": "Unpaid"
+  },
+  "order-status": {
+    "created": "Created",
+    "pending": "Pending",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled"
+  },
+  "recommend": "Recommend",
+  "shop-cart": {
+    "delete-all": "Delete all products",
+    "continue-shopping": "Continue shopping",
+    "checkout": "Checkout",
+    "no-cart-items": "No cart items",
+    "image": "Image",
+    "title": "Title",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total",
+    "remove": "Remove",
+    "shop-list": "Shopping list"
+  },
+  "checkout": {
+    "fill-order": "Fill order",
+    "confirm-order": "Confirm order",
+    "order-confirm": "Order confirm",
+    "confirm-payment": "Confirm payment",
+    "coupon-placeholder": "Enter coupon code",
+    "name-placeholder": "Enter name",
+    "tel-placeholder": "Enter phone number",
+    "address-placeholder": "Enter address",
+    "remark-placeholder": "Enter remark",
+    "payment-placeholder": "Select payment method",
+    "back": "Back",
+    "order-info": "Order info",
+    "name": "Name",
+    "tel": "Phone number",
+    "email": "Email",
+    "address": "Address",
+    "remark": "Remark",
+    "payment": "Payment method",
+    "no-items": "No items"
+  },
+  "coupon": {
+    "expired": "Coupon expired",
+    "discount": "Discount {percent}%"
+  },
+  "該 COUPON 序號並不存在。": "The coupon code does not exist.",
+  "form-validation": {
+    "name-required": "Name is required",
+    "tel-required": "Phone number is required",
+    "tel-length": "Phone number must be 10 digits",
+    "email-required": "Email is required",
+    "email-invalid": "Invalid email address",
+    "address-required": "Address is required",
+    "payment-required": "Payment method is required",
+    "pay-success": "Payment successful",
+    "pay-error": "Payment failed",
+    "password-required": "Password is required",
+    "password-min": "Password must be at least 8 characters"
+  },
+  "login": {
+    "success-detail": "Login successful",
+    "error-detail": "Login failed"
+  }
 }

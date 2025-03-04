@@ -1,7 +1,7 @@
 import { configure, defineRule } from 'vee-validate'
 import { localize } from '@vee-validate/i18n'
 import tw from '@vee-validate/i18n/dist/locale/zh_TW.json'
-import rules from '@vee-validate/rules'
+import { all as rules } from '@vee-validate/rules'
 
 export default defineNuxtPlugin((nuxtApp) => {
   /** 表單驗證 */

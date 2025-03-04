@@ -56,7 +56,7 @@ export const OrderClient = (): IOrderClient => {
   const config = useRuntimeConfig()
   const client = HttpClient({
     timeout: 30000,
-    prefix: `${config.apiUUID}/ec/`,
+    prefix: `${config.public.apiUUID}/ec/`,
   })
 
   return {

@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
 import { HttpClient } from './core'
 
 interface ICartProduct {
@@ -34,7 +34,7 @@ export const CartClient = (): ICartClient => {
   const config = useRuntimeConfig()
   const client = HttpClient({
     timeout: 30000,
-    prefix: `${config.apiUUID}/ec/`,
+    prefix: `${config.public.apiUUID}/ec/`,
   })
 
   return {

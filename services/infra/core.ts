@@ -1,10 +1,14 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios'
 
 interface InstanceConfig {
   timeout?: number
   prefix: string
   onRequest?: (cfg: AxiosRequestConfig) => AxiosRequestConfig
-  onReponse?: (cfg: AxiosResponse) => AxiosResponse
+  onResponse?: (cfg: AxiosResponse) => AxiosResponse
 }
 
 type CreateInstance = (c: InstanceConfig) => AxiosInstance
@@ -19,14 +23,14 @@ export const HttpClient: CreateInstance = (config) => {
   client.interceptors.request.use((cfg) => {
     cfg.headers = {
       ...cfg.headers,
-      ['Accept-Encoding']: 'gzip,deflate,compress',
+      // 'Accept-Encoding': 'deflate, gzip, compress',
     }
     if (typeof config.onRequest !== 'undefined') return config.onRequest(cfg)
     return cfg
   })
 
   client.interceptors.response.use((cfg) => {
-    if (typeof config.onReponse !== 'undefined') return config.onReponse(cfg)
+    if (typeof config.onResponse !== 'undefined') return config.onResponse(cfg)
     return cfg
   })
 
