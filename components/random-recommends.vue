@@ -56,10 +56,6 @@ async function getRandomProducts() {
             recommend.push(el)
           }
         })
-      // const d = data
-      //   .sort(() => 0.5 - Math.random())
-      //   .slice(0, 3 - recommend.length)
-      // recommend.push(...d)
     }
   } catch (e) {
     console.error(e)
@@ -67,7 +63,7 @@ async function getRandomProducts() {
     pending.value = false
   }
 }
-await useAsyncData('random-products', getRandomProducts)
+useAsyncData('random-products', getRandomProducts)
 function goTo(path: string) {
   if (route.path.indexOf('product') > -1) {
     navigateTo(path)

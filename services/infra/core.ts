@@ -1,13 +1,15 @@
 import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
+  type AxiosRequestHeaders,
   type AxiosResponse,
+  type InternalAxiosRequestConfig,
 } from 'axios'
 
 interface InstanceConfig {
   timeout?: number
   prefix: string
-  onRequest?: (cfg: AxiosRequestConfig) => AxiosRequestConfig
+  onRequest?: (cfg: AxiosRequestConfig) => InternalAxiosRequestConfig
   onResponse?: (cfg: AxiosResponse) => AxiosResponse
 }
 
@@ -23,9 +25,12 @@ export const HttpClient: CreateInstance = (config) => {
   client.interceptors.request.use((cfg) => {
     cfg.headers = {
       ...cfg.headers,
-      // 'Accept-Encoding': 'deflate, gzip, compress',
+    } as AxiosRequestHeaders
+
+    if (typeof config.onRequest !== 'undefined') {
+      return config.onRequest(cfg)
     }
-    if (typeof config.onRequest !== 'undefined') return config.onRequest(cfg)
+
     return cfg
   })
 

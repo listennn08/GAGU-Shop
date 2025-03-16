@@ -3,7 +3,9 @@ import type { IOrderClient, OrderInfo } from '../infra'
 export interface IOrderService {
   getOrder(id: string): Promise<any>
   createOrder(data: OrderInfo): Promise<any>
+  payOrder(id: string): Promise<any>
 }
+
 export const OrderService = (client: IOrderClient): IOrderService => {
   return {
     async getOrder(id: string) {
@@ -23,6 +25,9 @@ export const OrderService = (client: IOrderClient): IOrderService => {
     },
     createOrder(data) {
       return client.createOrder(data)
+    },
+    payOrder(id) {
+      return client.payOrder(id)
     },
   }
 }

@@ -28,7 +28,7 @@ const items = [
         style: {
           '--p-menubar-gap': '2rem',
         },
-        class: 'fixed top-0 inset-x-0',
+        class: '!fixed top-0 inset-x-0',
       },
       item: {
         class: 'navbar-item',

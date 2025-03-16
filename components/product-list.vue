@@ -97,38 +97,32 @@ onBeforeMount(getShopCartQuantity)
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 py-8 px-4"
       >
-        <item-card
-          v-for="item in items"
-          :key="item.id"
-          v-bind="item"
-          :loading="item.isLoading"
-          @add-to-cart="addToCart"
-        />
+        <transition-group name="fade" mode="out-in">
+          <item-card
+            v-for="item in items"
+            :key="item.id"
+            v-bind="item"
+            :loading="item.isLoading"
+            @add-to-cart="addToCart"
+          />
+        </transition-group>
       </div>
     </template>
   </p-data-view>
-  <!-- <p-overlay-badge
-    :value="shopCart.quantity"
-    severity="danger"
-    class="
-      w-12 h-12 border border-solid border-primary hover:border-primary/80
-      rounded-full text-lg bg-white cursor-pointer
-      flex items-center justify-center
-      !fixed right-6 bottom-6
-      transition-all duration-300
-      z-[10]
-    "
-  >
-    <nuxt-link
-      to="/shop-cart"
-      class="
-        flex flex-col items-center justify-center
-        text-sm no-underline color-primary hover:color-primary/80
-        transition-all duration-300
-      "
-    >
-      <i class="pi pi-shopping-cart" />
-      <span class="txt">{{ $t('cart') }}</span>
-    </nuxt-link>
-  </p-overlay-badge> -->
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-move {
+  transition: transform 0.5s ease;
+}
+</style>

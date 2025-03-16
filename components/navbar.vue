@@ -27,31 +27,37 @@ async function logout() {
   <component :is="isAdmin ? NavbarBackend : NavbarFrontend">
     <NuxtLink
       v-if="loginStore.isLogin"
-      class="navbar-item desktop"
+      class="navbar-item"
+      :class="{ '!text-white': isAdmin }"
       :to="isAdmin ? '/' : '/admin'"
     >
       {{ $t(isAdmin ? 'client' : 'management') }}
     </NuxtLink>
-    <NuxtLink v-if="!loginStore.isLogin" class="navbar-item" to="/login">
+    <NuxtLink
+      v-if="!loginStore.isLogin"
+      class="navbar-item"
+      :class="{ '!text-white': isAdmin }"
+      to="/login"
+    >
       <i
         v-show="loginStore.checking"
         name="pi pi-spin pi-spinner"
         class="text-2xl"
       />
-      <span v-show="!loginStore.checking">
+      <span v-show="!loginStore.checking && !loginStore.isLogin">
         {{ $t('sign-in') }}
       </span>
     </NuxtLink>
-    <button
+    <p-button
       v-else
-      class="button is-text desktop"
-      :class="{ 'is-dark': isAdmin }"
+      variant="link"
+      :class="{ '!text-white': isAdmin }"
       @click="logout"
     >
-      <span class="navbar-item">
+      <span>
         {{ $t('signout') }}
       </span>
-    </button>
+    </p-button>
     <template v-slot:dropdown>
       <NuxtLink
         v-if="loginStore.isLogin"

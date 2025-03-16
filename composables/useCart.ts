@@ -18,14 +18,15 @@ export const useCart = async () => {
     ),
   )
 
-  const itemTotal = (index: number) => {
+  function itemTotal(index: number) {
     const item = cartStore.shopCartItems[index]
     return item.quantity * (item.price ? item.price : item.origin_price)
   }
-  const quantityMinest = (index: number) =>
-    cartStore.shopCartItems[index].quantity === 1
+  function checkQuantityIsMinimum(index: number) {
+    return cartStore.shopCartItems[index].quantity === 1
+  }
 
-  const getShopCartData = async () => {
+  async function getShopCartData() {
     if (cartStore.loading === true || cartStore.shopCartItems.length) return
     try {
       cartStore.loading = true
@@ -83,14 +84,14 @@ export const useCart = async () => {
     }
   }
 
-  await useAsyncData(getShopCartData)
+  useAsyncData('shopCart', getShopCartData)
 
   return {
     shopCartItems: cartStore.shopCartItems,
     countAll,
     removeAllContainer,
     itemTotal,
-    quantityMinest,
+    checkQuantityIsMinimum,
     getShopCartData,
     updateCartData,
     countQuantity,

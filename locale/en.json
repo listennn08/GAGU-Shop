@@ -99,7 +99,13 @@
     "address": "Address",
     "remark": "Remark",
     "payment": "Payment method",
-    "no-items": "No items"
+    "no-items": "No items",
+    "error-message": "Failed to create order, please try again",
+    "pay-success": "Payment successful",
+    "pay-error": "Payment failed",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "payment-status": "Payment status"
   },
   "coupon": {
     "expired": "Coupon expired",
@@ -122,5 +128,6 @@
   "login": {
     "success-detail": "Login successful",
     "error-detail": "Login failed"
-  }
+  },
+  "goto-admin": "Go to admin"
 }

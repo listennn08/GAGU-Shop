@@ -1,5 +1,4 @@
 import axios from 'axios'
-import cookies from '@/cookies'
 
 const { VUE_APP_API_UUID } = process.env
 const Request = axios.create({
@@ -9,7 +8,7 @@ const Request = axios.create({
 
 Request.interceptors.request.use((request) => {
   const req = request
-  req.headers.Authorization = `Bearer ${cookies.getItem('token')}`
+  req.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
   return req
 })
 

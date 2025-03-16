@@ -9,6 +9,7 @@ const { t } = useI18n()
 const router = useRouter()
 const productStore = useProductStore()
 const productService = ProductService(ProductClient())
+
 async function getData() {
   if (productStore.loading || productStore.products.length > 0) return
   try {
@@ -20,7 +21,7 @@ async function getData() {
   }
 }
 
-await useAsyncData(getData)
+await useAsyncData('products', getData)
 
 const pt = reactive({
   root: {

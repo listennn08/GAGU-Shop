@@ -8,7 +8,7 @@ export const useDiscount = defineStore('discount', () => {
   const { t } = useI18n()
   const state = reactive<{
     isLoading: boolean
-    code?: string
+    code: string
     discountPercent: number
     discountType: boolean
     discountMsg: string

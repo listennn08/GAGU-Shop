@@ -119,9 +119,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBASE: process.env.NUXT_API_BASE,
-      apiUUID: process.env.NUXT_API_UUID,
-      baseURL: process.env.NUXT_BASE_URL,
+      apiBASE: process.env.NUXI_PUBLIC_API_BASE,
+      apiUUID: process.env.NUXI_PUBLIC_API_UUID,
+      baseURL: process.env.NUXI_PUBLIC_BASE_URL,
     },
   },
   ssr: false,

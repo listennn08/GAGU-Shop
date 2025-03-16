@@ -4,28 +4,25 @@ import { useCartStore } from '~~/store/cartStore'
 
 const { t } = useI18n()
 const cartStore = useCartStore()
-const {
-  countAll,
-  itemTotal,
-  deleteCartData,
-  countQuantity,
-  quantityMinest,
-  updateCartData,
-} = await useCart()
+const { itemTotal, deleteCartData } = await useCart()
 
 const columns = computed(() => [
-  { field: 'index', header: '#' },
-  { field: 'imageUrl', header: t('shop-cart.image') },
-  { field: 'title', header: t('shop-cart.title') },
-  { field: 'price', header: t('shop-cart.price') },
-  { field: 'quantity', header: t('shop-cart.quantity') },
-  { field: 'total', header: t('shop-cart.total') },
-  { field: 'remove', header: t('shop-cart.remove') },
+  { field: 'index', header: '#', width: '50px' },
+  { field: 'imageUrl', header: t('shop-cart.image'), width: '100px' },
+  { field: 'title', header: t('shop-cart.title'), width: '200px' },
+  { field: 'price', header: t('shop-cart.price'), width: '100px' },
+  { field: 'quantity', header: t('shop-cart.quantity'), width: '100px' },
+  { field: 'total', header: t('shop-cart.total'), width: '100px' },
+  { field: 'remove', header: t('shop-cart.remove'), width: '50px' },
 ])
 </script>
 <template>
-  <div class="flex flex-col items-center mb-4">
-    <p-data-table :value="cartStore.shopCartItems" class="mb-4">
+  <div class="max-w-screen-lg mx-auto mb-4">
+    <p-data-table
+      :value="cartStore.shopCartItems"
+      :loading="cartStore.loading"
+      class="mb-4"
+    >
       <template #header>
         <div class="flex justify-end">
           <p-button
@@ -51,6 +48,13 @@ const columns = computed(() => [
         :field="column.field"
         :header="column.header"
         class="align-middle"
+        :pt="{
+          header: {
+            style: {
+              width: column.width,
+            },
+          },
+        }"
       >
         <template #body="{ data, index }">
           <template v-if="column.field === 'index'">
@@ -113,7 +117,7 @@ const columns = computed(() => [
       </p-column>
     </p-data-table>
 
-    <div class="flex justify-center gap-x-4">
+    <div class="flex justify-center gap-x-4 mb-12">
       <p-button
         :label="$t('shop-cart.continue-shopping')"
         icon="pi pi-angle-double-left"

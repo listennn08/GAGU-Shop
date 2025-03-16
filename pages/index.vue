@@ -7,7 +7,7 @@ const store = useAppStore()
 const productStore = useProductStore()
 const email = ref('')
 const discountCode = ref('7buymore')
-const subscribe = () => {
+function subscribe() {
   if (email.value)
     toast.add({
       summary: 'Success',
@@ -17,9 +17,13 @@ const subscribe = () => {
     })
   email.value = ''
 }
-const goToProduct = (category: string) => {
-  productStore.setCategory(category)
-  navigateTo('products')
+function goToProduct(category?: string) {
+  navigateTo({
+    path: '/products',
+    query: {
+      category,
+    },
+  })
 }
 
 async function copyCode() {
@@ -42,9 +46,9 @@ async function copyCode() {
   }
 }
 
-const op = ref()
+const popover = ref()
 function toggle(event: Event) {
-  op.value.toggle(event)
+  popover.value.toggle(event)
 }
 </script>
 <template>
@@ -54,7 +58,7 @@ function toggle(event: Event) {
         class="image img-1 aspect-ratio-[3/1] flex flex-col items-center justify-between p-10"
       >
         <p
-          class="w-3/5 bg-white bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
+          class="md:w-3/5 bg-white bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
         >
           <span class="logo">GAGU</span>
           有豐富的傢俱<br />
@@ -70,7 +74,7 @@ function toggle(event: Event) {
           }"
           class="animate-duration-1000 animate-ease-in-out"
         >
-          <p-button label="購物去 &raquo;" @click="goToProduct('')" />
+          <p-button label="購物去 &raquo;" @click="goToProduct()" />
         </div>
       </div>
       <div class="banner">
@@ -79,7 +83,7 @@ function toggle(event: Event) {
           data-aos="fade-in"
         >
           <div
-            class="w-3/5 bg-white bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
+            class="md:w-3/5 bg-white bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
           >
             <h4 class="subtitle is-5 has-text-weight-bold is-marginless">
               <span class="logo">GAGU</span>
@@ -89,9 +93,7 @@ function toggle(event: Event) {
             <p>購買一定數涼擁有更多折扣，買傢俱？找 GAGU</p>
           </div>
           <div class="text-in-img right">
-            <p-button type="link" @click="goToProduct('bed')">
-              辦公室傢俱首選
-            </p-button>
+            <p-button @click="goToProduct('bed')"> 辦公室傢俱首選 </p-button>
           </div>
         </div>
       </div>
@@ -124,7 +126,7 @@ function toggle(event: Event) {
           data-aos="fade-in"
         >
           <div
-            class="w-3/5 bg-white bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
+            class="md:w-3/5 bg-white bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
             data-aos="fade-right"
           >
             <h4 class="subtitle is-5 has-text-weight-bold is-marginless">
@@ -153,7 +155,7 @@ function toggle(event: Event) {
         class="image img-5 aspect-ratio-[3/1] flex flex-col items-center justify-between p-10"
       >
         <div
-          class="w-2/5 bg-transparent bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
+          class="md:w-2/5 bg-transparent bg-opacity-80 text-center p-10 text-[#242b39] rounded-lg text-sm sm:text-base"
         >
           <p class="mb-4">
             不想老是錯過 <span class="font-bold">GAGU</span> 的最新消息？<br />
@@ -172,15 +174,9 @@ function toggle(event: Event) {
         </div>
 
         <div class="fixed right-4 bottom-4">
-          <p-button
-            title="折扣碼"
-            text
-            rounded
-            icon="pi pi-tags"
-            @click="toggle"
-          />
+          <p-button title="折扣碼" rounded icon="pi pi-tags" @click="toggle" />
         </div>
-        <p-popover ref="op">
+        <p-popover ref="popover">
           <div>
             鬼月不怕買傢俱！<br />
             GAGU 全館五折起！<br />

@@ -1,47 +1,20 @@
 <script setup lang="ts">
-import cookies from './cookies'
 import { AuthService } from './services/domain/auth'
-import { ProductService } from './services/domain/product'
-import { AuthClient, ProductClient } from './services/infra'
+import { AuthClient } from './services/infra'
 import { useLoginStore } from './store/loginStore'
-import { useProductStore } from './store/productStore'
 
-const route = useRoute()
 const loginStore = useLoginStore()
 const auth = new AuthService(AuthClient())
 
-const productStore = useProductStore()
-const productService = ProductService(ProductClient())
-// const getData = async () => {
-//   try {
-//     productStore.loading = true
-//     const resp = await productService.getAllProducts()
-//     productStore.setProducts(resp.products)
-//     productStore.pagination = reactive({ ...resp.pagination })
-//     return resp
-//   } catch (e) {
-//     console.log(e)
-//     // store.setMsg({
-//     //   msg: '載入失敗，請重新載入頁面',
-//     //   type: false,
-//     // })
-//   } finally {
-//     productStore.loading = false
-//   }
-// }
-
-// if (!route.path.includes('products')) useAsyncData(getData)
-// if (!route.path.includes('shopcart')) useCart()
-
 onBeforeMount(async () => {
   try {
-    // loginStore.toggleChecking()
+    loginStore.toggleChecking()
     await auth.checkLoginStatus()
-    loginStore.setLoginInfo(cookies.getItem('token')!)
+    loginStore.setLoginInfo(localStorage.getItem('token')!)
   } catch (e) {
     console.log(e)
   } finally {
-    // loginStore.toggleChecking()
+    loginStore.toggleChecking()
   }
 })
 </script>

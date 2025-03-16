@@ -100,7 +100,13 @@
     "address": "地址",
     "remark": "備註",
     "payment": "付款方式",
-    "no-items": "尚無商品"
+    "no-items": "尚無商品",
+    "error-message": "訂單建立失敗，請重新嘗試",
+    "pay-success": "付款成功",
+    "pay-error": "付款失敗",
+    "paid": "已付款",
+    "unpaid": "未付款",
+    "payment-status": "付款狀態"
   },
   "coupon": {
     "expired": "酷碰卷已過期",
@@ -120,5 +126,6 @@
   "login": {
     "success-detail": "登入成功",
     "error-detail": "登入失敗"
-  }
+  },
+  "goto-admin": "前往後台"
 }

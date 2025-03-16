@@ -25,7 +25,6 @@ export const AuthClient = (): IAuthClient => {
     timeout: 30000,
     prefix: 'auth',
     onResponse(cfg) {
-      console.log(cfg)
       return cfg
     },
   })

@@ -19,7 +19,7 @@ const items = [
         style: {
           '--p-menubar-gap': '2rem',
         },
-        class: 'fixed top-0 inset-x-0 !bg-primary',
+        class: '!fixed top-0 inset-x-0 !bg-primary',
       },
       item: {
         class: 'navbar-item',

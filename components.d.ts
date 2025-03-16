@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     PButton: typeof import('primevue/button')['default']
     PCard: typeof import('primevue/card')['default']
+    PCheckbox: typeof import('primevue/checkbox')['default']
     PColumn: typeof import('primevue/column')['default']
     PDataTable: typeof import('primevue/datatable')['default']
     PDataView: typeof import('primevue/dataview')['default']

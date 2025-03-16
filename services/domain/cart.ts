@@ -1,5 +1,5 @@
 import { useCartStore } from '~~/store/cartStore'
-import { ICartClient } from '../infra'
+import { type ICartClient } from '../infra'
 
 export interface ICartService {
   getAllCartItems(): Promise<any>
